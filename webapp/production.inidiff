@@ -1,0 +1,2 @@
+[app:main]
+pyramid.reload_templates = false

@@ -1,6 +1,6 @@
 PROJECT=vote
 
-PATH_ASSETS=${PROJECT}/static/ext
+PATH_EXTERNALS=${PROJECT}/externals
 
 INI_DEV  = development.ini
 INI_TEST = test.ini
@@ -34,37 +34,41 @@ env:
 setup: env
 	env/bin/python setup.py develop
 
-externals:
-	env/bin/python $(PROJECT)/scripts/dependency_downloader.py --destination $(PATH_ASSETS)
+dependency_downloader:
+	curl http://raw.github.com/calaldees/KaraKara/website/karakara/scripts/dependency_downloader.py --compressed --O
 
-install: env setup externals test
+externals:
+	env/bin/python dependency_downloader.py --destination $(PATH_EXTERNALS)
+
+install: env setup dependency_downloader externals test
 
 run:
 	env/bin/pserve --reload $(INI_DEV)
 
-run_production:
+run_production: ini_production
 	env/bin/pserve $(INI_PROD)
 
 shell:
 	env/bin/pshell $(INI_DEV)
 
 ini_test:
-	env/bin/python3 $(PROJECT)/scripts/make_ini.py test
+	env/bin/python3 $(PATH_EXTERNALS)/scripts/make_ini.py test
 ini_production:
-	env/bin/python3 $(PROJECT)/scripts/make_ini.py production
+	env/bin/python3 $(PATH_EXTERNALS)/scripts/make_ini.py production
 
 clean:
 	rm env -rf
 	rm *.egg-info -rf
 	rm $(INI_TEST) -f
 	rm $(INI_PROD) -f
-	rm -rf $(PATH_ASSETS)
+	rm -rf $(PATH_EXTERNALS)
+	rm -rf dependency_downloader.py
 	rm -rf dependencys_installed.json
 
 test: ini_test
 	env/bin/py.test $(PROJECT) -q --pdb
 
 start_webapp_daemon: ini_production
-	start-stop-daemon --start --pidfile webapp.pid --name $(PROJECT) --make-pidfile --background --exec /bin/bash -- -c "$(CURDIR)/env/bin/pserve $(CURDIR)/production.ini"
+	start-stop-daemon --start --pidfile webapp.pid --name $(PROJECT) --make-pidfile --background --exec /bin/bash -- -c "$(CURDIR)/env/bin/pserve $(CURDIR)/$(INI_PROD)"
 stop_webapp_daemon:
 	start-stop-daemon --stop  --pidfile webapp.pid && rm webapp.pid

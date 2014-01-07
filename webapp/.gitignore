@@ -1,0 +1,8 @@
+*.db
+*.db-journal
+/env/
+/data/
+/test.ini
+/production.ini
+dependencys_installed.json
+ext/

@@ -57,10 +57,10 @@ ini_production:
 	env/bin/python3 $(PATH_EXTERNALS)/scripts/make_ini.py production
 
 clean:
-	rm env -rf
-	rm *.egg-info -rf
-	rm $(INI_TEST) -f
-	rm $(INI_PROD) -f
+	rm -rf env
+	rm -rf *.egg-info
+	rm -rf $(INI_TEST)
+	rm -rf $(INI_PROD)
 	rm -rf $(PATH_EXTERNALS)
 	rm -rf dependency_downloader.py
 	rm -rf dependencys_installed.json

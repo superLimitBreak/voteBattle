@@ -17,16 +17,16 @@ help:
 
 env:
 	if dpkg -s python-virtualenv ; then \
-	    echo virtualenv already installed; \
+		echo virtualenv already installed; \
 	else \
-	    echo installing virtualenv; \
-	    sudo apt-get install python-virtualenv; \
+		echo installing virtualenv; \
+		sudo apt-get install python-virtualenv; \
 	fi
 	if dpkg -s python3-setuptools ; then \
-	    echo python 3 already installed; \
+		echo python 3 already installed; \
 	else \
-	    echo installing python 3; \
-	    sudo apt-get install python3-setuptools python-setuptools; \
+		echo installing python 3; \
+		sudo apt-get install python3-setuptools python-setuptools; \
 	fi
 	virtualenv --no-site-packages -p python3 env
 	cd env;	bin/easy_install pyramid
@@ -34,13 +34,13 @@ env:
 setup: env
 	env/bin/python setup.py develop
 
-dependency_downloader:
-	curl http://raw.github.com/calaldees/KaraKara/website/karakara/scripts/dependency_downloader.py --compressed --O
+dependency_downloader.py:
+	curl https://raw.github.com/calaldees/KaraKara/master/website/karakara/scripts/dependency_downloader.py --compressed -O
 
 externals:
 	env/bin/python dependency_downloader.py --destination $(PATH_EXTERNALS)
 
-install: env setup dependency_downloader externals test
+install: env setup dependency_downloader.py externals test
 
 run:
 	env/bin/pserve --reload $(INI_DEV)

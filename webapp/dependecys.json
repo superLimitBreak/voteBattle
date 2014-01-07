@@ -39,7 +39,7 @@
     },
     
     "python_lib": {
-        "source": "http://raw.github.com/calaldees/KaraKara/website/karakara",
+        "source": "https://raw.github.com/calaldees/KaraKara/master/website/karakara/",
         "version": "0.0.0",
         "target": [
             "lib/auto_format.py",
@@ -49,6 +49,6 @@
             "scripts/make_ini.py",
             "socket/multisocket_server.py"
         ]
-    },
+    }
 
 }

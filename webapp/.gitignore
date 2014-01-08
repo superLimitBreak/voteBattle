@@ -1,7 +1,7 @@
 *.db
 *.db-journal
 /env/
-/vote/externals/
+/externals/
 /data/
 /test.ini
 /production.ini

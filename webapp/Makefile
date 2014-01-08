@@ -1,6 +1,6 @@
 PROJECT=vote
 
-PATH_EXTERNALS=${PROJECT}/externals
+PATH_EXTERNALS=externals/
 
 INI_DEV  = development.ini
 INI_TEST = test.ini

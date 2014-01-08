@@ -42,8 +42,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=requires+test_requires,
-    tests_require=requires+test_requires,
-    test_suite="vote",
+    tests_require=test_requires,
+    test_suite="py.test",
     entry_points="""\
     [paste.app_factory]
     main = vote:main

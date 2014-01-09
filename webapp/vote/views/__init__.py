@@ -18,6 +18,6 @@ from externals.lib.pyramid_helpers.session_identity import overlay_session_ident
 
 web = decorator_combine(
     auto_format_output,
-    overlay_session_identity(('id')),
+    overlay_session_identity(('id',)),
     mark_external_request
 )

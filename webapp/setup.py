@@ -16,6 +16,7 @@ requires = [
     'decorator',
     'python-dateutil',
     'dogpile.cache',
+    'pyramid_beaker', # Session/Cache framework # REMOVE - has been depricated - need alternative
 ]
 test_requires = [
     'pytest',

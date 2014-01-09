@@ -1,10 +1,8 @@
 from pyramid.view import view_config
 
-#from . import web
-from externals.lib.misc import now
-
+from . import web, action_ok
 
 @view_config(route_name='home')
-#@web
+@web
 def my_view(request):
-    return {'project': 'vote'}
+    return action_ok(data={'project': 'vote'})

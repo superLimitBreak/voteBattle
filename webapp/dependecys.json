@@ -43,12 +43,14 @@
         "version": "0.0.0",
         "target": [
             "lib/__init__.py",
-            "lib/auto_format.py",
             "lib/misc.py",
-            "lib/pyramid_helpers.py",
             "lib/xml.py",
             "lib/make_ini.py",
-            "lib/multisocket_server.py"
+            "lib/multisocket_server.py",
+            "lib/pyramid_helpers/__init__.py",
+            "lib/pyramid_helpers/auto_format.py",
+            "lib/pyramid_helpers/etag.py",
+            "lib/pyramid_helpers/session_identity.py"
         ]
     }
 

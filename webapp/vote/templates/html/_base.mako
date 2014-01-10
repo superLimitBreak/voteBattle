@@ -1,6 +1,6 @@
 <%def name="init()"><%
-	self.path_static_external = 'ext/'
-	self.path_static          = 'static/'
+	self.path_static_external = '/ext/'
+	self.path_static          = '/static/'
 %></%def>
 
 <%def name="title()"></%def>

@@ -42,7 +42,8 @@ def main(global_config, **settings):
         Clients can still connect and read messages
         """
         session_data = session_factory(pyramid.request.Request({'HTTP_COOKIE':'{0}={1}'.format(config.registry.settings['session.key'],key)}))
-        return session_data and session_data.get('admin')
+        #return session_data and session_data.get('admin')
+        return True
     socket_manager = AuthEchoServerManager(
         authenticator=authenicator,
         websocket_port=config.registry.settings['vote.port.websocket'],

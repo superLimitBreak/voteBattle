@@ -59,7 +59,9 @@ def main(global_config, **settings):
     
     # Routes -------------------------------------------------------------------
     
-    config.add_route('home', append_format_pattern('/'))
+    config.add_route('home' , append_format_pattern('/')     )
+    config.add_route('frame', append_format_pattern('/frame'))
+    config.add_route('vote' , append_format_pattern('/vote') )
     
     # Events -------------------------------------------------------------------
     config.add_subscriber(add_template_helpers_to_event, pyramid.events.BeforeRender)

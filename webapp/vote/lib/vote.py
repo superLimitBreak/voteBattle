@@ -1,3 +1,4 @@
+from functools import reduce
 from externals.lib.misc import OrderedDefaultdict
 
 import logging
@@ -30,6 +31,10 @@ class VotePool(object):
 
     def new_frame(self, items):
         self.frames.append(Frame(items))
+
+    @property
+    def current_frame(self):
+        return self.frames[-1]
 
     def remove(self):
         self._del_pool(self)
@@ -68,12 +73,9 @@ class Frame(object):
         this is potentially inefficent and can be replaced later if
         more complex voting logic or performence are needed
         """
-        voters = set()
-        for s in self.frame.values():
-            voters |= s
-        return voters
+        return reduce(lambda a,b: a.union(b), self.frame.values())
     
-    def to_dict(self, total=True):
+    def to_dict(self, total=False):
         d = dict(self.frame)
         if total:
             for key in d:

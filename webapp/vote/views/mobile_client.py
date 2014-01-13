@@ -21,7 +21,7 @@ def mobile_client_select(request):
     else display list of vote pools
     """
     pools = VotePool.get_pool_ids()
-    if len(pools) == 1:
+    if request.registry.settings.get('mobile.client.auto_redirect_if_single_pool') and len(pools) == 1:
         raise HTTPFound(location='mobile_client/{0}'.format(tuple(pools)[0]))
     return action_ok(data={'pools': pools})
 

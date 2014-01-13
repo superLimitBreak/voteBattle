@@ -10,9 +10,10 @@ Terminology:
 
 from pyramid.view import view_config
 
-from . import web, action_ok
+from . import web, action_ok, action_error
 
-frame = {}
+from vote.lib.vote import VotePool, VoteFrame, VoteException
+
 
 @view_config(route_name='frame', request_method='GET')
 @web
@@ -29,14 +30,18 @@ def new_frame(request):
     post params:
     
     The final results from the previous frame are returned (this prevents the need )
-    """
-    previous_frame = frame.copy()
-    frame.clear()
-    
+    """    
     return action_ok()
 
 
 @view_config(route_name='vote')
 @web
 def vote(request):
+    vote_pool = VotePool.get_pool(request.matchdict['pool'])
+    if not vote_pool:
+        raise action_error(message='unknown vote_pool: {0}'.format(request.matchdict['pool']), code=400)
+    try:
+        vote_pool.current_frame.vote(request.session.get('id'), request.params.get('item'))
+    except VoteException as e:
+        raise action_error(message=e.message, code=400)
     return action_ok()

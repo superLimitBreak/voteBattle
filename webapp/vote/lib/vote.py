@@ -4,6 +4,9 @@ from externals.lib.misc import OrderedDefaultdict
 import logging
 log = logging.getLogger(__name__)
 
+class VoteException(Exception):
+    pass
+
 
 class VotePool(object):
     _pools = {}
@@ -30,7 +33,7 @@ class VotePool(object):
         self._add_pool(self)
 
     def new_frame(self, items):
-        self.frames.append(Frame(items))
+        self.frames.append(VoteFrame(items))
 
     @property
     def current_frame(self):
@@ -40,7 +43,7 @@ class VotePool(object):
         self._del_pool(self)
 
 
-class Frame(object):
+class VoteFrame(object):
 
     def __init__(self, items, **options):
         self.frame = OrderedDefaultdict(set)
@@ -57,12 +60,10 @@ class Frame(object):
     def vote(self, voter, item):
         if voter in self.voters:
         #if self.options.get('single_vote_per_voter', True) and voter in self.voters:
-            log.debug('rejected multivote')
-            return
+            raise VoteException('rejected multivote: {0}'.format(voter))
         #self.voters
         if item not in self.frame:
-            log.debug('rejected item not in frame')
-            return
+            raise VoteException('rejected item:{0} not in {1}'.format(item, self.frame.keys()))
         self.frame[item].add(voter)
         #self.total_votes += 1
 

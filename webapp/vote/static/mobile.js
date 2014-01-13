@@ -1,4 +1,4 @@
 var settings = {
-    "mobile_client_select.refresh": 20  // Seconds
+    "mobile.client.select.refresh": 20  // Seconds
 };
 

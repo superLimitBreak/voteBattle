@@ -1,11 +1,13 @@
 from externals.lib.misc import decorator_combine
 
 from externals.lib.pyramid.auto_format import action_ok, action_error
+from externals.lib.pyramid.etag import etag_decorator
 
 __all__ = [
     'web',
     'action_ok',
     'action_error',
+    'etag_decorator',
 ]
 
 #-------------------------------------------------------------------------------

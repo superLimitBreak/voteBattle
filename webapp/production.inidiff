@@ -1,2 +1,4 @@
 [app:main]
 pyramid.reload_templates = false
+
+server.etag.enabled = True -> bool

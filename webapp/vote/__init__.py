@@ -59,12 +59,17 @@ def main(global_config, **settings):
     
     # Routes -------------------------------------------------------------------
     
-    config.add_route('home' , append_format_pattern('/')     )
-    config.add_route('frame', append_format_pattern('/frame'))
-    config.add_route('vote' , append_format_pattern('/vote') )
+    config.add_route('mobile_client_select', append_format_pattern('/')                    )
+    config.add_route('mobile_client'       , append_format_pattern('/mobile_client/{pool}'))
+    config.add_route('frame'               , append_format_pattern('/frame')               )
+    config.add_route('vote'                , append_format_pattern('/vote')                )
     
     # Events -------------------------------------------------------------------
     config.add_subscriber(add_template_helpers_to_event, pyramid.events.BeforeRender)
+    
+    # Init ---------------------------------------------------------------------
+    from vote.lib.vote import VotePool
+    VotePool('default')
     
     # Return -------------------------------------------------------------------
     config.scan(ignore='.tests')

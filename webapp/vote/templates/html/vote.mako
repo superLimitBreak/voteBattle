@@ -3,6 +3,6 @@
 <%def name="title()">Vote</%def>
 
 <%def name="body()">
-	<h1>Vote</h1>
+	<h1>${title()}</h1>
     ${data}
 </%def>

@@ -69,8 +69,8 @@ def main(global_config, **settings):
     config.add_subscriber(add_template_helpers_to_event, pyramid.events.BeforeRender)
     
     # Init ---------------------------------------------------------------------
-    #from vote.lib.vote import VotePool
-    #VotePool('default')
+    from vote.lib.vote import VotePool
+    VotePool('default')
     
     # Return -------------------------------------------------------------------
     config.scan(ignore='.tests')

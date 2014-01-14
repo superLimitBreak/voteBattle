@@ -1,10 +1,11 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 
-from . import web, action_ok, etag_decorator
+from externals.lib.misc import now
 
 from vote.lib.vote import VotePool
 
+from . import web, action_ok, etag_decorator, set_cookie
 
 def generate_cache_key_mobile_client_select(request):
     return '-'.join(VotePool.get_pool_ids())  # This could be md5'ed because the pool list could become long
@@ -28,4 +29,5 @@ def mobile_client_select(request):
 @view_config(route_name='mobile_client')
 @web
 def mobile_client(request):
+    set_cookie(request, name='server_timesync', data={'server_timesync': now()}, path=request.path)
     return action_ok(data={'pool':request.matchdict['pool']})

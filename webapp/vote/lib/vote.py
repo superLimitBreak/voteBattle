@@ -1,4 +1,6 @@
 from functools import reduce
+import datetime
+
 from externals.lib.misc import OrderedDefaultdict
 
 import logging
@@ -49,6 +51,8 @@ class VoteFrame(object):
         self.frame = OrderedDefaultdict(set)
         for item in items:
             self.frame[item]
+        self.timestamp = datetime.datetime.now()
+        self.duration = datetime.timedelta(seconds=options.get('duration',0))
         #self.voters = set()
         #self.options = options
         #self.total_votes = 0

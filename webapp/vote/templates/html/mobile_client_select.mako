@@ -23,7 +23,7 @@
 				function(){
 					console.log("refresh");
 				},
-				settings["mobile_client_select.refresh"] * 1000
+				settings["mobile.client.select.refresh"] * 1000
 			);
 		}//);
 	</script>

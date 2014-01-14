@@ -1,7 +1,7 @@
 from functools import reduce
 import datetime
 
-from externals.lib.misc import OrderedDefaultdict
+from externals.lib.misc import OrderedDefaultdict, now
 
 import logging
 log = logging.getLogger(__name__)
@@ -34,12 +34,19 @@ class VotePool(object):
         self.frames = []
         self._add_pool(self)
 
-    def new_frame(self, items):
-        self.frames.append(VoteFrame(items))
+    def new_frame(self, items, **options):
+        self.frames.append(VoteFrame(items, **options))
+
+    def previous_frames(self, limit=0):
+        return self.frames[-limit-1:-1]
+
+    def size(self):
+        return len(self.frames)
 
     @property
     def current_frame(self):
-        return self.frames[-1]
+        if self.frames:
+            return self.frames[-1]
 
     def remove(self):
         self._del_pool(self)
@@ -51,7 +58,7 @@ class VoteFrame(object):
         self.frame = OrderedDefaultdict(set)
         for item in items:
             self.frame[item]
-        self.timestamp = datetime.datetime.now()
+        self.timestamp = now()
         self.duration = datetime.timedelta(seconds=options.get('duration',0))
         #self.voters = set()
         #self.options = options

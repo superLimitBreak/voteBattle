@@ -63,6 +63,7 @@ def main(global_config, **settings):
     config.add_route('mobile_client'       , append_format_pattern('/mobile_client/{pool}'))
     config.add_route('vote'                , append_format_pattern('/api/{pool}/vote'))
     config.add_route('frame'               , append_format_pattern('/api/{pool}/frame'))
+    config.add_route('previous_frames'     , append_format_pattern('/api/{pool}/previous_frames'))
     
     
     # Events -------------------------------------------------------------------

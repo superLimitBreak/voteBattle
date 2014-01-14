@@ -18,5 +18,5 @@ function get_server_datetime() {
         }
     }
     return new Date() - server_datetime_offset;
-}
-var now = get_server_datetime();
+};
+get_server_datetime();  // Set cookies and init server offset as soon as possible

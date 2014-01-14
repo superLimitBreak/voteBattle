@@ -10,6 +10,7 @@ __all__ = [
     'action_error',
     'etag_decorator',
     'set_cookie',
+    'cache', 'cache_none',
 ]
 
 #-------------------------------------------------------------------------------
@@ -24,4 +25,16 @@ web = decorator_combine(
     auto_format_output,
     overlay_session_identity(('id',)),
     mark_external_request
+)
+
+
+#-------------------------------------------------------------------------------
+# Cache
+#-------------------------------------------------------------------------------
+
+from dogpile.cache import make_region
+from dogpile.cache.api import NO_VALUE as cache_none
+
+cache = make_region().configure(
+    'dogpile.cache.memory'
 )

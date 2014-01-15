@@ -52,9 +52,9 @@ shell:
 	env/bin/pshell $(INI_DEV)
 
 ini_test:
-	env/bin/python3 $(PATH_EXTERNALS)/scripts/make_ini.py test
+	env/bin/python3 $(PATH_EXTERNALS)lib/make_ini.py test
 ini_production:
-	env/bin/python3 $(PATH_EXTERNALS)/scripts/make_ini.py production
+	env/bin/python3 $(PATH_EXTERNALS)lib/make_ini.py production
 
 clean:
 	rm -rf env

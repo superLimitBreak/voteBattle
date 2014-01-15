@@ -61,6 +61,7 @@ def main(global_config, **settings):
     
     config.add_route('mobile_client_select', append_format_pattern('/'))
     config.add_route('mobile_client'       , append_format_pattern('/mobile_client/{pool}'))
+    config.add_route('new_vote_pool'       , append_format_pattern('/api/new'))
     config.add_route('vote'                , append_format_pattern('/api/{pool}/vote'))
     config.add_route('frame'               , append_format_pattern('/api/{pool}/frame'))
     config.add_route('previous_frames'     , append_format_pattern('/api/{pool}/previous_frames'))
@@ -70,8 +71,8 @@ def main(global_config, **settings):
     config.add_subscriber(add_template_helpers_to_event, pyramid.events.BeforeRender)
     
     # Init ---------------------------------------------------------------------
-    from vote.lib.vote import VotePool
-    VotePool('default')
+    #from vote.lib.vote import VotePool
+    #VotePool('default')
     
     # Return -------------------------------------------------------------------
     config.scan(ignore='.tests')

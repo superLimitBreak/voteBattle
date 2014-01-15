@@ -93,11 +93,12 @@ def new_frame(request):
     except Exception:
         raise action_error(message='invalid items', status_code=400)
     previous_frame = vote_pool.current_frame
-    new_frame = VotePool.new_frame(items, **request.params)
+    new_frame = vote_pool.new_frame(items, **request.params)
     invalidate_frame(id)
     return action_ok(data={
+        'sequence_id': vote_pool.size(),
+        'frame': new_frame.to_dict(),
         'previous_frame': previous_frame.to_dict(),
-        'new_frame'     : new_frame.to_dict(),
     })
 
 
@@ -121,3 +122,19 @@ def previous_frames(request):
         }
     previous_frame_data = cache.get_or_create(generate_cache_key_previous_frames(request), get_previous_frame_dict)
     return action_ok(data=previous_frame_data)
+
+
+# New Vote Pool ----------------------------------------------------------------
+
+@view_config(route_name='new_vote_pool', request_method='POST')
+@web
+def new_vote_pool(request):
+    VotePool(request.params['id'])
+    return action_ok()
+   
+#@view_config(route_name='remove_vote_pool', request_method='DELETE')
+#@web
+#def remove_vote_pool(request):
+#    pass
+
+    

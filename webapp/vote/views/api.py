@@ -10,6 +10,8 @@ Terminology:
 from collections import defaultdict
 from pyramid.view import view_config
 
+from externals.lib.misc import json_string
+
 from . import web, action_ok, action_error, etag_decorator, cache, cache_none
 
 from vote.lib.vote import VotePool, VoteException
@@ -36,7 +38,10 @@ def vote(request):
         vote_pool.current_frame.vote(request.session.get('id'), request.params.get('item'))
     except VoteException as e:
         raise action_error(message=e.message, code=400)
+    # Clear Cache
     invalidate_frame(id)
+    # Send update over websocket
+    request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)).encode('utf-8'))
     return action_ok()
 
 
@@ -90,10 +95,10 @@ def new_frame(request):
     previous_frame = vote_pool.current_frame
     new_frame = VotePool.new_frame(items, **request.params)
     invalidate_frame(id)
-    return action_ok(data=dict(
-        previous_frame = previous_frame.to_dict(),
-        new_frame      =      new_frame.to_dict(),
-    ))
+    return action_ok(data={
+        'previous_frame': previous_frame.to_dict(),
+        'new_frame'     : new_frame.to_dict(),
+    })
 
 
 # Previous Frames --------------------------------------------------------------

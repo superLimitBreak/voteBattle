@@ -36,6 +36,7 @@ class VotePool(object):
 
     def new_frame(self, items, **options):
         self.frames.append(VoteFrame(items, **options))
+        return self.current_frame
 
     def previous_frames(self, limit=0):
         return self.frames[-limit-1:-1]
@@ -59,7 +60,8 @@ class VoteFrame(object):
         for item in items:
             self.frame[item]
         self.timestamp = now()
-        self.duration = datetime.timedelta(seconds=options.get('duration',0))
+        if options.get('duration'):
+            self.duration = datetime.timedelta(seconds=options.get('duration',0))
         #self.voters = set()
         #self.options = options
         #self.total_votes = 0

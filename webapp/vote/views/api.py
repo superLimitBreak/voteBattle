@@ -93,12 +93,12 @@ def new_frame(request):
     except Exception:
         raise action_error(message='invalid items', status_code=400)
     previous_frame = vote_pool.current_frame
-    new_frame = vote_pool.new_frame(items, **request.params)
+    new_frame = vote_pool.new_frame(items, duration=request.params.get('duration'))
     invalidate_frame(id)
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': new_frame.to_dict(),
-        'previous_frame': previous_frame.to_dict(),
+        'previous_frame': previous_frame.to_dict() if previous_frame else None,
     })
 
 

@@ -49,3 +49,12 @@ def test_frame_sequence(app):
     response_data = app.get('/api/test_vote/previous_frames.json?limit=1').json['data']
     assert len(response_data['frames']) == 1
     assert 'option4' in response_data['frames'][0]
+
+def test_vote(app):
+    # Create new vote pool called 'test_vote'
+    #response_json = app.post('/api/new.json', dict(id='test_vote')).json
+    #assert response_json['status']=='ok'
+    
+
+def test_cache(app):
+    pass

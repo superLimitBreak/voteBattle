@@ -39,7 +39,9 @@ class VotePool(object):
         return self.current_frame
 
     def previous_frames(self, limit=0):
-        return self.frames[-limit-1:-1]
+        if limit:
+            return self.frames[-(limit+1):-1]
+        return self.frames[:-1]
 
     def size(self):
         return len(self.frames)

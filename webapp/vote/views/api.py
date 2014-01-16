@@ -16,6 +16,9 @@ from . import web, action_ok, action_error, etag_decorator, cache, cache_none
 
 from vote.lib.vote import VotePool, VoteException
 
+import logging
+log = logging.getLogger(__name__)
+
 
 # Cache ------------------------------------------------------------------------
 
@@ -42,6 +45,7 @@ def vote(request):
     invalidate_frame(id)
     # Send update over websocket
     request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)).encode('utf-8'))
+    log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(id, request.session.get('id'), request.params.get('item')))
     return action_ok()
 
 
@@ -95,6 +99,7 @@ def new_frame(request):
     previous_frame = vote_pool.current_frame
     new_frame = vote_pool.new_frame(items, duration=request.params.get('duration'))
     invalidate_frame(id)
+    log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(id, items))
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': new_frame.to_dict(),
@@ -130,6 +135,7 @@ def previous_frames(request):
 @web
 def new_vote_pool(request):
     VotePool(request.params['id'])
+    log.debug('NEW_POOL VotePool:{0}'.format(id))
     return action_ok()
    
 #@view_config(route_name='remove_vote_pool', request_method='DELETE')

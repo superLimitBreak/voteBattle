@@ -92,6 +92,8 @@ def new_frame(request):
     vote_pool = VotePool.get_pool(id)
     if not vote_pool:
         raise action_error(message='unknown vote_pool: {0}'.format(id), code=400)
+    if vote_pool.owner and vote_pool.owner != request.session['id']:
+        raise action_error(message='not owner of vote_pool: {0}'.format(id), code=403)
     try:
         items = map(lambda item: item.strip(),request.params['items'].split(','))
     except Exception:
@@ -134,10 +136,10 @@ def previous_frames(request):
 @view_config(route_name='new_vote_pool', request_method='POST')
 @web
 def new_vote_pool(request):
-    VotePool(request.params['id'])
-    log.debug('NEW_POOL VotePool:{0}'.format(id))
+    VotePool(request.params['id'], owner=request.session['id'])
+    log.debug('NEW_POOL VotePool:{0} with owner {1}'.format(id, request.session['id']))
     return action_ok()
-   
+
 #@view_config(route_name='remove_vote_pool', request_method='DELETE')
 #@web
 #def remove_vote_pool(request):

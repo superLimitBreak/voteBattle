@@ -29,10 +29,11 @@ class VotePool(object):
     def _del_pool(_class, vote_pool):
         del _class._pools[vote_pool.id]
 
-    def __init__(self, id):
+    def __init__(self, id, owner=None):
         self.id = id
         self.frames = []
         self._add_pool(self)
+        self.owner = owner
 
     def new_frame(self, items, **options):
         self.frames.append(VoteFrame(items, **options))

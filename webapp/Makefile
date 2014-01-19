@@ -35,7 +35,7 @@ setup: env
 	env/bin/python setup.py develop
 
 dependency_downloader.py:
-	curl https://raw.github.com/calaldees/KaraKara/master/website/karakara/scripts/dependency_downloader.py --compressed -O
+	curl https://raw.github.com/calaldees/libs/master/python3/lib/dependency_downloader.py --compressed -O
 
 externals:
 	env/bin/python dependency_downloader.py --destination $(PATH_EXTERNALS)

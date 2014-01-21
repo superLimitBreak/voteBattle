@@ -83,9 +83,22 @@ def test_vote(app):
     assert len(response_data['frame']['option2']) == 0
 
     # Remove vote pool called 'test_vote'
-    response_json = app.delete('/api/test_vote.json').json
-    assert response_json['status']=='ok'
+    app.delete('/api/test_vote.json').json
+
+
+def test_mobile_client_landing_flow(app):
+    response = app.get('/')
+    assert 'waiting' in response.text.lower(), "The landing screen should start waiting"
+
+    app.post('/api/.json', dict(id='test_vote')).json
+    app.post('/api/test_vote.json', dict(items='option1,option2,option3')).json['data']
+
+    response = app.get('/')
+    assert 'mobile_client/test_vote' in response.text.lower(), "The landing screen link to a mobile_client url for the created vote"
+    # humm. . this is redirect
+    
+    #soup = BeautifulSoup(app.get('/').text)
+    #assert 'mobile_client/test_vote' in soup.find_all('li')[0].a['href'], "The landing screen link to a mobile_client url for the created vote"
     
 
-def test_cache(app):
-    pass
+    app.delete('/api/test_vote.json').json

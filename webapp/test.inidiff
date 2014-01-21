@@ -1,2 +1,3 @@
 [app:main]
 vote.port.tcp = 9872 -> int
+server.etag.enabled = True -> bool

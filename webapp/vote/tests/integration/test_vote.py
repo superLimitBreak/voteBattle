@@ -2,6 +2,7 @@ from ..conftest import unimplemented, unfinished, xfail
 
 from bs4 import BeautifulSoup
 
+
 def assert_in(values, items):
     for value in values:
         assert value in items
@@ -49,7 +50,12 @@ def test_frame_sequence(app):
     response_data = app.get('/api/test_vote/previous_frames.json?limit=1').json['data']
     assert len(response_data['frames']) == 1
     assert 'option4' in response_data['frames'][0]
-    
+
+    # Remove vote pool called 'test_vote'
+    response_json = app.delete('/api/new.json?pool_id=test_vote').json
+    assert response_json['status']=='ok'
+    response_json = app.get('/api/test_vote/frame.json', expect_errors=True).json
+    assert response_json['code'] == 400
     
 
 def test_vote(app):

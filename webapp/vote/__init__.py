@@ -60,11 +60,11 @@ def main(global_config, **settings):
     # Routes -------------------------------------------------------------------
     
     config.add_route('mobile_client_select', append_format_pattern('/'))
-    config.add_route('mobile_client'       , append_format_pattern('/mobile_client/{pool}'))
+    config.add_route('mobile_client'       , append_format_pattern('/mobile_client/{pool_id}'))
     config.add_route('new_vote_pool'       , append_format_pattern('/api/new'))
-    config.add_route('vote'                , append_format_pattern('/api/{pool}/vote'))
-    config.add_route('frame'               , append_format_pattern('/api/{pool}/frame'))
-    config.add_route('previous_frames'     , append_format_pattern('/api/{pool}/previous_frames'))
+    config.add_route('vote'                , append_format_pattern('/api/{pool_id}/vote'))
+    config.add_route('frame'               , append_format_pattern('/api/{pool_id}/frame'))
+    config.add_route('previous_frames'     , append_format_pattern('/api/{pool_id}/previous_frames'))
     
     
     # Events -------------------------------------------------------------------

@@ -79,7 +79,7 @@ class VoteFrame(object):
             raise VoteException('rejected multivote: {0}'.format(voter))
         #self.voters
         if item not in self.frame:
-            raise VoteException('rejected item:{0} not in {1}'.format(item, self.frame.keys()))
+            raise VoteException('rejected item:{0} not in {1}'.format(item, set(self.frame.keys())))
         self.frame[item].add(voter)
         #self.total_votes += 1
 

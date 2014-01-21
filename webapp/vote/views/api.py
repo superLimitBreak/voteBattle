@@ -53,10 +53,12 @@ def get_pool(request, is_owner=False):
 @web
 def vote(request):
     vote_pool = get_pool(request)
+    if not vote_pool.current_frame:
+        raise action_error(message="no vote frame setup yet", code=400)
     try:
         vote_pool.current_frame.vote(request.session.get('id'), request.params.get('item'))
     except VoteException as e:
-        raise action_error(message=e.message, code=400)
+        raise action_error(message=str(e), code=400)
     # Clear Cache
     invalidate_frame(vote_pool.id)
     # Send update over websocket
@@ -150,7 +152,7 @@ def new_vote_pool(request):
     log.info('NEW_POOL VotePool:{0} with owner {1}'.format(vote_pool.id, vote_pool.owner))
     return action_ok(code=201)
 
-@view_config(route_name='new_vote_pool', request_method='DELETE')
+@view_config(route_name='frame', request_method='DELETE')
 @web
 def remove_vote_pool(request):
     vote_pool = get_pool(request, is_owner=True)

@@ -19,7 +19,7 @@ class VotePool(object):
     
     @classmethod
     def get_pool(_class, id):
-        return _class._pools[id]
+        return _class._pools.get(id)
 
     @classmethod
     def _add_pool(_class, vote_pool):

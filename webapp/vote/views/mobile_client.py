@@ -30,4 +30,4 @@ def mobile_client_select(request):
 @web
 def mobile_client(request):
     set_cookie(request, name='server_timesync', data={'server_timesync': now()}, path=request.path)
-    return action_ok(data={'pool':request.matchdict['pool']})
+    return action_ok(data={'pool':request.matchdict['pool_id']})

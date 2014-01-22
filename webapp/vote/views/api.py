@@ -96,6 +96,10 @@ def new_frame(request):
     post params:
     
     The final results from the previous frame are returned (this prevents the need )
+    
+    TODO: Make this method optionaly take an entire frame state
+    If the server crashs and the client has the state of the current frame, attempt to reinstate it
+    We need to be resiliant to both the projector client and the server failing.
     """
     vote_pool = get_pool(request, is_owner=True)
     try:

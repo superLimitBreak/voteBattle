@@ -34,6 +34,7 @@ function setup_websocket() {
 			clearInterval(socket_retry_interval);
 			socket_retry_interval = null;
 		}
+		startup();
 	};
 	socket.onclose  = function() {
 		socket = null;
@@ -56,37 +57,69 @@ setup_websocket();
 
 var vote_pool = 'battle';
 
-function new_frame(items) {
+var current_frame;
+
+function new_frame(vote_pool, items) {
 	items = "attack,defend,heal";
 	$.post('/api/'+vote_pool+'.json', {"items": items})
 	.success(function(data){
-		console.log("new frame");
+		//current_frame = ;
+		console.log("I just made a new frame, im a clever projector interface, now give me a cookie");
 	})
 	.error(function(xhr){
 		var data = xhr.responseJSON;
-		console.log("ballz", data);
+		console.error("ballz", data);
 	});
 }
 
-function pool_ready() {
-	//new_frame(['attack', 'defend', 'heal']);
+// Startup cycle ---------------------------------------------------------------
+//    The startup cycle trys to automatically setup a vote_pool with a frame
+//    in the event these exisit on the server, it will use the server copys
+//    if not, it will create new ones for this projector client
+
+function startup() {
+	console.debug("startup");
+	create_vote_pool(vote_pool);
 }
 
-$(document).ready(function() {
+function create_vote_pool(vote_pool) {
+	console.debug("create_vote_pool", vote_pool);
+	// Create vote_pool if needed
 	$.post("/api/.json" , {"pool_id":vote_pool})
 	.success(function(data){
-		//console.log(data);
-		pool_ready();
+		create_frame(vote_pool);
     })
     .error(function(xhr){
 		var data = xhr.responseJSON;
 		if (data.messages[0].search("already exists")) {
-			//console.log('its all ok');
-			pool_ready();
+			create_frame(vote_pool);
 		}
 	});
-	
-});
+}
+
+function create_frame(vote_pool) {
+	console.debug("create_frame", vote_pool);
+	$.getJSON('/api/'+vote_pool)
+	.success(function(data){
+		console.debug("create_frame", vote_pool, "current frame already on server");
+		current_frame = data['data']
+	})
+	.error(function(xhr){
+		if (current_frame) {
+			console.warn("unimplemented resilience")
+			// TODO - Failure resilience
+			// If this client already has a current frame, this may mean the server has died and may not have it's state
+			// Try to instanciate the state of the last frame
+		}
+		else {
+			console.debug("create_frame", vote_pool, "create new frame");
+			new_frame(vote_pool, ['attack', 'defend', 'heal']);
+		}
+	});
+}
+
+
+//$(document).ready(function() {startup();});
 
 //$.getJSON( url , params , callback )
 //$.post( url , params , callback )

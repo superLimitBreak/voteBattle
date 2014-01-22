@@ -53,3 +53,40 @@ function setup_websocket() {
 
 check_browser_compatability();
 setup_websocket();
+
+var vote_pool = 'battle';
+
+function new_frame(items) {
+	items = "attack,defend,heal";
+	$.post('/api/'+vote_pool+'.json', {"items": items})
+	.success(function(data){
+		console.log("new frame");
+	})
+	.error(function(xhr){
+		var data = xhr.responseJSON;
+		console.log("ballz", data);
+	});
+}
+
+function pool_ready() {
+	new_frame(['attack', 'defend', 'heal']);
+}
+
+$(document).ready(function() {
+	$.post("/api/.json" , {"pool_id":vote_pool})
+	.success(function(data){
+		//console.log(data);
+		pool_ready();
+    })
+    .error(function(xhr){
+		var data = xhr.responseJSON;
+		if (data.messages[0].search("already exists")) {
+			//console.log('its all ok');
+			pool_ready();
+		}
+	});
+	
+});
+
+//$.getJSON( url , params , callback )
+//$.post( url , params , callback )

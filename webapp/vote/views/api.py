@@ -145,10 +145,10 @@ def previous_frames(request):
 @view_config(route_name='new_vote_pool', request_method='POST')
 @web
 def new_vote_pool(request):
-    id = request.params['id']
-    if id in VotePool.get_pool_ids():
-        raise action_error(message='vote_pool: {0} already exisits'.format(id), code=400)
-    vote_pool = VotePool(id, owner=request.session['id'])
+    pool_id = request.params['pool_id']
+    if pool_id in VotePool.get_pool_ids():
+        raise action_error(message='vote_pool: {0} already exisits'.format(pool_id), code=400)
+    vote_pool = VotePool(pool_id, owner=request.session['id'])
     log.info('NEW_POOL VotePool:{0} with owner {1}'.format(vote_pool.id, vote_pool.owner))
     return action_ok(code=201)
 

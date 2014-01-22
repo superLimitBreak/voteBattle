@@ -12,7 +12,7 @@ def test_frame_sequence(app):
     """
     """
     # Create new vote pool called 'test_vote'
-    response_json = app.post('/api/.json', dict(id='test_vote')).json
+    response_json = app.post('/api/.json', dict(pool_id='test_vote')).json
     assert response_json['status']=='ok'
 
     # Create new frame with 3 options
@@ -63,7 +63,7 @@ def test_vote(app):
     app.get('/api/test_vote/vote.json?item=ERROR', expect_errors=True).json
     
     # Create new vote pool called 'test_vote'
-    app.post('/api/.json', dict(id='test_vote')).json
+    app.post('/api/.json', dict(pool_id='test_vote')).json
 
     # Vote when no frames are present
     app.get('/api/test_vote/vote.json?item=ERROR', expect_errors=True).json

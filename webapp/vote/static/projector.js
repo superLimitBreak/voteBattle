@@ -69,7 +69,7 @@ function new_frame(items) {
 }
 
 function pool_ready() {
-	new_frame(['attack', 'defend', 'heal']);
+	//new_frame(['attack', 'defend', 'heal']);
 }
 
 $(document).ready(function() {

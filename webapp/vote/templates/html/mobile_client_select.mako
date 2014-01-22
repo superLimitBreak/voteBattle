@@ -21,7 +21,7 @@
 		//$(document).ready(function() {
 			refresh_timeout = setInterval(
 				function(){
-					console.log("refresh");
+					window.location = window.location;
 				},
 				settings["mobile.client.select.refresh"] * 1000
 			);

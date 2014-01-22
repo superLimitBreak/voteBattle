@@ -81,7 +81,7 @@ def current_frame(request):
     vote_pool = get_pool(request)
     return action_ok(data={
         'sequence_id': vote_pool.size(),
-        'frame': vote_pool.current_frame.to_dict()
+        'frame': vote_pool.current_frame.to_dict() if vote_pool.current_frame else {}
     }
 )
 

@@ -1,5 +1,6 @@
 from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
+from pyramid.request import Request
 
 from externals.lib.misc import now
 
@@ -30,4 +31,5 @@ def mobile_client_select(request):
 @web
 def mobile_client(request):
     set_cookie(request, name='server_timesync', data={'server_timesync': now()}, path=request.path)
-    return action_ok(data={'pool':request.matchdict['pool_id']})
+    current_frame = request.invoke_subrequest(Request.blank('/api/{}.json'.format(request.matchdict['pool_id']))).json['data']
+    return action_ok(data=current_frame)

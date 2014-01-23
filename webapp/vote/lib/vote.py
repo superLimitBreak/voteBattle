@@ -35,8 +35,8 @@ class VotePool(object):
         self._add_pool(self)
         self.owner = owner
 
-    def new_frame(self, items, **options):
-        self.frames.append(VoteFrame(items, **options))
+    def new_frame(self, items, **properties):
+        self.frames.append(VoteFrame(items, **properties))
         return self.current_frame
 
     def previous_frames(self, limit=0):
@@ -58,13 +58,13 @@ class VotePool(object):
 
 class VoteFrame(object):
 
-    def __init__(self, items, **options):
+    def __init__(self, items, **properties):
         self.frame = OrderedDefaultdict(set)
         for item in items:
             self.frame[item]
         self.timestamp = now()
-        if options.get('duration'):
-            self.duration = datetime.timedelta(seconds=options.get('duration',0))
+        self.duration = datetime.timedelta(seconds=properties.pop('duration',0))
+        self.properties = properties
         #self.voters = set()
         #self.options = options
         #self.total_votes = 0
@@ -93,9 +93,16 @@ class VoteFrame(object):
         return reduce(lambda a,b: a.union(b), self.frame.values())
     
     def to_dict(self, total=False):
-        d = dict(self.frame)
+        votes = dict(self.frame)
         if total:
-            for key in d:
-                d[key] = len(d[key])
-        return d
-        
+            for key in votes:
+                votes[key] = len(votes[key])
+        return {
+            'votes': votes,
+            'timeframe': {
+                'start': self.timestamp,
+                'duration': self.duration,
+                'end': self.timestamp + self.duration,
+            },
+            'properties': self.properties,
+        }

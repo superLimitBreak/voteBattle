@@ -22,9 +22,9 @@ log = logging.getLogger(__name__)
 
 # Cache ------------------------------------------------------------------------
 
-CURRENT_FRAME_COUNTER = defaultdict(int)
-def invalidate_frame(id):
-    CURRENT_FRAME_COUNTER[id] += 1
+CACHE_COUNTER = defaultdict(int)
+def invalidate_cache(id):
+    CACHE_COUNTER[id] += 1
     cache.delete(id)
     
 # Utils ------------------------------------------------------------------------
@@ -59,8 +59,6 @@ def vote(request):
         vote_pool.current_frame.vote(request.session.get('id'), request.params.get('item'))
     except VoteException as e:
         raise action_error(message=str(e), code=400)
-    # Clear Cache
-    invalidate_frame(vote_pool.id)
     # Send update over websocket
     request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)).encode('utf-8'))
     log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(vote_pool.id, request.session.get('id'), request.params.get('item')))
@@ -72,12 +70,20 @@ def vote(request):
 def generate_cache_key_current_frame(request):
     return '-'.join([
         request.path_qs,
-        str(CURRENT_FRAME_COUNTER[request.matchdict['pool_id']])
+        str(CACHE_COUNTER[request.matchdict['pool_id']])
     ])
 @view_config(route_name='frame', request_method='GET')
 @etag_decorator(generate_cache_key_current_frame)
 @web
 def current_frame(request):
+    """
+    The current frame is client cached under the etag of it's frame counter
+    This means if a client wants an 'up to the second' response they have to cache bust the query string
+    Projector interfaces will get updates via websockets.
+    It's worth noting that if a client joins a vote half way through, the etaged frame they receive will have votes in it
+    
+    TODO: Is it worth making this return cutdown item details for mobile clients, but the full thing for the frame owner?
+    """
     vote_pool = get_pool(request)
     return action_ok(data={
         'sequence_id': vote_pool.size(),
@@ -102,14 +108,18 @@ def new_frame(request):
     We need to be resiliant to both the projector client and the server failing.
     """
     vote_pool = get_pool(request, is_owner=True)
+    if request.params.get('frame_state'):
+        # the host interface could need to restore a frame state from server failure
+        raise action_error(message='unimplemented', code=502)
+    properties = dict(request.params)
     try:
-        items = map(lambda item: item.strip(),request.params['items'].split(','))
+        properties['items'] = map(lambda item: item.strip(),properties['items'].split(','))
     except Exception:
         raise action_error(message='invalid items', code=400)
     previous_frame = vote_pool.current_frame
-    new_frame = vote_pool.new_frame(items, duration=request.params.get('duration'))
-    invalidate_frame(vote_pool.id)
-    log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(vote_pool.id, items))
+    new_frame = vote_pool.new_frame(**properties)
+    invalidate_cache(vote_pool.id)
+    log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(vote_pool.id, properties))
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': new_frame.to_dict(),
@@ -161,6 +171,6 @@ def new_vote_pool(request):
 def remove_vote_pool(request):
     vote_pool = get_pool(request, is_owner=True)
     vote_pool.remove()
-    invalidate_frame(vote_pool.id)
+    invalidate_cache(vote_pool.id)
     log.info('REMOVED_POOL VotePool:{0}'.format(vote_pool.id))
     return action_ok()

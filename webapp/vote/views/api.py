@@ -7,6 +7,7 @@ Terminology:
     that are not connected via websockets know when to refresh and can provide
     user feedback
 """
+import random
 from collections import defaultdict
 from pyramid.view import view_config
 
@@ -22,7 +23,7 @@ log = logging.getLogger(__name__)
 
 # Cache ------------------------------------------------------------------------
 
-CACHE_COUNTER = defaultdict(int)
+CACHE_COUNTER = defaultdict(lambda: random.randint(0,10000))
 def invalidate_cache(id):
     CACHE_COUNTER[id] += 1
     cache.delete(id)
@@ -60,7 +61,7 @@ def vote(request):
     except VoteException as e:
         raise action_error(message=str(e), code=400)
     # Send update over websocket
-    request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)).encode('utf-8'))
+    request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)['votes']).encode('utf-8'))
     log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(vote_pool.id, request.session.get('id'), request.params.get('item')))
     return action_ok()
 

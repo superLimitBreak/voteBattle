@@ -1,11 +1,15 @@
+
+// Settings --------------------------------------------------------------------
+
 $.cookie.json = true;
 
 var settings = {
     "mobile.client.select.refresh": 20  // Seconds
 };
 
+// Timesync --------------------------------------------------------------------
 
-function get_server_datetime() {
+function now() {
     var server_datetime_offset = $.cookie('server_datetime_offset');
     if (!server_datetime_offset) {
         try {
@@ -19,4 +23,18 @@ function get_server_datetime() {
     }
     return new Date() - server_datetime_offset;
 };
-get_server_datetime();  // Set cookies and init server offset as soon as possible
+now();  // Set cookies and init server offset as soon as possible
+
+// Startup ---------------------------------------------------------------------
+
+function startup_client(pool_id) {
+	$.getJSON('/api/'+pool_id)
+	.success(function(data){
+		console.log("frame data", data);
+	})
+	.error(function(xhr){
+        console.error("ballz");
+	});
+
+};
+console.log("LIB READY");

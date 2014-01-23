@@ -102,7 +102,7 @@ class VoteFrame(object):
             'timeframe': {
                 'start': self.timestamp,
                 'duration': self.duration,
-                'end': self.timestamp + self.duration,
+                'end': self.timestamp + self.duration if self.duration else None,
             },
             'properties': self.properties,
         }

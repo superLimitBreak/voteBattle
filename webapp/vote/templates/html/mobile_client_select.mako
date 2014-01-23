@@ -17,7 +17,7 @@
 	
 	<script type="text/javascript">
 		var refresh_timeout;
-		document.ready = function() {
+		document.addEventListener("DOMContentLoaded", function() {
 		//$(document).ready(function() {
 			refresh_timeout = setInterval(
 				function(){
@@ -25,6 +25,6 @@
 				},
 				settings["mobile.client.select.refresh"] * 1000
 			);
-		}//);
+		});
 	</script>
 </%def>

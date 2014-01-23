@@ -28,13 +28,30 @@ now();  // Set cookies and init server offset as soon as possible
 // Startup ---------------------------------------------------------------------
 
 function startup_client(pool_id) {
-	$.getJSON('/api/'+pool_id)
-	.success(function(data){
-		console.log("frame data", data);
+	$.getJSON('/api/'+pool_id+'.json')
+	.success(function(response_json){
+        var votes = response_json['data']['frame']['votes'];
+        console.debug("vote_options", votes);
+        var $vote_input = $('#vote_input');
+        $vote_input.empty();
+		$.each(votes, function(key, value){
+            $vote_input.append('<li data-item="'+key+'">'+key+'</li>');
+        });
+        $vote_input.find('li').on('click', function(){
+            var item = $(this).data('item');
+            //console.debug("vote", item);
+            $.getJSON('/api/'+pool_id+'/vote.json?item='+item)
+            .success(function(data){
+                console.debug("vote successful");
+                $vote_input.empty();
+            })
+            .error(function(xhr){
+                console.error(xhr.responseJSON['messages'][0]);
+            });
+        });
 	})
 	.error(function(xhr){
-        console.error("ballz");
+        console.error("startup_client failed");
 	});
 
 };
-console.log("LIB READY");

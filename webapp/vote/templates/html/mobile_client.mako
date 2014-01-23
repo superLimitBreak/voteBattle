@@ -6,15 +6,14 @@
 
 	<h1>${title()}</h1>
 	##${data}
-	<ol class="vote_input">
+	<ol id="vote_input">
 	
 	</ol>
 
 	<script type="text/javascript">
-		document.ready = function(){
-			console.log("IM READY!");
+		document.addEventListener("DOMContentLoaded", function() {
 			startup_client("${request.matchdict['pool_id']}");
-		};
+		});
 	</script>
 
 </%def>

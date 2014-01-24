@@ -99,7 +99,7 @@ function create_vote_pool(vote_pool) {
 
 function create_frame(vote_pool) {
 	console.debug("create_frame", vote_pool);
-	$.getJSON('/api/'+vote_pool)
+	$.getJSON('/api/'+vote_pool, {duration:30})
 	.success(function(data){
 		console.debug("create_frame", vote_pool, "current frame already on server");
 		current_frame = data['data']

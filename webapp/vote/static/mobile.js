@@ -4,12 +4,15 @@
 $.cookie.json = true;
 
 var settings = {
-    "mobile.client.select.refresh": 20  // Seconds
+    "mobile.client.select.refresh": 20,  // Seconds
+    "mobile.client.retry.timeout.missed": 1,
+    "mobile.client.retry.timeout.default_frame_duration": 10,
 };
 
 // Timesync --------------------------------------------------------------------
 
-function now() {
+
+function timediff(datetime) {
     var server_datetime_offset = $.cookie('server_datetime_offset');
     if (!server_datetime_offset) {
         try {
@@ -21,9 +24,29 @@ function now() {
             console.warn("Unable to determin server_datetime_offset");
         }
     }
-    return new Date() - server_datetime_offset;
+    if (!datetime) {datetime = new Date();}
+    return datetime - server_datetime_offset;
 };
-now();  // Set cookies and init server offset as soon as possible
+timediff();  // Set cookies and init server offset as soon as possible
+var now = timediff;  // function alias for timediff for readabilty
+var timed_functions = {}
+function clear_timed_function(func) {clearTimeout(timed_functions[func]);}
+function set_timed_function(func, timeout) {
+    // at timestamp (with server offset), tigger the function
+    if (timeout == null) {
+        console.error("null timeout");
+        return;
+    }
+    if (typeof(timeout)=="object" && 'getDate' in timeout) {
+        timeout = (timeout - now()) + 1000; // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
+    }
+    if (typeof(timeout)!="number") {
+        console.error("Invalid timeout");
+        return;
+    }
+    console.debug("waiting "+timeout/1000);
+    timed_functions[func] = setTimeout(func, timeout);
+}
 
 
 var sequence_id = 0;
@@ -45,13 +68,27 @@ function get_frame(pool_id) {
 	$.getJSON('/api/'+pool_id+'.json')
 	.success(function(response_json){
         var data = response_json['data'];
+        // If frame aquire is our current frame - retry get_frame
         if (sequence_id == data['sequence_id']) {
             console.log("already on this frame");
+            set_timed_function(function(){
+                get_frame(pool_id);
+            }, settings["mobile.client.retry.timeout.missed"] * 1000);
             return;
         }
+        // Setup new frame
         sequence_id = data['sequence_id'];
         setup_vote_input(pool_id, data['frame']['votes']);
-        
+        // Setup refresh time for new frame
+        var timeout = data['frame']['timeframe']['end'];
+        // if no refresh time provided, fall back to polling
+        if (timeout == null) {
+            console.log("frame has no timeout data, falling back to default wait of "+settings["mobile.client.retry.timeout.default_frame_duration"]);
+            timeout = settings["mobile.client.retry.timeout.default_frame_duration"] * 1000;
+        }
+        set_timed_function(function(){
+            get_frame(pool_id);
+        }, timeout);
 	})
 	.error(function(xhr){
         console.error("get_frame failed");
@@ -86,9 +123,6 @@ function do_vote(pool_id, item) {
     });
 }
 
-function set_frame_refresh_timeout() {
-    
-}
 
 // Startup ---------------------------------------------------------------------
 

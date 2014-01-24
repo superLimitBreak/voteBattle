@@ -25,6 +25,9 @@ function now() {
 };
 now();  // Set cookies and init server offset as soon as possible
 
+
+var sequence_id = 0;
+
 // utils ------
 
 function set_vote_input_state(state) {
@@ -41,11 +44,17 @@ function get_frame(pool_id) {
     console.debug("get_frame", pool_id);
 	$.getJSON('/api/'+pool_id+'.json')
 	.success(function(response_json){
-        var votes = response_json['data']['frame']['votes'];
-        setup_vote_input(pool_id, votes);
+        var data = response_json['data'];
+        if (sequence_id == data['sequence_id']) {
+            console.log("already on this frame");
+            return;
+        }
+        sequence_id = data['sequence_id'];
+        setup_vote_input(pool_id, data['frame']['votes']);
+        
 	})
 	.error(function(xhr){
-        console.error("startup_client failed");
+        console.error("get_frame failed");
 	});
 }
 
@@ -57,18 +66,28 @@ function setup_vote_input(pool_id, votes) {
         $vote_input.append('<li><button data-item="'+key+'">'+key+'</button></li>');
     });
     $vote_input.find('li button').on('click', function(){
-        set_vote_input_state(false);
         var item = $(this).data('item');
-        //console.debug("vote", item);
-        $.getJSON('/api/'+pool_id+'/vote.json?item='+item)
-        .success(function(data){
-            console.debug("vote successful");
-            $vote_input.empty();
-        })
-        .error(function(xhr){
-            console.error(xhr.responseJSON['messages'][0]);
-        });
+        do_vote(pool_id, item);
     });
+}
+
+function do_vote(pool_id, item) {
+    console.debug("do_vote", pool_id, item);
+    set_vote_input_state(false);
+    $.getJSON('/api/'+pool_id+'/vote.json?item='+item)
+    .success(function(data){
+        console.debug("vote successful");
+    })
+    .error(function(xhr){
+        var error_message = xhr.responseJSON['messages'][0];  // TODO: join all the messages
+        if (error_message.search("multivote")) {
+            alert("already voted");
+        }
+    });
+}
+
+function set_frame_refresh_timeout() {
+    
 }
 
 // Startup ---------------------------------------------------------------------

@@ -90,8 +90,8 @@ function create_vote_pool(vote_pool) {
 		create_frame(vote_pool);
     })
     .error(function(xhr){
-		var data = xhr.responseJSON;
-		if (data.messages[0].search("already exists")) {
+		var error_message = xhr.responseJSON.messages[0];
+		if (error_message.search("already exists")) {
 			create_frame(vote_pool);
 		}
 	});

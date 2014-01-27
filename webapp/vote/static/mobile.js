@@ -59,8 +59,8 @@ var sequence_id = 0;
 
 // utils ------
 
-function set_vote_input_state(state) {
-    console.log("set_vote_input_state", state)
+function set_vote_input_state(state, item_confirmed) {
+    console.log("set_vote_input_state", state, item_confirmed);
     $('#vote_input li button').each(function(i, element){
         var $element = $(element);
         $element.attr('disabled', !state);
@@ -125,12 +125,17 @@ function do_vote(pool_id, item) {
     $.getJSON('/api/'+pool_id+'/vote.json?item='+item)
     .success(function(data){
         console.debug("vote successful");
+        set_vote_input_state(false, item);
     })
     .error(function(xhr){
         var error_message = xhr.responseJSON['messages'][0];  // TODO: join all the messages
         if (error_message.search("multivote")) {
             alert("already voted");
+            return;
         }
+        console.error(error_message);
+        consoleNode.log("no idea what went wrong, re-enable the buttons");
+        set_vote_input_state(true);
     });
 }
 

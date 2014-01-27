@@ -112,7 +112,7 @@ function create_frame(vote_pool) {
 	})
 	.error(function(xhr){
 		if (current_frame) {
-			console.warn("unimplemented resilience")
+			console.warn("the server has failed and this projector interface has state - unimplemented resilience of reinstating server frame state")
 			// TODO - Failure resilience
 			// If this client already has a current frame, this may mean the server has died and may not have it's state
 			// Try to instanciate the state of the last frame

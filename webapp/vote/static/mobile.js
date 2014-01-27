@@ -7,6 +7,7 @@ var settings = {
     "mobile.client.select.refresh": 20,  // Seconds
     "mobile.client.retry.timeout.missed": 1,
     "mobile.client.retry.timeout.default_frame_duration": 10,
+    "mobile.client.fetch.offset": 1,  // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
 };
 
 // Timesync --------------------------------------------------------------------
@@ -41,7 +42,7 @@ function set_timed_function(func, timeout) {
         timeout = new Date(timeout);
     }
     if (typeof(timeout)=="object" && 'getDate' in timeout) {
-        timeout = (timeout - now()) + 1000; // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
+        timeout = (timeout - now()) + settings["mobile.client.fetch.offset"]*1000;
     }
     if (typeof(timeout)!="number") {
         console.error("Invalid timeout", timeout);

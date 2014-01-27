@@ -61,7 +61,7 @@ var current_frame;
 
 function new_frame(vote_pool, items) {
 	items = "attack,defend,heal";
-	$.post('/api/'+vote_pool+'.json', {"items": items})
+	$.post('/api/'+vote_pool+'.json', {"items": items, duration: 30})
 	.success(function(data){
 		//current_frame = ;
 		console.log("I just made a new frame, im a clever projector interface, now give me a cookie");
@@ -99,7 +99,7 @@ function create_vote_pool(vote_pool) {
 
 function create_frame(vote_pool) {
 	console.debug("create_frame", vote_pool);
-	$.getJSON('/api/'+vote_pool, {duration:30})
+	$.getJSON('/api/'+vote_pool)
 	.success(function(data){
 		console.debug("create_frame", vote_pool, "current frame already on server");
 		current_frame = data['data']

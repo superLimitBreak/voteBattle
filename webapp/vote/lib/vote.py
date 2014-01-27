@@ -63,7 +63,7 @@ class VoteFrame(object):
         for item in items:
             self.frame[item]
         self.timestamp = now()
-        self.duration = datetime.timedelta(seconds=properties.pop('duration',0))
+        self.duration = datetime.timedelta(seconds=int(properties.pop('duration',0)))
         self.properties = properties
         #self.voters = set()
         #self.options = options

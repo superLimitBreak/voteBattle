@@ -33,15 +33,18 @@ var timed_functions = {}
 function clear_timed_function(func) {clearTimeout(timed_functions[func]);}
 function set_timed_function(func, timeout) {
     // at timestamp (with server offset), tigger the function
-    if (timeout == null) {
+    if (!timeout) {
         console.error("null timeout");
         return;
+    }
+    if (typeof(timeout)=="string") {
+        timeout = new Date(timeout);
     }
     if (typeof(timeout)=="object" && 'getDate' in timeout) {
         timeout = (timeout - now()) + 1000; // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
     }
     if (typeof(timeout)!="number") {
-        console.error("Invalid timeout");
+        console.error("Invalid timeout", timeout);
         return;
     }
     console.debug("waiting "+timeout/1000);

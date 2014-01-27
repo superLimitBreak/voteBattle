@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 
 # Cache ------------------------------------------------------------------------
 
-CACHE_COUNTER = defaultdict(lambda: random.randint(0,10000))
+CACHE_COUNTER = defaultdict(lambda: random.randint(0,65535))
 def invalidate_cache(id):
     CACHE_COUNTER[id] += 1
     cache.delete(id)

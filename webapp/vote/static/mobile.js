@@ -5,9 +5,10 @@ $.cookie.json = true;
 
 var settings = {
     "mobile.client.select.refresh": 20,  // Seconds
+    "mobile.client.retry.timeout.error": 10,
     "mobile.client.retry.timeout.missed": 1,
     "mobile.client.retry.timeout.default_frame_duration": 10,
-    "mobile.client.fetch.offset": 1,  // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
+    "mobile.client.fetch.offset": 0.1,  // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
 };
 
 // Timesync --------------------------------------------------------------------
@@ -55,6 +56,7 @@ function set_timed_function(func, timeout) {
 
 var sequence_id = 0;
 
+
 // utils ------
 
 function set_vote_input_state(state) {
@@ -82,20 +84,25 @@ function get_frame(pool_id) {
         }
         // Setup new frame
         sequence_id = data['sequence_id'];
-        setup_vote_input(pool_id, data['frame']['votes']);
-        // Setup refresh time for new frame
-        var timeout = data['frame']['timeframe']['end'];
-        // if no refresh time provided, fall back to polling
-        if (timeout == null) {
-            console.log("frame has no timeout data, falling back to default wait of "+settings["mobile.client.retry.timeout.default_frame_duration"]);
-            timeout = settings["mobile.client.retry.timeout.default_frame_duration"] * 1000;
+        var votes = data['frame']['votes'];
+        var timeout;
+        if (votes) {
+            timeout = data['frame']['timeframe']['end'];  // Setup refresh timestamp for the next frame - this could be null
+            setup_vote_input(pool_id, votes);  // If we have something to vote for, setup input
+        }
+        if (!timeout) {
+            timeout = settings["mobile.client.retry.timeout.missed"] * 1000;  // Nothing to vote for, keep asking for votes frequently
         }
         set_timed_function(function(){
             get_frame(pool_id);
         }, timeout);
 	})
 	.error(function(xhr){
-        console.error("get_frame failed");
+        console.error("get_frame failed, the server has issues, recovering timeout");
+        setTimeout(function(){
+            get_frame(pool_id);
+        }, settings["mobile.client.retry.timeout.error"] * 1000);
+        return;
 	});
 }
 

@@ -60,15 +60,14 @@ var vote_pool = 'battle';
 var current_frame;
 
 function new_frame(vote_pool, items, duration) {
-	items = "attack,defend,heal";
 	if (!duration) {
 		duration = settings["projector.frame.duration.default"];
 	}
-	$.post('/api/'+vote_pool+'.json', {items: items, duration: duration})
+	$.post('/api/'+vote_pool+'.json', {items: items.join(","), duration: duration})
 	.success(function(data){
 		current_frame = data.data;
 		setTimeout(
-			function(){new_frame(vote_pool, ""+Math.random()+","+Math.random()+","+Math.random())},
+			function(){new_frame(vote_pool, [Math.random(), Math.random(), Math.random()]);},
 			duration*1000
 		);
 		console.log("I just made a new frame, im a clever projector interface, now give me a cookie");

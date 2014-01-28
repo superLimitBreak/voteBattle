@@ -4,6 +4,12 @@ var settings = {
     "projector.frame.duration.default": 15,
 };
 
+function keys(obj) {
+	keys = [];
+	for (item in obj) {keys.push(item);}
+	return keys;
+}
+
 // Browser Compatability -------------------------------------------------------
 
 function check_browser_compatability() {
@@ -22,7 +28,7 @@ function check_browser_compatability() {
 // Websocket -------------------------------------------------------------------
 var socket;
 var socket_retry_interval = null;
-function setup_websocket() {
+function setup_websocket(on_message) {
 	console.log("setup_websocket");
 
 	socket = new WebSocket("ws://"+location.hostname+":"+settings['websocket.port']+"/");
@@ -41,25 +47,23 @@ function setup_websocket() {
 		$('body').addClass('websocket_disconnected');
 		console.log("Websocket: Disconnected");
 		if (!socket_retry_interval) {
-			socket_retry_interval = setInterval(setup_websocket,settings["websocket.disconnected_retry_interval"]*1000);
+			socket_retry_interval = setInterval(function(){setup_websocket(on_message)},settings["websocket.disconnected_retry_interval"]*1000);
 		}
 	};
 	socket.onmessage = function(msg) {
 		var data = JSON.parse(msg.data);
-		console.log('Websocket: data: '+data);
+		on_message(data);
 	};
 }
 
-// Init ------------------------------------------------------------------------
-
-check_browser_compatability();
-setup_websocket();
+// Vote stuff ------------------------------------------------------------------
 
 var vote_pool = 'battle';
 
 var current_frame;
 
 function new_frame(vote_pool, items, duration) {
+	console.debug("new_frame", items, duration);
 	if (!duration) {
 		duration = settings["projector.frame.duration.default"];
 	}
@@ -68,13 +72,13 @@ function new_frame(vote_pool, items, duration) {
 		current_frame = data.data;
 		setTimeout(
 			function(){new_frame(vote_pool, [Math.random(), Math.random(), Math.random()]);},
-			duration*1000
+			duration * 1000
 		);
-		console.log("I just made a new frame, im a clever projector interface, now give me a cookie");
+		console.debug("new_frame created");
 	})
 	.error(function(xhr){
 		var data = xhr.responseJSON;
-		console.error("ballz", data);
+		console.error("new_frame cant create new frame, hu?", data);
 	});
 }
 
@@ -97,7 +101,7 @@ function create_vote_pool(vote_pool) {
     })
     .error(function(xhr){
 		var error_message = xhr.responseJSON.messages[0];
-		if (error_message.search("already exists")) {
+		if (error_message.search("pool already exists")) {
 			create_frame(vote_pool);
 		}
 	});
@@ -107,15 +111,17 @@ function create_frame(vote_pool) {
 	console.debug("create_frame", vote_pool);
 	$.getJSON('/api/'+vote_pool)
 	.success(function(data){
-		console.debug("create_frame", vote_pool, "current frame already on server");
+		console.debug("create_frame", vote_pool, "aquireing frame from server");
 		current_frame = data['data']
 	})
 	.error(function(xhr){
 		if (current_frame) {
-			console.warn("the server has failed and this projector interface has state - unimplemented resilience of reinstating server frame state")
+			console.debug("projector has state, server has no state, re-instating last know frame");
+			//console.warn("the server has failed and this projector interface has state - unimplemented resilience of reinstating server frame state")
 			// TODO - Failure resilience
 			// If this client already has a current frame, this may mean the server has died and may not have it's state
 			// Try to instanciate the state of the last frame
+			new_frame(vote_pool, keys(current_frame['frame']['votes']), current_frame['frame']['timeframe']['duration']);
 		}
 		else {
 			console.debug("create_frame", vote_pool, "create new frame");
@@ -129,3 +135,14 @@ function create_frame(vote_pool) {
 
 //$.getJSON( url , params , callback )
 //$.post( url , params , callback )
+
+function on_message(data) {
+	console.debug("websocket message recived");
+	console.log(data);
+}
+
+
+// Init ------------------------------------------------------------------------
+
+check_browser_compatability();
+setup_websocket(on_message);

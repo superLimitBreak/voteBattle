@@ -11,7 +11,7 @@ import random
 from collections import defaultdict
 from pyramid.view import view_config
 
-from externals.lib.misc import json_string
+from externals.lib.misc import json_string, json_load
 
 from . import web, action_ok, action_error, etag_decorator, cache
 
@@ -110,6 +110,7 @@ def new_frame(request):
     """
     vote_pool = get_pool(request, is_owner=True)
     if request.params.get('frame_state'):
+        #frame_state = json_load(request.params['frame_state'])
         # the host interface could need to restore a frame state from server failure
         raise action_error(message='unimplemented', code=502)
     properties = dict(request.params)

@@ -5,10 +5,12 @@ var settings = {
 };
 
 function keys(obj) {
-	keys = [];
+	var keys = [];
 	for (item in obj) {keys.push(item);}
 	return keys;
 }
+
+
 
 // Browser Compatability -------------------------------------------------------
 
@@ -59,8 +61,8 @@ function setup_websocket(on_message) {
 // Vote stuff ------------------------------------------------------------------
 
 var vote_pool = 'battle';
-
 var current_frame;
+var interval_next_check;
 
 function new_frame(vote_pool, items, duration) {
 	console.debug("new_frame", items, duration);
@@ -70,7 +72,7 @@ function new_frame(vote_pool, items, duration) {
 	$.post('/api/'+vote_pool+'.json', {items: items.join(","), duration: duration})
 	.success(function(data){
 		current_frame = data.data;
-		setTimeout(
+		interval_next_check = setTimeout( // if we ever get websocket diconnected we have to stop any timers
 			function(){new_frame(vote_pool, [Math.random(), Math.random(), Math.random()]);},
 			duration * 1000
 		);
@@ -82,6 +84,13 @@ function new_frame(vote_pool, items, duration) {
 	});
 }
 
+function cancelTimeout() {
+	if (interval_next_check) {
+		clearInterval(interval_next_check);
+		interval_next_check = null;
+	}
+}
+
 // Startup cycle ---------------------------------------------------------------
 //    The startup cycle trys to automatically setup a vote_pool with a frame
 //    in the event these exisit on the server, it will use the server copys
@@ -89,6 +98,7 @@ function new_frame(vote_pool, items, duration) {
 
 function startup() {
 	console.debug("startup");
+	cancelTimeout();
 	create_vote_pool(vote_pool);
 }
 

@@ -32,9 +32,16 @@ function timediff(datetime) {
 timediff();  // Set cookies and init server offset as soon as possible
 var now = timediff;  // function alias for timediff for readabilty
 var timed_functions = {}
-function clear_timed_function(func) {clearTimeout(timed_functions[func]);}
+function clear_timed_function(func) {
+    if (func && func in timed_functions) {
+        console.debug("clear_timed_function");
+        clearTimeout(timed_functions[func]);
+        timed_functions[func] = null;
+    }
+}
 function set_timed_function(func, timeout) {
-    // at timestamp (with server offset), tigger the function
+    /* at timestamp (with server offset), tigger the function */
+    clear_timed_function(func);
     if (!timeout) {
         console.error("null timeout");
         return;
@@ -43,7 +50,7 @@ function set_timed_function(func, timeout) {
         timeout = new Date(timeout);
     }
     if (typeof(timeout)=="object" && 'getDate' in timeout) {
-        timeout = (timeout - now()) + settings["mobile.client.fetch.offset"]*1000;
+        timeout = (timeout - now()) + settings["mobile.client.fetch.offset"] * 1000;
     }
     if (typeof(timeout)!="number") {
         console.error("Invalid timeout", timeout);

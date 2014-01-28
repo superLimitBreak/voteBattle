@@ -73,6 +73,10 @@ class VoteFrame(object):
     def items(self):
         return self.frame.keys()
 
+    @property
+    def timestamp_end(self):
+        return self.timestamp + self.duration if self.duration else None
+
     def vote(self, voter, item):
         if voter in self.voters:
         #if self.options.get('single_vote_per_voter', True) and voter in self.voters:
@@ -102,7 +106,7 @@ class VoteFrame(object):
             'timeframe': {
                 'start': self.timestamp,
                 'duration': self.duration,
-                'end': self.timestamp + self.duration if self.duration else None,
+                'end': self.timestamp_end,
             },
             'properties': self.properties,
         }

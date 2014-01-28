@@ -11,7 +11,7 @@ import random
 from collections import defaultdict
 from pyramid.view import view_config
 
-from externals.lib.misc import json_string, json_load
+from externals.lib.misc import json_string, json_load, now
 
 from . import web, action_ok, action_error, etag_decorator, cache
 
@@ -119,6 +119,8 @@ def new_frame(request):
     except Exception:
         raise action_error(message='invalid items', code=400)
     previous_frame = vote_pool.current_frame
+    if previous_frame and previous_frame.timestamp_end > now():
+        raise action_error(message='created new frame before previous frame closed', code=400)
     new_frame = vote_pool.new_frame(**properties)
     invalidate_cache(vote_pool.id)
     log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(vote_pool.id, properties))

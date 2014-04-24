@@ -58,7 +58,7 @@ function setup_websocket(on_message) {
 	};
 }
 
-// Vote stuff ------------------------------------------------------------------
+// Vote lib ------------------------------------------------------------------
 
 var vote_pool = 'battle';
 var current_frame;
@@ -150,6 +150,13 @@ function on_message(data) {
 	console.debug("websocket message recived");
 	console.log(data);
 }
+
+// High level use --------------------------------------------------------------
+
+function activate_frame(items, on_complete, on_update) {
+	
+}
+
 
 
 // Init ------------------------------------------------------------------------

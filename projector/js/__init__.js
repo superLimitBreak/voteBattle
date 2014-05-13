@@ -10,8 +10,8 @@ var enemys = [];
 
 
 // Startup
-init();
-animate();
+//init();
+//animate();
 
 
 function render() {renderer.render( scene, camera );}
@@ -31,7 +31,7 @@ function init() {
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = 0;
     // DOM Addition
-    document.body.appendChild( renderer.domElement );    
+    document.body.appendChild( renderer.domElement );
     // Events
     window.addEventListener('resize', onWindowResize, false);
 
@@ -41,8 +41,6 @@ function init() {
     controls.minDistance = 500;
     controls.maxDistance = 6000;
     controls.addEventListener( 'change', function(){} );
-    
-    init_scene();
 }
 
 
@@ -64,29 +62,5 @@ function onWindowResize() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     controls.handleResize();
     render()
-}
-
-// -----------------------------------------------------------------------------
-
-function init_scene() {
-    var build_character = function(data) {
-        var dom = document.createElement( 'div' );
-        var dom_image = document.createElement('img');
-        dom_image.style.width = '200px';
-        dom_image.style.height = '300px';
-        dom_image.src = data.image;
-        dom.appendChild(dom_image);
-        return dom;
-    }
-
-    var character_filenames = ['char1.png', 'char2.png', 'char3.png', 'char4.png'];
-    for (var i in character_filenames) {
-        var filename = "images/characters/"+character_filenames[i];
-        var object = new THREE.CSS3DObject( build_character({image:filename}) );
-        object.position.x = 200 - (200*i);
-        object.position.y = 0;
-        object.position.z = 1000 - (200*i);
-        scene.add(object);
-    }
 }
 

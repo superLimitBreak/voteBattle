@@ -14,6 +14,19 @@
 		<script src="externals/threejs/controls/OrbitControls.js"></script>
 		<script src="externals/threejs/renderers/CSS3DRenderer.js"></script>
 		
+		<script src="settings.js"></script>
+		<script src="js/__init__.js"></script>
+		<script src="js/build_scene.js"></script>
+		
+		<script type="text/javascript">
+			document.addEventListener("DOMContentLoaded", function() {
+				init();
+				build_scene();
+				animate();
+			});
+		</script>
+
+		
 		<style type="text/css">
 			body {
 				overflow: hidden;
@@ -65,8 +78,6 @@
 				<li>Heal</li>
 			</ul>
 		</div>
-		
-		<script src="battlescape.js"></script>
     </body>
 
 </html>

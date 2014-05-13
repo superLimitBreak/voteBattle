@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>VoteBattle Test</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		
+		<!-- <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> -->
+		
+		<script src="externals/threejs/three.min.js"></script>
+		<script src="externals/threejs/libs/tween.min.js"></script>
+		<script src="externals/threejs/controls/TrackballControls.js"></script>
+		<script src="externals/threejs/controls/OrbitControls.js"></script>
+		<script src="externals/threejs/renderers/CSS3DRenderer.js"></script>
+		
+		<style type="text/css">
+			body {
+				overflow: hidden;
+				font-family: sans-serif;
+				background-color: #ccc;
+			}
+
+			.box {
+				color: white;
+				background-color: blue; /* gradient */
+				border: 0.5em solid white;
+				z-index: 1000;
+				border-radius: 1em;
+				font-size: 24px;	
+			}
+			
+			.stats {
+				position: absolute;
+				top: 0.5em;
+				right: 0.5em;
+				width: 66%;
+				height: 20%;
+			}
+			
+			.menu_actions {
+				position: absolute;
+				right: 20%;
+				top: 10%;
+				width: 15%;
+				height: 20%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="container"></div>
+		<div class="box stats">
+			<ul class="characters">
+				<li>Fighter</li>
+				<li>Mage</li>
+				<li>Theif</li>
+				<li>Archer</li>
+			</ul>
+		</div>
+		<div class="box menu_actions">
+			<ul>
+				<li>Attack</li>
+				<li>Defend</li>
+				<li>Heal</li>
+			</ul>
+		</div>
+		
+		<script src="battlescape.js"></script>
+    </body>
+
+</html>

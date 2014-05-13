@@ -1,20 +1,11 @@
-// Constats
+graphics = window.graphics || {};
+(function(external){
+
+// Constats --------------------------------------------------------------------
 var DRAW_DISTANCE = 5000;
 
-// Variables
+// Variables -------------------------------------------------------------------
 var camera, scene, renderer, controls;
-
-var characters = [];
-var enemys = [];
-
-
-
-// Startup
-//init();
-//animate();
-
-
-function render() {renderer.render( scene, camera );}
 
 function init() {
     // Camera
@@ -43,18 +34,14 @@ function init() {
     controls.addEventListener( 'change', function(){} );
 }
 
-
+function render() {renderer.render( scene, camera );}
 
 function animate() {
     requestAnimationFrame(animate);
-    
     TWEEN.update();
     render();
-    
     controls.update();
 }
-
-
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
@@ -64,3 +51,12 @@ function onWindowResize() {
     render()
 }
 
+// Init ------------------------------------------------------------------------
+init();
+
+// Export ----------------------------------------------------------------------
+external.scene = scene;
+external.camera = camera;
+external.animate = animate;
+
+}(graphics));

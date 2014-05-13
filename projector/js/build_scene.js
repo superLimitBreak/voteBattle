@@ -1,3 +1,7 @@
+(function(external, graphics){
+
+var scene = graphics.scene;
+
 function build_scene() {
     
     console.log("build_scene");
@@ -23,3 +27,11 @@ function build_scene() {
         scene.add(object);
     }
 }
+
+// Init ------------------------------------------------------------------------
+build_scene();
+
+// Export ----------------------------------------------------------------------
+
+
+}(global, graphics));

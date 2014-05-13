@@ -6,7 +6,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 		
-		<!-- <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script> -->
+		<script src="externals/jquery.min.js"></script>
 		
 		<script src="externals/threejs/three.min.js"></script>
 		<script src="externals/threejs/libs/tween.min.js"></script>
@@ -14,15 +14,9 @@
 		<script src="externals/threejs/controls/OrbitControls.js"></script>
 		<script src="externals/threejs/renderers/CSS3DRenderer.js"></script>
 		
-		<script src="settings.js"></script>
-		<script src="js/__init__.js"></script>
-		<script src="js/build_scene.js"></script>
-		
 		<script type="text/javascript">
 			document.addEventListener("DOMContentLoaded", function() {
-				init();
-				build_scene();
-				animate();
+				graphics.animate();
 			});
 		</script>
 
@@ -65,19 +59,19 @@
 		<div id="container"></div>
 		<div class="box stats">
 			<ul class="characters">
-				<li>Fighter</li>
-				<li>Mage</li>
-				<li>Theif</li>
-				<li>Archer</li>
 			</ul>
 		</div>
 		<div class="box menu_actions">
 			<ul>
-				<li>Attack</li>
-				<li>Defend</li>
-				<li>Heal</li>
 			</ul>
 		</div>
+		
+		<script src="data.js"></script>
+		<script src="js/utils.js"></script>
+		<script src="js/graphics.js"></script>
+		<script src="js/build_scene.js"></script>
+		<script src="js/ui.js"></script>
+		
     </body>
 
 </html>

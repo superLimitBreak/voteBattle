@@ -1,5 +1,20 @@
 var global = {};
-var state = {};
+var state = {
+    characters: {
+        'player1': {
+            health:50,
+        },
+        'player2': {
+            health:10,
+        },
+        'player3': {
+            health:0,
+        },
+        'player4': {
+            health:50,
+        },
+    }
+};
 var data = {
     characters: {
         'player1': {

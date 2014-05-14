@@ -5,19 +5,18 @@ function ui_update_stats() {
     console.log("update_stats");
     
     var build_player_row = function(player) {
-        var player_data = data.characters[player];
-        var player_state = state.characters[player];
+        player = state.characters[player];
         $row = $(
             "<tr><td class='selected_cell'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
-            .replace("PLAYER_NAME", player_data.name)
-            .replace("CURRENT_HEALTH", player_state.health)
-            .replace("MAX_HEALTH", player_data.health)
+            .replace("PLAYER_NAME", player.data.name)
+            .replace("CURRENT_HEALTH", player.health)
+            .replace("MAX_HEALTH", player.data.health)
         );
         //$row.addClass('selected');
-        if ((player_state.health/player_data.health) < 0.2) {
+        if ((player.health/player.data.health) < 0.2) {
             $row.addClass('low_health');
         }
-        if (player_state.health <= 0) {
+        if (player.health <= 0) {
             $row.addClass('dead');
         }
         return $row;

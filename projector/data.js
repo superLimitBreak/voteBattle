@@ -1,21 +1,16 @@
 var global = {};
 var state = {
     characters: {
-        'player1': {
-            health:50,
-        },
-        'player2': {
-            health:10,
-        },
-        'player3': {
-            health:0,
-        },
-        'player4': {
-            health:50,
-        },
     }
 };
 var data = {
+    settings: {
+        path: {
+            images: {
+                characters: 'images/characters/',
+            },
+        },
+    },
     characters: {
         'player1': {
             name: 'Axe Specalist',
@@ -32,6 +27,8 @@ var data = {
                 'hit': '',
                 'hurt': '',
                 'win': '',
+                'dead': '',
+                'at_ease': '',
             },
         },
         'player2': {
@@ -47,7 +44,7 @@ var data = {
         'player3': {
             name: 'Monk',
             health: 120,
-            min_damage: 8,
+            min_damage: 10,
             max_damage: 22,
             heal: 50,
             specials: [],
@@ -60,7 +57,7 @@ var data = {
             health: 140,
             min_damage: 20,
             max_damage: 20,
-            heal: 40,
+            heal: 5,
             specials: [],
             images: {
                 'stand': 'char4',

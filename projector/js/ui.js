@@ -33,10 +33,15 @@ function update_stats() {
     });
 }
 
+function message(msg) {
+    $('.messages').html(msg);
+}
 
 // Init ------------------------------------------------------------------------
 
 update_stats();
+message("Techno Mage does 23 damage to Nyan Cat");
+
 
 // External --------------------------------------------------------------------
 

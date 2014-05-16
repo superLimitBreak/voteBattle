@@ -4,29 +4,45 @@
 
 var scene = graphics.scene;
 
+function create_actor(id, actor_data) {
+    var actor = state.actors[id] || {id:id};
+    state.actors[actor.id] = actor;
+    actor.data = actor_data;
+    
+    // Create 3D dom object for this player
+    actor.dom = document.createElement('img');
+    //player.dom.style.width = '200px';
+    //player.dom.style.height = '300px';
+    actor.CSS3DObject = new THREE.CSS3DObject( actor.dom );
+    
+    // Methods
+    
+    actor.is_hurt = function() {return (actor.health/actor.data.health) <= data.settings.ui.health_low_threshold;}
+    actor.is_dead = function() {return actor.health <= 0;}    
+    actor.set_pose = function(pose) {
+        actor.dom.src = data.settings.path.images.characters + actor.data.images[pose] + '.png';
+    };
+    actor.get_actions = function() {
+        if (actor.is_dead()) {return [];}
+        return ['attack', 'defend', 'heal'];  // Hard coded list for now, in future this could be dynamic
+    };
+    
+    // Set Variables
+    actor.health = actor.data.health;
+    actor.set_pose('stand');
+    
+    // TEMP HACK!!!
+    if (id == 'player2') {state.active_actor = actor;}
+    
+    return actor;
+};
+
 
 // Setup Players ---------------------------------------------------------------
 
-function setup_players() {
-    $.each(data.players ,function(i, player){
-        player = state.characters[player] || {id:player};
-        state.characters[player.id] = player;
-        player.data = data.characters[player.id];
-        
-        // Create 3D dom object for this player
-        player.dom = document.createElement('img');
-        //player.dom.style.width = '200px';
-        //player.dom.style.height = '300px';
-        player.CSS3DObject = new THREE.CSS3DObject( player.dom );
-        
-        // Methods
-        player.set_pose = function(pose) {
-            player.dom.src = data.settings.path.images.characters + player.data.images[pose] + '.png';
-        };
-        
-        // Set Variables
-        player.health = player.data.health;
-        player.set_pose('stand');
+function setup_actors() {
+    $.each(data.players ,function(i, player_id){
+        state.actors[player_id] = create_actor(player_id, data.characters[player_id]);
     });
 }
 
@@ -36,16 +52,16 @@ function setup_players() {
 function build_scene() {
     console.log("build_scene");
     
-    $.each(data.players ,function(i, player){
-        player = state.characters[player];
-        player.CSS3DObject.position.x = 200 - (200*i);
-        player.CSS3DObject.position.y = 0;
-        player.CSS3DObject.position.z = 1000 - (200*i);
-        scene.add(player.CSS3DObject);
+    $.each(data.players ,function(i, player_id){
+        var actor = state.actors[player_id];
+        actor.CSS3DObject.position.x = 200 - (200*i);
+        actor.CSS3DObject.position.y = 0;
+        actor.CSS3DObject.position.z = 1000 - (200*i);
+        scene.add(actor.CSS3DObject);
     });
 }
 // Init ------------------------------------------------------------------------
-setup_players()
+setup_actors()
 build_scene();
 
 // Export ----------------------------------------------------------------------

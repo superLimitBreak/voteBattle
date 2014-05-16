@@ -1,6 +1,6 @@
 var global = {};
 var state = {
-    characters: {
+    actors: {
     }
 };
 var data = {
@@ -10,6 +10,9 @@ var data = {
                 characters: 'images/characters/',
             },
         },
+        ui: {
+            health_low_threshold: 0.25,
+        }
     },
     characters: {
         'player1': {

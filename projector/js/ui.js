@@ -1,22 +1,26 @@
+var ui = window.ui || {};
+
 (function(external){
 // -----------------------------------------------------------------------------
 
-function ui_update_stats() {
+function update_stats() {
     console.log("update_stats");
     
-    var build_player_row = function(player) {
-        player = state.characters[player];
+    var build_player_row = function(player_id) {
+        var actor = state.actors[player_id];
         $row = $(
-            "<tr><td class='selected_cell'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
-            .replace("PLAYER_NAME", player.data.name)
-            .replace("CURRENT_HEALTH", player.health)
-            .replace("MAX_HEALTH", player.data.health)
+            "<tr><td class='selected_td'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
+            .replace("PLAYER_NAME", actor.data.name)
+            .replace("CURRENT_HEALTH", actor.health)
+            .replace("MAX_HEALTH", actor.data.health)
         );
-        //$row.addClass('selected');
-        if ((player.health/player.data.health) < 0.2) {
-            $row.addClass('low_health');
+        if (actor == state.active_actor) {
+            $row.addClass('selected');
         }
-        if (player.health <= 0) {
+        if (actor.is_hurt()) {
+            $row.addClass('hurt');
+        }
+        if (actor.is_dead()) {
             $row.addClass('dead');
         }
         return $row;
@@ -24,13 +28,18 @@ function ui_update_stats() {
     
     $characters_table = $("<table></table>");
     $('.characters').empty().append($characters_table);
-    $.each(data.players, function(i, player){
-        $characters_table.append(build_player_row(player));
+    $.each(data.players, function(i, player_id){
+        $characters_table.append(build_player_row(player_id));
     });
 }
 
+
+// Init ------------------------------------------------------------------------
+
+update_stats();
+
 // External --------------------------------------------------------------------
 
-external.ui_update_stats = ui_update_stats;
+external.update_stats = update_stats;
 
-}(global));
+}(ui));

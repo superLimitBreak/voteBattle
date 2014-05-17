@@ -15,70 +15,7 @@
 		<script src="externals/threejs/controls/OrbitControls.js"></script>
 		<script src="externals/threejs/renderers/CSS3DRenderer.js"></script>
 		
-		<style type="text/css">
-			html {
-				overflow: hidden;
-				font-family: sans-serif;
-				background-color: #ccc;
-			}
-
-			ul, li {
-				list-style-type: none;
-			}
-			
-			table {
-				border-collapse: separate;
-				padding: 0.5em;
-			}
-			th, td {
-				padding: 0.25em 0.5em;
-			}
-			td.numeric {
-				text-align: right;
-			}
-			
-			.box {
-				color: white;
-				background-color: blue; /* gradient */
-				border: 0.25em solid white;
-				z-index: 1000;
-				border-radius: 1em;
-				font-size: 28px;
-			}
-			
-			.stats {
-				position: absolute;
-				bottom: 0.5em;
-				right: 0.5em;
-				/* width: 66%; */
-				/* height: 20%; */
-			}
-			
-			.menu_actions {
-				position: absolute;
-				right: 10%;
-				bottom: 10%;
-				width: 20%;
-				height: 20%;
-			}
-			
-			.messages {
-				position: absolute;
-				top: 0.5em;
-				right: 0.5em;
-				left: 0.5em;
-				padding: 0.25em;
-				
-				text-align: center;
-			}
-			
-			.characters .hurt {color: #f33;}
-			.characters .dead {color: #444;}
-			
-			.characters .selected .selected_td:before {
-				content: ">";
-			}
-		</style>
+		<link href="battlescape.css" rel="stylesheet" />
 	</head>
 
 	<body>
@@ -92,6 +29,8 @@
 			<ul>
 			</ul>
 		</div>
+		
+		U+1F480 SKULL  http://codepoints.net/U+1F480
 		-->
 		
 		<div class="box messages"></div>

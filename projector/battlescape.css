@@ -1,0 +1,90 @@
+@font-face {
+  font-family: testfont;
+  src: url('fonts/6x13-ISO8859-1.pcf.woff');
+}
+
+body {
+  font-family: testfont, courier;
+  letter-spacing:0.1em;
+  /*font-size: 13px;
+  line-height: 13px;*/
+  text-shadow: 2px 2px #555;
+}
+
+html {
+    overflow: hidden;
+    font-family: sans-serif;
+    background-color: #ccc;
+}
+
+ul, li {
+    list-style-type: none;
+}
+
+table {
+    border-collapse: separate;
+    padding: 0.5em;
+}
+th, td {
+    padding: 0.25em 0.5em;
+}
+td.numeric {
+    text-align: right;
+}
+
+.box {
+    color: white;
+    background-color: blue;
+    background: linear-gradient(#0000b0 0%, #000050 100%);
+    border: 0.2em solid white;
+    z-index: 1000;
+    border-radius: 0.5em;
+    font-size: 28px;
+}
+
+.stats {
+    position: absolute;
+    bottom: 0.5em;
+    right: 0.5em;
+    /* width: 66%; */
+    /* height: 20%; */
+}
+
+.menu_actions {
+    position: absolute;
+    right: 10%;
+    bottom: 10%;
+    width: 20%;
+    height: 20%;
+}
+
+.messages {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+    left: 0.5em;
+    padding: 0.25em;
+    
+    text-align: center;
+}
+
+.selected_td:before {
+    display: inline-block;
+    position: absolute;
+    margin-top: -0.6em;
+    margin-left: -0.5em;
+    font-size: 150%;
+    
+}
+
+.characters .hurt {color: #f33;}
+.characters .dead {color: #444; text-shadow: none;}
+.characters .dead .selected_td:before {
+    text-shadow: none;
+    content: "\1F480";
+}
+
+.characters .selected .selected_td:before {
+    content: "\1F449";
+    text-shadow: none;
+}

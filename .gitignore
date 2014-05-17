@@ -37,3 +37,6 @@ nosetests.xml
 
 # Vagrant VM
 .vagrant
+
+# OSX
+.DS_Store

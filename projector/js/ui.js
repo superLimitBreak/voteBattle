@@ -1,20 +1,20 @@
-var ui = window.ui || {};
+battlescape.ui = {};
 
-(function(external){
+(function(external, battlescape){
 // -----------------------------------------------------------------------------
 
 function update_stats() {
     console.log("update_stats");
     
     var build_player_row = function(player_id) {
-        var actor = state.actors[player_id];
+        var actor = battlescape.state.actors[player_id];
         $row = $(
             "<tr><td class='selected_td'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
             .replace("PLAYER_NAME", actor.data.name)
             .replace("CURRENT_HEALTH", actor.health)
             .replace("MAX_HEALTH", actor.data.health)
         );
-        if (actor == state.active_actor) {
+        if (actor == battlescape.state.active_actor) {
             $row.addClass('selected');
         }
         if (actor.is_hurt()) {
@@ -28,23 +28,24 @@ function update_stats() {
     
     $characters_table = $("<table></table>");
     $('.characters').empty().append($characters_table);
-    $.each(data.players, function(i, player_id){
+    $.each(battlescape.data.players, function(i, player_id){
         $characters_table.append(build_player_row(player_id));
     });
 }
 
-function message(msg) {
+function set_message(msg) {
     $('.messages').html(msg);
 }
 
 // Init ------------------------------------------------------------------------
 
 update_stats();
-message("Techno Mage does 23 damage to Nyan Cat");
+set_message("Techno Mage does 23 damage to Nyan Cat");
 
 
 // External --------------------------------------------------------------------
 
 external.update_stats = update_stats;
+external.set_message = set_message;
 
-}(ui));
+}(battlescape.ui, battlescape));

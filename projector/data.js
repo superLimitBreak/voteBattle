@@ -1,3 +1,7 @@
+var battlescape = window.battlescape || {};
+
+(function(external){
+
 var global = {};
 var state = {
     actors: {
@@ -78,3 +82,14 @@ var data = {
     enemys: ['boss'],
     turn_order: ['player1', 'player2', 'boss' ,'player3', 'player4', 'boss'],
 }
+
+
+// Init ------------------------------------------------------------------------
+
+
+// External --------------------------------------------------------------------
+external.global = global;
+external.state = state;
+external.data = data;
+
+}(battlescape));

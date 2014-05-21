@@ -27,7 +27,7 @@ function update_stats() {
     };
     
     $characters_table = $("<table></table>");
-    $('.characters').empty().append($characters_table);
+    $('.stats').empty().append($characters_table);
     $.each(battlescape.data.players, function(i, player_id){
         $characters_table.append(build_player_row(player_id));
     });

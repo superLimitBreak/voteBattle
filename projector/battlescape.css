@@ -1,96 +1,95 @@
 @font-face {
-  font-family: testfont;
-  src: url('fonts/6x13-ISO8859-1.pcf.woff');
+	font-family: pixelfont;
+	src: url('fonts/6x13-ISO8859-1.pcf.woff');
 }
 
 body {
-  font-family: testfont, courier;
-  letter-spacing:0.1em;
-  /*font-size: 13px;
-  line-height: 13px;*/
-  text-shadow: 2px 2px #555;
+	font-family: pixelfont, courier, sans-serif;
+	letter-spacing:0.1em;
+	/*font-size: 13px;
+	line-height: 13px;*/
+	text-shadow: 2px 2px #555;
 }
 
 html {
-    overflow: hidden;
-    font-family: sans-serif;
-    background-color: #ccc;
+	overflow: hidden;
+	background-color: #ccc;
 }
 
 ul, li {
-    list-style-type: none;
+	list-style-type: none;
 }
 
 table {
-    border-collapse: separate;
-    padding: 0.5em;
+	border-collapse: separate;
+	padding: 0.5em;
 }
 th, td {
-    padding: 0.0em 0.5em;
+	padding: 0.0em 0.5em;
 }
 td.numeric {
-    text-align: right;
+	text-align: right;
 }
 
 .box {
-    color: white;
-    background-color: blue;
-    background: linear-gradient(#0000b0 0%, #000050 100%);
-    border: 0.2em solid white;
-    z-index: 1000;
-    border-radius: 0.5em;
-    font-size: 28px;
+	color: white;
+	background-color: blue;
+	background: linear-gradient(#0000b0 0%, #000050 100%);
+	border: 0.2em solid white;
+	z-index: 1000;
+	border-radius: 0.5em;
+	font-size: 28px;
 }
 
 .stats {
-    position: absolute;
-    top: 0.5em;
-    left: 0.5em;
-    width: 60%;
+	position: absolute;
+	top: 0.5em;
+	left: 0.5em;
+	width: 60%;
 }
 
 .actions {
-    position: absolute;
-    right: 0.5em;
-    top: 1em;
-    width: 40%;
+	position: absolute;
+	right: 0.5em;
+	top: 1em;
+	width: 40%;
 }
 
 .messages {
-    position: absolute;
-    top: 25%;
-    right: 1em;
-    left: 1em;
-    padding: 0.25em;
-    
-    text-align: center;
+	position: absolute;
+	top: 25%;
+	right: 1em;
+	left: 1em;
+	padding: 0.25em;
+	
+	text-align: center;
 }
 
 .selected_td:before {
-    display: inline-block;
-    position: absolute;
-    margin-top: -0.6em;
-    margin-left: -0.5em;
-    font-size: 150%;
-    
+	display: inline-block;
+	position: absolute;
+	margin-top: -0.6em;
+	margin-left: -0.5em;
+	font-size: 150%;
+	
 }
 
 .box th {
-  text-transform: capitalize;
+	text-transform: capitalize;
 }
 
 .box .hurt {color: #f33;}
 .box .dead {color: #444; text-shadow: none;}
 .box .dead .selected_td:before {
-    text-shadow: none;
-    content: "\1F480";
+	text-shadow: none;
+	content: "\1F480";
 }
 
 .box .selected .selected_td:before {
-    content: "\1F449";
-    text-shadow: none;
+	content: "\1F449";
+	text-shadow: none;
 }
 
 .box .count {
-  text-align: right;
+	text-align: right;
 }

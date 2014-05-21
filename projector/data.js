@@ -5,7 +5,8 @@ var battlescape = window.battlescape || {};
 var global = {};
 var state = {
     actors: {
-    }
+    },
+    current_turn_index: 0
 };
 var data = {
     settings: {

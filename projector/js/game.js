@@ -32,25 +32,37 @@ function create_actor(id, actor_data) {
     actor.set_pose('stand');
     
     // TEMP HACK!!!
-    if (id == 'player2') {battlescape.state.active_actor = actor;}
+    //if (id == 'player2') {battlescape.state.active_actor = actor;}
     
     return actor;
 };
 
-
+function get_current_turn_actor() {
+    return battlescape.state.actors[
+        battlescape.data.turn_order[
+            battlescape.state.current_turn_index
+        ]
+    ];
+}
 
 function perform_action(actor, action) {
     
 }
 
-function next() {
-    
+function next_turn() {
+    //console.log("next_turn", battlescape.state.current_turn_index);
+    battlescape.state.current_turn_index = (battlescape.state.current_turn_index + 1) % battlescape.data.turn_order.length;
+    battlescape.ui.update_stats();
+    //console.log("current actor is", get_current_turn_actor().data.name);
 }
+
 
 // Init ------------------------------------------------------------------------
 
 
 // External --------------------------------------------------------------------
 external.create_actor = create_actor;
+external.get_current_turn_actor = get_current_turn_actor;
+external.next_turn = next_turn;
 
 }(battlescape.game, battlescape));

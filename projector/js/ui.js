@@ -14,7 +14,7 @@ function update_stats() {
             .replace("CURRENT_HEALTH", actor.health)
             .replace("MAX_HEALTH", actor.data.health)
         );
-        if (actor == battlescape.state.active_actor) {
+        if (actor == battlescape.game.get_current_turn_actor()) {
             $row.addClass('selected');
         }
         if (actor.is_hurt()) {

@@ -44,25 +44,23 @@ td.numeric {
 
 .stats {
     position: absolute;
-    bottom: 0.5em;
-    right: 0.5em;
-    /* width: 66%; */
-    /* height: 20%; */
+    top: 0.5em;
+    left: 0.5em;
+    width: 60%;
 }
 
-.menu_actions {
+.actions {
     position: absolute;
-    right: 10%;
-    bottom: 10%;
-    width: 20%;
-    height: 20%;
+    right: 0.5em;
+    top: 1em;
+    width: 40%;
 }
 
 .messages {
     position: absolute;
-    top: 0.5em;
-    right: 0.5em;
-    left: 0.5em;
+    top: 25%;
+    right: 1em;
+    left: 1em;
     padding: 0.25em;
     
     text-align: center;
@@ -77,14 +75,22 @@ td.numeric {
     
 }
 
-.characters .hurt {color: #f33;}
-.characters .dead {color: #444; text-shadow: none;}
-.characters .dead .selected_td:before {
+.box th {
+  text-transform: capitalize;
+}
+
+.box .hurt {color: #f33;}
+.box .dead {color: #444; text-shadow: none;}
+.box .dead .selected_td:before {
     text-shadow: none;
     content: "\1F480";
 }
 
-.characters .selected .selected_td:before {
+.box .selected .selected_td:before {
     content: "\1F449";
     text-shadow: none;
+}
+
+.box .count {
+  text-align: right;
 }

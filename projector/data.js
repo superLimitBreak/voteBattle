@@ -2,12 +2,6 @@ var battlescape = window.battlescape || {};
 
 (function(external){
 
-var global = {};
-var state = {
-    actors: {
-    },
-    current_turn_index: 0
-};
 var data = {
     settings: {
         path: {
@@ -89,8 +83,6 @@ var data = {
 
 
 // External --------------------------------------------------------------------
-external.global = global;
-external.state = state;
 external.data = data;
 
 }(battlescape));

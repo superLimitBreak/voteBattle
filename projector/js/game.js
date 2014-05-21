@@ -1,4 +1,4 @@
-battlescape.game = {};
+battlescape = window.battlescape || {};
 
 (function(external, battlescape){
 // -----------------------------------------------------------------------------
@@ -57,23 +57,22 @@ function create_game(players, turn_order) {
 
     game.next_turn = function() {
         current_turn_index = (current_turn_index + 1) % turn_order.length;
-        battlescape.ui.update_stats();
+        battlescape.ui.update();
     }
 
     return game;
 }
+
+// Init ------------------------------------------------------------------------
+// External --------------------------------------------------------------------
+
 external.game = create_game(
     battlescape.data.players,
     battlescape.data.turn_order
 );
 
 
-// Init ------------------------------------------------------------------------
 
 
-// External --------------------------------------------------------------------
-//external.create_actor = create_actor;
-//external.get_current_turn_actor = get_current_turn_actor;
-//external.next_turn = next_turn;
 
-}(battlescape.game, battlescape));
+}(battlescape, battlescape));

@@ -4,17 +4,17 @@ battlescape.ui = {};
 // -----------------------------------------------------------------------------
 
 function update_stats() {
-    console.log("update_stats");
+    //console.log("update_stats");
     
-    var build_player_row = function(player_id) {
-        var actor = battlescape.game.game.get_actors()[player_id];
+    function build_player_row(player_id) {
+        var actor = battlescape.game.get_actors()[player_id];
         $row = $(
             "<tr><td class='selected_td'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
             .replace("PLAYER_NAME", actor.data.name)
             .replace("CURRENT_HEALTH", actor.health)
             .replace("MAX_HEALTH", actor.data.health)
         );
-        if (actor == battlescape.game.game.get_current_turn_actor()) {
+        if (actor == battlescape.game.get_current_turn_actor()) {
             $row.addClass('selected');
         }
         if (actor.is_hurt()) {
@@ -33,19 +33,46 @@ function update_stats() {
     });
 }
 
+function update_actions() {
+    
+    function build_action_row(action) {
+        $row = $(
+            "<tr><td class='selected_td'></td><th>ACTION</th><td class='count'>COUNT</td></tr>"
+            .replace("COUNT", parseInt(Math.random() * 15, 10))
+            .replace("ACTION", action)
+        );
+        if (action == "defend") {
+            $row.addClass('selected');
+        }
+        return $row;
+    }
+    
+    $action_table = $("<table></table>");
+    $('.actions').empty().append($action_table);
+    $.each(battlescape.game.get_current_turn_actor().get_actions(), function(i, action){
+        $action_table.append(build_action_row(action));
+    });
+}
+
 function set_message(msg) {
     $('.messages').html(msg);
 }
 
+function update() {
+    console.log("ui update")
+    update_stats();
+    update_actions();
+}
+
 // Init ------------------------------------------------------------------------
 
-update_stats();
+update();
 set_message("Techno Mage does 23 damage to Nyan Cat");
 
 
 // External --------------------------------------------------------------------
 
-external.update_stats = update_stats;
+external.update = update
 external.set_message = set_message;
 
 }(battlescape.ui, battlescape));

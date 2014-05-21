@@ -5,8 +5,8 @@ battlescape.game = {};
 
 
 function create_actor(id, actor_data) {
-    var actor = battlescape.state.actors[id] || {id:id};
-    battlescape.state.actors[actor.id] = actor;
+    var actor = {id:id};  //battlescape.state.actors[id] || 
+    //battlescape.state.actors[actor.id] = actor;
     actor.data = actor_data;
     
     // Create 3D dom object for this player
@@ -37,32 +37,43 @@ function create_actor(id, actor_data) {
     return actor;
 };
 
-function get_current_turn_actor() {
-    return battlescape.state.actors[
-        battlescape.data.turn_order[
-            battlescape.state.current_turn_index
-        ]
-    ];
-}
-
-function perform_action(actor, action) {
+function create_game(players, turn_order) {
+    var game = {};
     
-}
+    var current_turn_index = 0;
+    var actors = {};
 
-function next_turn() {
-    //console.log("next_turn", battlescape.state.current_turn_index);
-    battlescape.state.current_turn_index = (battlescape.state.current_turn_index + 1) % battlescape.data.turn_order.length;
-    battlescape.ui.update_stats();
-    //console.log("current actor is", get_current_turn_actor().data.name);
+
+    $.each(players ,function(i, player_id){
+        actors[player_id] = create_actor(player_id, battlescape.data.characters[player_id]);
+    });
+
+    game.get_actors = function() {
+        return actors;
+    }
+    game.get_current_turn_actor =  function() {
+        return actors[turn_order[current_turn_index]];
+    }
+
+    game.next_turn = function() {
+        current_turn_index = (current_turn_index + 1) % turn_order.length;
+        battlescape.ui.update_stats();
+    }
+
+    return game;
 }
+external.game = create_game(
+    battlescape.data.players,
+    battlescape.data.turn_order
+);
 
 
 // Init ------------------------------------------------------------------------
 
 
 // External --------------------------------------------------------------------
-external.create_actor = create_actor;
-external.get_current_turn_actor = get_current_turn_actor;
-external.next_turn = next_turn;
+//external.create_actor = create_actor;
+//external.get_current_turn_actor = get_current_turn_actor;
+//external.next_turn = next_turn;
 
 }(battlescape.game, battlescape));

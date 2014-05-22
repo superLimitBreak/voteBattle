@@ -41,9 +41,7 @@ function update_actions() {
             .replace("COUNT", parseInt(Math.random() * 15, 10))
             .replace("ACTION", action)
         );
-        if (action == "defend") {
-            $row.addClass('selected');
-        }
+        if (action == "defend") {$row.addClass('selected');}  // HACK!! Selected placeholder
         return $row;
     }
     
@@ -55,11 +53,14 @@ function update_actions() {
 }
 
 function set_message(msg) {
-    $('.messages').html(msg);
+    var $messages = $('.messages');
+    $messages.removeClass('message');
+    $messages.html(msg);
+    $messages.addClass('message');
 }
 
 function update() {
-    console.log("ui update")
+    //console.log("ui update");
     update_stats();
     update_actions();
 }

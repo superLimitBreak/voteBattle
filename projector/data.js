@@ -22,7 +22,7 @@ var data = {
             heal: 10,
             specials: [],
             images: {
-                'stand': 'char1',
+                'stand': 'char1.png',
                 'attack': '',
                 'defend': '',
                 'charge': '',
@@ -40,7 +40,7 @@ var data = {
             max_damage: 30,
             heal: 30,
             images: {
-                'stand': 'char3',
+                'stand': 'char3.png',
             },
         },
         'player3': {
@@ -51,7 +51,7 @@ var data = {
             heal: 50,
             specials: [],
             images: {
-                'stand': 'char2',
+                'stand': 'char2.png',
             },
         },
         'player4': {
@@ -62,7 +62,7 @@ var data = {
             heal: 5,
             specials: [],
             images: {
-                'stand': 'char4',
+                'stand': 'char4.png',
             },
         },
         'boss': {
@@ -71,6 +71,9 @@ var data = {
             max_damamage: 50,
             min_damage: 30,
             specials: ['all'],
+            images: {
+                'stand': 'nyan_cat.gif',
+            },
         }
     },
     players: ['player1', 'player2', 'player3', 'player4'],

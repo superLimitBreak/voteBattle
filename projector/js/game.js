@@ -16,12 +16,16 @@ function create_actor(id, actor_data) {
     actor.CSS3DObject = new THREE.CSS3DObject( actor.dom );
     
     // Methods
-    
-    actor.is_hurt = function() {return (actor.health/actor.data.health) <= battlescape.data.settings.ui.health_low_threshold;}
-    actor.is_dead = function() {return actor.health <= 0;}    
+    actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}
+    actor.is_hurt   = function() {return (actor.health/actor.data.health) <= battlescape.data.settings.ui.health_low_threshold;}
+    actor.is_dead   = function() {return actor.health <= 0;}    
     actor.set_pose = function(pose) {
-        actor.dom.src = battlescape.data.settings.path.images.characters + actor.data.images[pose] + '.png';
+        actor.dom.src = battlescape.data.settings.path.images.characters + actor.data.images[pose];
     };
+    actor.set_direction = function(direction) {
+        if (direction != 0) {direction = Math.PI;}
+        actor.CSS3DObject.rotation.y = direction;
+    }
     actor.get_actions = function() {
         if (actor.is_dead()) {return [];}
         return ['attack', 'defend', 'heal'];  // Hard coded list for now, in future this could be dynamic
@@ -37,15 +41,15 @@ function create_actor(id, actor_data) {
     return actor;
 };
 
-function create_game(players, turn_order) {
+function create_game(players, enemys, turn_order) {
     var game = {};
     
     var current_turn_index = 0;
     var actors = {};
 
 
-    $.each(players ,function(i, player_id){
-        actors[player_id] = create_actor(player_id, battlescape.data.characters[player_id]);
+    $.each(players.concat(enemys) ,function(i, id){
+        actors[id] = create_actor(id, battlescape.data.characters[id]);
     });
 
     game.get_actors = function() {
@@ -58,6 +62,10 @@ function create_game(players, turn_order) {
     game.next_turn = function() {
         current_turn_index = (current_turn_index + 1) % turn_order.length;
         battlescape.ui.update();
+        
+        if (!game.get_current_turn_actor().is_player()) {
+            battlescape.ai.take_action();
+        }
     }
 
     return game;
@@ -68,6 +76,7 @@ function create_game(players, turn_order) {
 
 external.game = create_game(
     battlescape.data.players,
+    battlescape.data.enemys,
     battlescape.data.turn_order
 );
 

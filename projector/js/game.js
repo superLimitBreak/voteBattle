@@ -4,8 +4,11 @@ battlescape = window.battlescape || {};
 // -----------------------------------------------------------------------------
 
 
-function create_actor(id, actor_data) {
-    var actor = {id:id};
+function create_actor(id, team_name, actor_data) {
+    var actor = {
+        id: id,
+        team_name: team_name,
+    };
     actor.data = actor_data;
     
     // Create 3D dom object for this player
@@ -35,12 +38,18 @@ function create_actor(id, actor_data) {
         if (action == "attack") {
             actor.defending = false;
             var damage = actor.data.min_damage + parseInt(Math.random() * (actor.data.max_damage - actor.data.min_damage), 10);
-            battlescape.ai.get_enemy(actor).take_damage(damage);
+            battlescape.ai.get_random_enemy(actor).take_damage(damage);
             return;
         }
         if (action == "heal") {
             actor.defending = false;
-            battlescape.ai.get_friend(actor).take_damage(actor.data.heal);
+            var most_hurt_friend = {health: 65535, take_damage: function(x){}};
+            $.each(battlescape.ai.get_friends(actor), function(i, friend){
+                if (!friend.is_dead() && friend.health < most_hurt_friend.health) {
+                    most_hurt_friend = friend;
+                }
+            });
+            most_hurt_friend.take_damage(-actor.data.heal);
             return;
         }
         if (action == "defend") {
@@ -57,6 +66,7 @@ function create_actor(id, actor_data) {
         if (actor.is_dead()) {
             actor.set_pose('dead');
         }
+        battlescape.ui.set_message(""+actor.data.name+" takes "+damage+" damage");
     }
     
     // Set Variables
@@ -72,13 +82,19 @@ function create_game(players, enemys, turn_order) {
     var current_turn_index = 0;
     var actors = {};
 
+    function init_team(id_list, team_name) {
+        $.each(id_list ,function(i, id){
+            actors[id] = create_actor(id, team_name, battlescape.data.characters[id]);
+        });
+    }
+    init_team(players, 'player');
+    init_team(enemys, 'enemy');
 
-    $.each(players.concat(enemys) ,function(i, id){
-        actors[id] = create_actor(id, battlescape.data.characters[id]);
-    });
-
-    game.get_actors = function() {
-        return actors;
+    game.get_actors = function() {return actors;};
+    game.get_team = function(team_name, inverse) {
+        console.log("get_team", team_name, inverse);
+        if (!team_name) {return [];}
+        return $.grep(battlescape.utils.values(actors), function(actor){return actor.team_name == team_name;}, inverse);
     }
     game.get_current_turn_actor =  function() {
         return actors[turn_order[current_turn_index]];

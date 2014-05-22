@@ -12,6 +12,13 @@ function create_ai() {
         battlescape.game.next_turn();
     }
     
+    ai.get_enemy = function(me) {
+        
+    }
+    ai.get_friend = function(me) {
+        
+    }
+    
     return ai;
 }
 

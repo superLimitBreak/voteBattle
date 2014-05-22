@@ -5,8 +5,7 @@ battlescape = window.battlescape || {};
 
 
 function create_actor(id, actor_data) {
-    var actor = {id:id};  //battlescape.state.actors[id] || 
-    //battlescape.state.actors[actor.id] = actor;
+    var actor = {id:id};
     actor.data = actor_data;
     
     // Create 3D dom object for this player
@@ -17,8 +16,8 @@ function create_actor(id, actor_data) {
     
     // Methods
     actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}
-    actor.is_hurt   = function() {return (actor.health/actor.data.health) <= battlescape.data.settings.ui.health_low_threshold;}
-    actor.is_dead   = function() {return actor.health <= 0;}    
+    actor.is_hurt = function() {return (actor.health/actor.data.health) <= battlescape.data.settings.ui.health_low_threshold;}
+    actor.is_dead = function() {return actor.health <= 0;}    
     actor.set_pose = function(pose) {
         actor.dom.src = battlescape.data.settings.path.images.characters + actor.data.images[pose];
     };
@@ -31,13 +30,39 @@ function create_actor(id, actor_data) {
         return ['attack', 'defend', 'heal'];  // Hard coded list for now, in future this could be dynamic
     };
     
+    actor.action = function(action) {
+        if (!(actor.get_actions().indexOf(action)>=0)) {console.warn(""+action+" is not a valid action at this time");}
+        if (action == "attack") {
+            actor.defending = false;
+            var damage = actor.data.min_damage + parseInt(Math.random() * (actor.data.max_damage - actor.data.min_damage), 10);
+            battlescape.ai.get_enemy(actor).take_damage(damage);
+            return;
+        }
+        if (action == "heal") {
+            actor.defending = false;
+            battlescape.ai.get_friend(actor).take_damage(actor.data.heal);
+            return;
+        }
+        if (action == "defend") {
+            actor.defending = true;
+            return;
+        }
+        console.warn("unknown action "+action);
+    }
+    actor.take_damage = function(damage) {
+        if (actor.defending && damage > 0) {
+            damage = Math.round(damage / 10);
+        }
+        actor.health = actor.health - damage;
+        if (actor.is_dead()) {
+            actor.set_pose('dead');
+        }
+    }
+    
     // Set Variables
     actor.health = actor.data.health;
     actor.set_pose('stand');
-    
-    // TEMP HACK!!!
-    //if (id == 'player2') {battlescape.state.active_actor = actor;}
-    
+
     return actor;
 };
 
@@ -68,6 +93,7 @@ function create_game(players, enemys, turn_order) {
         }
     }
 
+    
     return game;
 }
 

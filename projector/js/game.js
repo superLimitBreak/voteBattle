@@ -43,13 +43,7 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "heal") {
             actor.defending = false;
-            var most_hurt_friend = {health: 65535, take_damage: function(x){}};
-            $.each(battlescape.ai.get_friends(actor), function(i, friend){
-                if (!friend.is_dead() && friend.health < most_hurt_friend.health) {
-                    most_hurt_friend = friend;
-                }
-            });
-            most_hurt_friend.take_damage(-actor.data.heal);
+            battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor)).take_damage(-actor.data.heal);
             return;
         }
         if (action == "defend") {
@@ -66,7 +60,10 @@ function create_actor(id, team_name, actor_data) {
         if (actor.is_dead()) {
             actor.set_pose('dead');
         }
+        if (actor.health < 0) {actor.health = 0;}
+        if (actor.health > actor.data.health) {actor.health = actor.data.health;}
         battlescape.ui.set_message(""+actor.data.name+" takes "+damage+" damage");
+        battlescape.ui.update();
     }
     
     // Set Variables
@@ -104,8 +101,12 @@ function create_game(players, enemys, turn_order) {
         current_turn_index = (current_turn_index + 1) % turn_order.length;
         battlescape.ui.update();
         
-        if (!game.get_current_turn_actor().is_player()) {
-            battlescape.ai.take_action();
+        var actor = game.get_current_turn_actor();
+        if (actor.is_dead()) {
+            game.next_turn();
+        }
+        if (!actor.is_player()) {
+            battlescape.ai.take_action(actor);
         }
     }
 

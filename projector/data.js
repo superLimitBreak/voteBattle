@@ -20,6 +20,7 @@ var data = {
             min_damage: 15,
             max_damage: 35,
             heal: 10,
+            defence_effectiveness: 6,
             specials: [],
             images: {
                 'stand': 'char1.png',
@@ -39,16 +40,18 @@ var data = {
             min_damage: 6,
             max_damage: 30,
             heal: 30,
+            defence_effectiveness: 4,
             images: {
                 'stand': 'char3.png',
             },
         },
         'player3': {
-            name: 'Monk',
+            name: 'Bard Ninja',
             health: 120,
-            min_damage: 10,
-            max_damage: 22,
+            min_damage: 12,
+            max_damage: 24,
             heal: 50,
+            defence_effectiveness: 5,
             specials: [],
             images: {
                 'stand': 'char2.png',
@@ -57,9 +60,10 @@ var data = {
         'player4': {
             name: 'Batton Gorilla',
             health: 140,
-            min_damage: 20,
-            max_damage: 20,
+            min_damage: 18,
+            max_damage: 18,
             heal: 5,
+            defence_effectiveness: 8,
             specials: [],
             images: {
                 'stand': 'char4.png',

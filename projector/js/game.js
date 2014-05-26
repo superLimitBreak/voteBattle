@@ -12,6 +12,7 @@ function create_actor(id, team_name, actor_data) {
     var data = actor_data;
     var health = data.health;
     var charge = 0;
+    var defending = false;
     
     // Create 3D dom object for this player
     actor.dom = document.createElement('img');
@@ -77,7 +78,7 @@ function create_actor(id, team_name, actor_data) {
     
     actor.take_damage = function(value) {
         if (defending && value > 0) {
-            damage = Math.round(value / 5);
+            value = Math.round(value / data.defence_effectiveness);
         }
         modify_health(value);
         battlescape.ui.set_message(""+data.name+" takes "+value+" damage");

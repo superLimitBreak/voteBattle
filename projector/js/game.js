@@ -50,15 +50,19 @@ function create_actor(id, team_name, actor_data) {
         if (!(actor.get_actions().indexOf(action)>=0)) {console.warn(""+action+" is not a valid action at this time");}
         cancel_existing_action();
         if (action == "attack") {
+            var enemy = battlescape.ai.get_random_enemy(actor);
             var damage = get_attack_damage();
             if (charge) {
                 damage = damage * charge * 2.7;
             }
-            battlescape.ai.get_random_enemy(actor).take_damage(damage);
+            damage = enemy.take_damage(damage);
+            battlescape.ui.set_message(""+data.name+" does "+damage+" damage to "+enemy.get_data().name);
             return;
         }
         if (action == "heal") {
-            battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor)).heal(data.heal);
+            var hurt_friend = battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor));
+            var value = hurt_friend.heal(data.heal);
+            battlescape.ui.set_message(""+data.name+" healed "+hurt_friend.get_data().name+" "+value);
             return;
         }
         if (action == "defend") {
@@ -76,9 +80,7 @@ function create_actor(id, team_name, actor_data) {
             charge = 0;
             var total = 0;
             _.each(battlescape.ai.get_enemys(actor), function(enemy, index, enemys) {
-                var damage = get_attack_damage();
-                total += damage;
-                enemy.take_damage(damage);
+                total += enemy.take_damage(get_attack_damage());
             });
             battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
             return;
@@ -94,7 +96,7 @@ function create_actor(id, team_name, actor_data) {
     }
     
     function get_attack_damage() {
-        return data.min_damage + Math.round(Math.random() * (data.max_damage - data.min_damage));
+        return _.random(data.min_damage, data.max_damage);
     }
     
     function modify_health(damage) {
@@ -112,11 +114,12 @@ function create_actor(id, team_name, actor_data) {
             value = Math.round(value / data.defence_effectiveness);
         }
         modify_health(value);
-        battlescape.ui.set_message(""+data.name+" takes "+value+" damage");
+        return value;
     }
     actor.heal = function(value) {
+        var health_before = health
         modify_health(-value);
-        battlescape.ui.set_message(""+data.name+" healed "+value);
+        return health - health_before;
     }
     
     // Set Variables

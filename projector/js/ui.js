@@ -38,7 +38,7 @@ function update_actions() {
     function build_action_row(action) {
         $row = $(
             "<tr><td class='selected_td'></td><th>ACTION</th><td class='count'>COUNT</td></tr>"
-            .replace("COUNT", parseInt(Math.random() * 15, 10))
+            .replace("COUNT", _.random(0,15))
             .replace("ACTION", action)
         );
         if (action == "defend") {$row.addClass('selected');}  // HACK!! Selected placeholder

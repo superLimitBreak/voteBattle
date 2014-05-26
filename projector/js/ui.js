@@ -10,9 +10,9 @@ function update_stats() {
         var actor = battlescape.game.get_actors()[player_id];
         $row = $(
             "<tr><td class='selected_td'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
-            .replace("PLAYER_NAME", actor.data.name)
-            .replace("CURRENT_HEALTH", actor.health)
-            .replace("MAX_HEALTH", actor.data.health)
+            .replace("PLAYER_NAME", actor.get_data().name)
+            .replace("CURRENT_HEALTH", actor.get_health())
+            .replace("MAX_HEALTH", actor.get_data().health)
         );
         if (actor == battlescape.game.get_current_turn_actor()) {
             $row.addClass('selected');

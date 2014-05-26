@@ -22,9 +22,9 @@ function create_ai() {
     }
     
     ai.get_most_hurt = function(actors) {
-        var most_hurt = {health: 65535, take_damage: function(x){}};
+        var most_hurt = {get_health_percent: function(){return 65535;}, take_damage: function(x){}};
         $.each(actors, function(i, actor){
-            if (!actor.is_dead() && actor.health < most_hurt.health) {
+            if (!actor.is_dead() && (actor.get_health_percent() < most_hurt.get_health_percent())) {
                 most_hurt = actor;
             }
         });

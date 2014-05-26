@@ -9,7 +9,9 @@ function create_actor(id, team_name, actor_data) {
         id: id,
         team_name: team_name,
     };
-    actor.data = actor_data;
+    var data = actor_data;
+    var health = data.health;
+    var charge = 0;
     
     // Create 3D dom object for this player
     actor.dom = document.createElement('img');
@@ -19,10 +21,10 @@ function create_actor(id, team_name, actor_data) {
     
     // Methods
     actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}
-    actor.is_hurt = function() {return (actor.health/actor.data.health) <= battlescape.data.settings.ui.health_low_threshold;}
-    actor.is_dead = function() {return actor.health <= 0;}    
+    actor.is_hurt = function() {return (health/data.health) <= battlescape.data.settings.ui.health_low_threshold;}
+    actor.is_dead = function() {return health <= 0;}    
     actor.set_pose = function(pose) {
-        actor.dom.src = battlescape.data.settings.path.images.characters + actor.data.images[pose];
+        actor.dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
     };
     actor.set_direction = function(direction) {
         if (direction != 0) {direction = Math.PI;}
@@ -32,42 +34,60 @@ function create_actor(id, team_name, actor_data) {
         if (actor.is_dead()) {return [];}
         return ['attack', 'defend', 'heal'];  // Hard coded list for now, in future this could be dynamic
     };
+    actor.get_charge    = function() {return charge;}
+    actor.get_defending = function() {return defending;}
+    actor.get_health    = function() {return health;}
+    actor.get_data      = function() {return data;}  // Dont like this ... want to remove it inpreference to accessors
+    
+    actor.get_health_percent = function() {return health / data.health;}
     
     actor.action = function(action) {
         if (!(actor.get_actions().indexOf(action)>=0)) {console.warn(""+action+" is not a valid action at this time");}
         if (action == "attack") {
-            actor.defending = false;
-            var damage = actor.data.min_damage + parseInt(Math.random() * (actor.data.max_damage - actor.data.min_damage), 10);
+            defending = false;
+            var damage = data.min_damage + parseInt(Math.random() * (data.max_damage - data.min_damage), 10);
             battlescape.ai.get_random_enemy(actor).take_damage(damage);
             return;
         }
         if (action == "heal") {
-            actor.defending = false;
-            battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor)).take_damage(-actor.data.heal);
+            defending = false;
+            battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor)).heal(data.heal);
             return;
         }
         if (action == "defend") {
-            actor.defending = true;
+            defending = true;
+            return;
+        }
+        if (action == "charge") {
+            charge++;
             return;
         }
         console.warn("unknown action "+action);
     }
-    actor.take_damage = function(damage) {
-        if (actor.defending && damage > 0) {
-            damage = Math.round(damage / 10);
-        }
-        actor.health = actor.health - damage;
-        if (actor.is_dead()) {
+    
+    function modify_health(damage) {
+        health = health - damage;  // Update health
+        if (health < 0) {health = 0;}  // Limit health
+        if (health > data.health) {health = data.health;}
+        if (actor.is_dead()) {  // Update pose
             actor.set_pose('dead');
         }
-        if (actor.health < 0) {actor.health = 0;}
-        if (actor.health > actor.data.health) {actor.health = actor.data.health;}
-        battlescape.ui.set_message(""+actor.data.name+" takes "+damage+" damage");
-        battlescape.ui.update();
+        battlescape.ui.update();  // Update ui
+    }
+    
+    actor.take_damage = function(value) {
+        if (defending && value > 0) {
+            damage = Math.round(value / 5);
+        }
+        modify_health(value);
+        battlescape.ui.set_message(""+data.name+" takes "+value+" damage");
+    }
+    actor.heal = function(value) {
+        modify_health(-value);
+        battlescape.ui.set_message(""+data.name+" healed "+value);
     }
     
     // Set Variables
-    actor.health = actor.data.health;
     actor.set_pose('stand');
 
     return actor;

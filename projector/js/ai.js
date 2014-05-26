@@ -9,7 +9,14 @@ function create_ai() {
     var INVERSE = true;
     
     ai.take_action = function(actor) {
-        actor.action("attack");
+        var ai_actions = actor.get_data().ai_actions;
+        if (ai_actions) {
+            if (actor.ai_action_index==undefined) {actor.ai_action_index  = 0;}
+            else                                  {actor.ai_action_index += 1;}
+            console.log(actor.ai_action_index, ai_actions.length, ai_actions, ai_actions[actor.ai_action_index % ai_actions.length]);
+            actor.action(ai_actions[actor.ai_action_index % ai_actions.length]);
+        }
+        //actor.action("attack");
         battlescape.game.next_turn();
     }
     

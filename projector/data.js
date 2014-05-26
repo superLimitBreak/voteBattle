@@ -2,6 +2,8 @@ var battlescape = window.battlescape || {};
 
 (function(external){
 
+var base_actions = ['attack', 'defend', 'heal'];
+
 var data = {
     settings: {
         path: {
@@ -22,6 +24,7 @@ var data = {
             heal: 10,
             defence_effectiveness: 6,
             specials: [],
+            base_actions: base_actions,
             images: {
                 'stand': 'char1.png',
                 'attack': '',
@@ -41,6 +44,7 @@ var data = {
             max_damage: 30,
             heal: 30,
             defence_effectiveness: 4,
+            base_actions: base_actions,
             images: {
                 'stand': 'char3.png',
             },
@@ -53,6 +57,7 @@ var data = {
             heal: 50,
             defence_effectiveness: 5,
             specials: [],
+            base_actions: base_actions,
             images: {
                 'stand': 'char2.png',
             },
@@ -65,6 +70,7 @@ var data = {
             heal: 5,
             defence_effectiveness: 8,
             specials: [],
+            base_actions: base_actions,
             images: {
                 'stand': 'char4.png',
             },
@@ -75,8 +81,11 @@ var data = {
             max_damage: 50,
             min_damage: 30,
             specials: ['all'],
+            ai_actions: ['attack','attack','attack','charge','charge','all'],
+            base_actions: ['attack', 'charge'],
             images: {
                 'stand': 'nyan_cat.gif',
+                'charge': 'nyan_cat.charge.gif',
             },
         }
     },

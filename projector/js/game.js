@@ -33,7 +33,11 @@ function create_actor(id, team_name, actor_data) {
     }
     actor.get_actions = function() {
         if (actor.is_dead()) {return [];}
-        return ['attack', 'defend', 'heal'];  // Hard coded list for now, in future this could be dynamic
+        var actions = _.clone(data.base_actions);
+        if (charge >= 1 && _.contains(data.specials, 'all')) {
+            actions.push('all');
+        }
+        return actions;
     };
     actor.get_charge    = function() {return charge;}
     actor.get_defending = function() {return defending;}
@@ -44,26 +48,53 @@ function create_actor(id, team_name, actor_data) {
     
     actor.action = function(action) {
         if (!(actor.get_actions().indexOf(action)>=0)) {console.warn(""+action+" is not a valid action at this time");}
+        cancel_existing_action();
         if (action == "attack") {
-            defending = false;
-            var damage = data.min_damage + parseInt(Math.random() * (data.max_damage - data.min_damage), 10);
+            var damage = get_attack_damage();
+            if (charge) {
+                damage = damage * charge * 2.7;
+            }
             battlescape.ai.get_random_enemy(actor).take_damage(damage);
             return;
         }
         if (action == "heal") {
-            defending = false;
             battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor)).heal(data.heal);
             return;
         }
         if (action == "defend") {
             defending = true;
+            actor.set_pose('defend');
             return;
         }
         if (action == "charge") {
             charge++;
+            battlescape.ui.set_message(""+data.name+" is charging");
+            actor.set_pose('charge');
             return;
         }
+        if (action == "all") {
+            charge = 0;
+            var total = 0;
+            _.each(battlescape.ai.get_enemys(actor), function(enemy, index, enemys) {
+                var damage = get_attack_damage();
+                total += damage;
+                enemy.take_damage(damage);
+            });
+            battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
+            return;
+        }
+        
         console.warn("unknown action "+action);
+    }
+
+    
+    function cancel_existing_action() {
+        defending = false;
+        actor.set_pose('stand');
+    }
+    
+    function get_attack_damage() {
+        return data.min_damage + Math.round(Math.random() * (data.max_damage - data.min_damage));
     }
     
     function modify_health(damage) {

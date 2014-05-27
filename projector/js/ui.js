@@ -34,7 +34,7 @@ function update_stats() {
 }
 
 function update_actions() {
-    
+
     function build_action_row(action) {
         // Get current vote count for this action
         var current_frame = battlescape.vote.get_current_frame();
@@ -53,9 +53,20 @@ function update_actions() {
     
     $action_table = $("<table></table>");
     $('.actions').empty().append($action_table);
-    $.each(battlescape.game.get_current_turn_actor().get_actions(), function(i, action){
-        $action_table.append(build_action_row(action));
-    });
+    var actor = battlescape.game.get_current_turn_actor();
+    if (actor.is_player()) {
+        $.each(actor.get_actions(), function(i, action){
+            $action_table.append(build_action_row(action));
+        });
+    }
+    else {
+        $action_table.append("<tr><td>Thinking</td></tr>");
+    }
+}
+
+function update_countdown(time_remaining) {
+    var $countdown = $('.countdown');
+    $countdown.html(time_remaining);
 }
 
 function set_message(msg) {
@@ -81,5 +92,7 @@ set_message("VoteBattle");
 
 external.update = update
 external.set_message = set_message;
+external.update_countdown = update_countdown;
+external.update_actions = update_actions;
 
 }(battlescape.ui, battlescape));

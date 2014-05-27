@@ -20,7 +20,6 @@ function create_ai() {
             console.warn("no ai actions for this actor, falled back to standard attack");
             actor.action("attack");
         }
-        battlescape.game.next_turn();
     }
     
     ai.get_enemys = function(actor) {return battlescape.game.get_team(actor.team_name, INVERSE);}

@@ -65,6 +65,12 @@ td.numeric {
 	text-align: center;
 }
 
+.countdown {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
 .selected_td:before {
 	display: inline-block;
 	position: absolute;

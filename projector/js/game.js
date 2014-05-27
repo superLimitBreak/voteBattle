@@ -47,14 +47,12 @@ function create_actor(id, team_name, actor_data) {
     actor.get_health_percent = function() {return health / data.health;}
     
     actor.action = function(action) {
+        console.log("action", action);
         if (!(actor.get_actions().indexOf(action)>=0)) {console.warn(""+action+" is not a valid action at this time");}
         cancel_existing_action();
         if (action == "attack") {
             var enemy = battlescape.ai.get_random_enemy(actor);
             var damage = get_attack_damage();
-            if (charge) {
-                damage = damage * charge * 2.7;
-            }
             damage = enemy.take_damage(damage);
             battlescape.ui.set_message(""+data.name+" does "+damage+" damage to "+enemy.get_data().name);
             return;
@@ -85,8 +83,13 @@ function create_actor(id, team_name, actor_data) {
             battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
             return;
         }
+        if (action == "super") {
+            battlescape.ui.set_message("" + data.name + " is not in the mood to play anymore");
+            return;
+        }
         if (action == "confused") {
             battlescape.ui.set_message("" + data.name + " is confused");
+            return;
         }
         
         console.warn("unknown action "+action);
@@ -99,7 +102,11 @@ function create_actor(id, team_name, actor_data) {
     }
     
     function get_attack_damage() {
-        return _.random(data.min_damage, data.max_damage);
+        var damage = _.random(data.min_damage, data.max_damage);
+        if (charge) {
+            damage = damage * charge * 2.7;
+        }
+        return damage;
     }
     
     function modify_health(damage) {
@@ -162,10 +169,14 @@ function create_game(players, enemys, turn_order) {
         var actor = game.get_current_turn_actor();
         if (actor.is_dead()) {
             game.next_turn();
+            return;
         }
         if (!actor.is_player()) {
-            battlescape.ai.take_action(actor);
+            _.delay(function(){battlescape.ai.take_action(actor)}, 3 * 1000);
+            _.delay(game.next_turn, 6 * 1000);
+            return;
         }
+        battlescape.vote.new_frame(actor.get_actions(), 6);
     }
 
     

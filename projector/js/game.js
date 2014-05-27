@@ -85,6 +85,9 @@ function create_actor(id, team_name, actor_data) {
             battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
             return;
         }
+        if (action == "confused") {
+            battlescape.ui.set_message("" + data.name + " is confused");
+        }
         
         console.warn("unknown action "+action);
     }

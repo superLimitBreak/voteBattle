@@ -36,12 +36,18 @@ function update_stats() {
 function update_actions() {
     
     function build_action_row(action) {
+        // Get current vote count for this action
+        var current_frame = battlescape.vote.get_current_frame();
+        if (current_frame == undefined) {current_frame = {};}
+        var count = current_frame[action] || 0;
+        
+        // Build action row
         $row = $(
             "<tr><td class='selected_td'></td><th>ACTION</th><td class='count'>COUNT</td></tr>"
-            .replace("COUNT", _.random(0,15))
             .replace("ACTION", action)
+            .replace("COUNT", count)
         );
-        if (action == "defend") {$row.addClass('selected');}  // HACK!! Selected placeholder
+        if (count == _.max(_.values(current_frame))) {$row.addClass('selected');}  // Select the highest vote
         return $row;
     }
     
@@ -68,7 +74,7 @@ function update() {
 // Init ------------------------------------------------------------------------
 
 update();
-set_message("Techno Mage does 23 damage to Nyan Cat");
+set_message("VoteBattle");
 
 
 // External --------------------------------------------------------------------

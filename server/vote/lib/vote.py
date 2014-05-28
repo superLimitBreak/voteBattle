@@ -6,17 +6,18 @@ from externals.lib.misc import OrderedDefaultdict, now
 import logging
 log = logging.getLogger(__name__)
 
+
 class VoteException(Exception):
     pass
 
 
 class VotePool(object):
     _pools = {}
-    
+
     @classmethod
     def get_pool_ids(_class):
         return _class._pools.keys()
-    
+
     @classmethod
     def get_pool(_class, id):
         return _class._pools.get(id)
@@ -94,8 +95,8 @@ class VoteFrame(object):
         this is potentially inefficent and can be replaced later if
         more complex voting logic or performence are needed
         """
-        return reduce(lambda a,b: a.union(b), self.frame.values())
-    
+        return reduce(lambda a, b: a.union(b), self.frame.values())
+
     def to_dict(self, total=False):
         votes = dict(self.frame)
         if total:

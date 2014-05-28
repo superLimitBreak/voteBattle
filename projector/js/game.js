@@ -172,11 +172,11 @@ function create_game(players, enemys, turn_order) {
             return;
         }
         if (!actor.is_player()) {
-            _.delay(function(){battlescape.ai.take_action(actor)}, battlescape.data.settings.turn.enemy_think_duration * 1000);
-            _.delay(game.next_turn, battlescape.data.settings.turn.enemy_duration * 1000);
+            _.delay(function(){battlescape.ai.take_action(actor)}, battlescape.data.settings.game.turn.enemy_think_duration * 1000);
+            _.delay(game.next_turn, battlescape.data.settings.game.turn.enemy_duration * 1000);
             return;
         }
-        battlescape.vote.new_frame(actor.get_actions(), battlescape.data.settings.turn.player_duration);
+        battlescape.vote.new_frame(actor.get_actions(), battlescape.data.settings.game.turn.player_duration);
     }
 
     return game;

@@ -91,7 +91,7 @@ var data = {
         },
         'boss': {
             name: 'Nyan Cat',
-            health: 500,
+            health: 320,
             max_damage: 50,
             min_damage: 30,
             specials: ['all'],

@@ -6,6 +6,17 @@ var base_actions = ['attack', 'defend', 'heal'];
 
 var data = {
     settings: {
+        game: {
+            turn: {
+                player_duration: 6,
+                enemy_duration: 6,
+                enemy_think_duration: 3,
+            }
+        },
+        websocket: {
+            port: 9873,
+            disconnected_retry_interval: 5,
+        },
         path: {
             images: {
                 characters: 'images/characters/',
@@ -13,7 +24,10 @@ var data = {
         },
         ui: {
             health_low_threshold: 0.25,
-        }
+        },
+        vote: {
+            pool: 'battlescape',
+        },
     },
     characters: {
         'player1': {

@@ -32,6 +32,18 @@
         "target": "static/jquery.mobile-VERSION.min.map"
     },
     
+    "underscore":{
+        "source": "https://raw.github.com/jashkenas/underscore/VERSION/underscore-min.js",
+        "version": "1.6.0",
+        "target": "static/underscore-min.js"
+    },
+
+    "threejs":{
+        "source": "https://github.com/mrdoob/three.js/VERSION/build/three.min.js",
+        "version": "r67",
+        "target": "static/three.min.js"
+    },
+    
     "yui-reset": {
         "source": "http://yui.yahooapis.com/VERSION/build/cssreset/cssreset-min.css",
         "version": "3.13.0",

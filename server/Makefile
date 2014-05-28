@@ -6,6 +6,8 @@ INI_DEV  = development.ini
 INI_TEST = test.ini
 INI_PROD = production.ini
 
+OS = $(shell uname -s)
+
 
 help:
 	# Usage: make <target>, where target is
@@ -16,31 +18,37 @@ help:
 	# clean         -- reset the folder to clean git checkout (removes virtual python env)
 
 env:
-	if dpkg -s python-virtualenv ; then \
-		echo virtualenv already installed; \
-	else \
-		echo installing virtualenv; \
-		sudo apt-get install python-virtualenv; \
+	if [$OS -eq "Linux"]; then \
+		if dpkg -s python-virtualenv ; then \
+			echo virtualenv already installed; \
+		else \
+			echo installing virtualenv; \
+			sudo apt-get install python-virtualenv; \
+		fi
+		if dpkg -s python3-setuptools ; then \
+			echo python 3 already installed; \
+		else \
+			echo installing python 3; \
+			sudo apt-get install python3-setuptools python-setuptools; \
+		fi ;\
 	fi
-	if dpkg -s python3-setuptools ; then \
-		echo python 3 already installed; \
-	else \
-		echo installing python 3; \
-		sudo apt-get install python3-setuptools python-setuptools; \
+	# TODO - check brew installed + maybe install it
+	if [$OS -eq "Darwin"]; then \
+		brew install python3 ;\
 	fi
 	virtualenv --no-site-packages -p python3 env
-	cd env;	bin/easy_install pyramid
+	cd env; bin/easy_install pyramid
 
-setup: env
+VoteBattle.egg-info: env
 	env/bin/python setup.py develop
 
 dependency_downloader.py:
-	curl https://raw.github.com/calaldees/libs/master/python3/lib/dependency_downloader.py --compressed -O
+	curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/dependency_downloader.py --compressed -O
 
 externals:
 	env/bin/python dependency_downloader.py --destination $(PATH_EXTERNALS)
 
-install: env setup dependency_downloader.py externals test
+install: env VoteBattle.egg-info dependency_downloader.py externals test
 
 run:
 	env/bin/pserve --reload $(INI_DEV)

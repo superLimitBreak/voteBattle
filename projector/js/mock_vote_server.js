@@ -91,7 +91,15 @@ function end_frame() {
     
     var actor = battlescape.game.get_current_turn_actor();
     
-    // Find highest voted actions
+    var actions = get_highest_voted_actions();
+    // If more than one highest action - confused
+    if (actions.length != 1) {actions.push("confused");}
+    
+    actor.action(_.last(actions));
+    battlescape.game.next_turn();
+}
+
+function get_highest_voted_actions() {
     var max = _.max(_.values(current_frame));
     var actions = []
     _.each(current_frame, function(value, key, list){
@@ -99,11 +107,7 @@ function end_frame() {
             actions.push(key);
         }
     });
-    // If more than one highest action - confused
-    if (actions.length != 1) {actions.push("confused");}
-    
-    actor.action(_.last(actions));
-    battlescape.game.next_turn();
+    return actions;
 }
 
 function get_current_frame() {
@@ -126,6 +130,7 @@ setup_websocket(
 // External --------------------------------------------------------------------
 external.new_frame = new_frame;
 external.get_current_frame = get_current_frame;
+external.get_highest_voted_actions = get_highest_voted_actions;
 
 }(battlescape.vote, battlescape));
 

@@ -95,6 +95,11 @@ td.numeric {
 	content: "\1F449";
 	text-shadow: none;
 }
+.box .confused .selected_td:before {
+	content: "?";
+	text-shadow: none;
+}
+
 
 .box .count {
 	text-align: right;

@@ -47,7 +47,10 @@ function update_actions() {
             .replace("ACTION", action)
             .replace("COUNT", count)
         );
-        if (count == _.max(_.values(current_frame))) {$row.addClass('selected');}  // Select the highest vote
+        
+        var css_class_selected = 'selected';
+        if (battlescape.vote.get_highest_voted_actions().length > 1) {css_class_selected = 'confused';}
+        if (count == _.max(_.values(current_frame))) {$row.addClass(css_class_selected);}  // Select the highest vote
         return $row;
     }
     
@@ -60,7 +63,7 @@ function update_actions() {
         });
     }
     else {
-        $action_table.append("<tr><td>Thinking</td></tr>");
+        $action_table.append("");
     }
 }
 

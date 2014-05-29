@@ -1,7 +1,7 @@
 {
     "jquery": {
         "source": "http://code.jquery.com/jquery-VERSION.min.js",
-        "version": "2.0.3",
+        "version": "2.1.1",
         "target": "static/jquery.min.js"
     },
     "jquery_map": {
@@ -18,17 +18,17 @@
 
     "jquery_mobile": {
         "source": "http://code.jquery.com/mobile/VERSION/jquery.mobile-VERSION.min.js",
-        "version": "1.4.0",
+        "version": "1.4.2",
         "target": "static/jquery.mobile.min.js"
     },
     "jquery_mobile_css": {
         "source": "http://code.jquery.com/mobile/VERSION/jquery.mobile-VERSION.min.css",
-        "version": "1.4.0",
+        "version": "1.4.2",
         "target": "static/jquery.mobile.min.css"
     },
     "jquery_mobile_map": {
         "source": "http://code.jquery.com/mobile/VERSION/jquery.mobile-VERSION.min.map",
-        "version": "1.4.0",
+        "version": "1.4.2",
         "target": "static/jquery.mobile-VERSION.min.map"
     },
     

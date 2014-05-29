@@ -54,8 +54,8 @@ def main(global_config, **settings):
 
     # Static Routes ------------------------------------------------------------
     
-    config.add_static_view('static', 'static'             , cache_max_age=3600)
-    config.add_static_view('ext'   , '../externals/static', cache_max_age=3600)
+    config.add_static_view('static', 'static'             )#, cache_max_age=3600)
+    config.add_static_view('ext'   , '../externals/static')#, cache_max_age=3600)
     
     # Routes -------------------------------------------------------------------
     

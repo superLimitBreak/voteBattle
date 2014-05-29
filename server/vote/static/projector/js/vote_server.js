@@ -82,9 +82,12 @@ function new_frame(items, duration) {
     });
     battlescape.ui.update_actions();
     _.delay(end_frame, duration * 1000);
-    var countdown = duration;
-	function update_countdown(){battlescape.ui.update_countdown(countdown--);};
-    interval_countdown = setInterval(update_countdown, 1000);
+	
+	battlescape.ui.update_countdown(0);
+	var ui_progress_update_interval = 0.1;
+    var progress = 0;
+	function update_countdown(){progress += ui_progress_update_interval/duration; battlescape.ui.update_countdown(progress);};
+    interval_countdown = setInterval(update_countdown, ui_progress_update_interval * 1000);
 	update_countdown();
 }
 

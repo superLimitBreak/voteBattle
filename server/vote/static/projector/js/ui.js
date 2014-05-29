@@ -67,9 +67,32 @@ function update_actions() {
     }
 }
 
+
+//
+var context = document.getElementById('countdown_canvas').getContext('2d');
+var x = context.canvas.width / 2;
+var y = x;
+function filled_circle(angle, line_width) {
+    var radius = x - line_width;
+    var angle_start = -Math.PI/2;
+    context.beginPath();
+    context.arc(x, y, radius, angle_start, angle + angle_start, false);
+    context.lineTo(x, y);
+    context.closePath();
+    context.lineWidth = line_width;
+    context.fillStyle = '#dddddd';
+    context.fill();
+    context.strokeStyle = 'red';
+    context.stroke();
+}
+
+
 function update_countdown(time_remaining) {
-    var $countdown = $('.countdown');
-    $countdown.html(time_remaining);
+    if (time_remaining==0) {context.clearRect(0,0,100,100);}
+    // time remaining is a fraction 0 -> 1
+    //var $countdown = $('.countdown');
+    //$countdown.html(time_remaining);
+    filled_circle(time_remaining * Math.PI * 2, 5);
 }
 
 function set_message(msg) {

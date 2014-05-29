@@ -118,14 +118,34 @@ function get_current_frame() {
 
 
 // Init ------------------------------------------------------------------------
+
+function create_vote_pool(vote_pool) {
+	//console.info("create_vote_pool", vote_pool);
+	// Create vote_pool if needed
+	$.post("/api/.json" , {"pool_id":vote_pool})
+	.success(function(data){
+		console.log("vote_pool created", vote_pool);
+    })
+    .error(function(xhr){
+		var error_message = xhr.responseJSON.messages[0];
+		if (error_message.search("pool already exists")) {
+			console.debug("vote_pool already exisits", vote_pool);
+		}
+		else {
+			console.warn("unable to create vote_pool", vote_pool);
+		}
+	});
+}
+create_vote_pool(vote_pool);
+
+
 setup_websocket(
     // connect
     function(){},
     // message
     function(data){
-        console.log(data);
-        //current_frame[] = 
-        //update_current_frame_ui();
+        _.extend(current_frame, data);
+        update_current_frame_ui();
     }
 );
 

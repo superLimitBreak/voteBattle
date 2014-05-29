@@ -32,7 +32,7 @@ ${self.init()}\
 		<link href="${ self.path_static_external }jquery.mobile.min.css" rel="stylesheet">
 		
 		<!-- CSS - Site -->
-		<link href="${ self.path_static }mobile.css" rel="stylesheet">
+		<link href="${ self.path_static }mobile/mobile.css" rel="stylesheet">
 </%def>
 
 <%def name="scripts()">
@@ -42,5 +42,5 @@ ${self.init()}\
 		<script src="${ self.path_static_external }jquery.mobile.min.js"></script>
 		
 		<!-- Javascript - Site -->
-		<script src="${ self.path_static }mobile.js"></script>
+		<script src="${ self.path_static }mobile/mobile.js"></script>
 </%def>

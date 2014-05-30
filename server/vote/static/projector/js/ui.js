@@ -27,7 +27,7 @@ function update_stats() {
     };
     
     $characters_table = $("<table></table>");
-    $('.stats').empty().append($characters_table);
+    $('#stats').empty().append($characters_table);
     $.each(battlescape.data.players, function(i, player_id){
         $characters_table.append(build_player_row(player_id));
     });
@@ -54,16 +54,18 @@ function update_actions() {
         return $row;
     }
     
-    $action_table = $("<table></table>");
-    $('.actions').empty().append($action_table);
+    $actions = $('#actions');
     var actor = battlescape.game.get_current_turn_actor();
     if (actor.is_player()) {
-        $.each(actor.get_actions(), function(i, action){
+        $actions.removeClass('hidden');
+        $action_table = $("<table></table>");
+        $('#action_menu').empty().append($action_table);
+        $.each(actor.get_actions(), function(i, action) {
             $action_table.append(build_action_row(action));
         });
     }
     else {
-        $action_table.append("");
+        $actions.addClass('hidden');
     }
 }
 
@@ -80,23 +82,23 @@ function filled_circle(angle, line_width) {
     context.lineTo(x, y);
     context.closePath();
     context.lineWidth = line_width;
-    context.fillStyle = '#dddddd';
+    context.fillStyle = 'white';
     context.fill();
-    context.strokeStyle = 'red';
+    context.strokeStyle = '#dddddd';
     context.stroke();
 }
 
 
 function update_countdown(time_remaining) {
-    if (time_remaining==0) {context.clearRect(0,0,100,100);}
+    if (time_remaining == 0) {context.clearRect(0,0,100,100);}
     // time remaining is a fraction 0 -> 1
     //var $countdown = $('.countdown');
     //$countdown.html(time_remaining);
-    filled_circle(time_remaining * Math.PI * 2, 5);
+    filled_circle(time_remaining * Math.PI * 2, 1);
 }
 
 function set_message(msg) {
-    var $messages = $('.messages');
+    var $messages = $('#messages');
     $messages.removeClass('message');
     $messages.html(msg);
     $messages.addClass('message');

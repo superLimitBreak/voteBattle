@@ -31,6 +31,10 @@ td.numeric {
 	text-align: right;
 }
 
+.hidden {
+	display: none;
+}
+
 .box {
 	color: white;
 	background-color: blue;
@@ -41,21 +45,30 @@ td.numeric {
 	font-size: 28px;
 }
 
-.stats {
+#stats {
 	position: absolute;
 	top: 0.5em;
 	left: 0.5em;
 	width: 60%;
 }
 
-.actions {
+#actions {
 	position: absolute;
 	right: 0.5em;
 	top: 1em;
 	width: 40%;
 }
 
-.messages {
+#countdown {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin-right: 0.5em;
+	margin-top: 0.5em;
+}
+
+
+#messages {
 	position: absolute;
 	top: 25%;
 	right: 1em;
@@ -63,14 +76,6 @@ td.numeric {
 	padding: 0.25em;
 	
 	text-align: center;
-}
-
-.countdown {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 100px;
-	height: 100px;
 }
 
 .selected_td:before {

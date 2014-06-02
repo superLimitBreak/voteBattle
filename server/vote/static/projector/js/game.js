@@ -138,7 +138,7 @@ function create_actor(id, team_name, actor_data) {
     }
     
     actor.animate_attack = function(target_actor) {
-        actor.set_pose('attack')
+        actor.set_pose('attack');
         var original_position = _.clone(actor.CSS3DObject.position);
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)
                     .to(target_actor.CSS3DObject.position, battlescape.data.settings.animation.attack.in_time)
@@ -149,7 +149,10 @@ function create_actor(id, team_name, actor_data) {
                     .onComplete(
                         actor.set_pose_to_current_state
                     );
-        tween.easing(TWEEN.Easing.Linear.None).start()
+        tween.easing(
+            TWEEN.Easing.Elastic.InOut
+            //TWEEN.Easing.Linear.None
+        ).start()
     }
     
     // Set Variables

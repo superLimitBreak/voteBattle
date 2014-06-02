@@ -138,6 +138,7 @@ function create_actor(id, team_name, actor_data) {
     }
     
     actor.animate_attack = function(target_actor) {
+        // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
         actor.set_pose('attack');
         var original_position = _.clone(actor.CSS3DObject.position);
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)

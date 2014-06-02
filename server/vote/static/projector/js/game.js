@@ -98,7 +98,7 @@ function create_actor(id, team_name, actor_data) {
     
     function cancel_existing_action() {
         defending = false;
-        actor.set_pose('stand');
+        actor.set_pose_to_current_state();
     }
     
     function get_attack_damage() {
@@ -130,6 +130,26 @@ function create_actor(id, team_name, actor_data) {
         var health_before = health
         modify_health(-value);
         return health - health_before;
+    }
+    
+    actor.set_pose_to_current_state = function() {
+        // TODO, inspect state and set
+        actor.set_pose('stand');
+    }
+    
+    actor.animate_attack = function(target_actor) {
+        actor.set_pose('attack')
+        var original_position = _.clone(actor.CSS3DObject.position);
+        var tween = new TWEEN.Tween(actor.CSS3DObject.position)
+                    .to(target_actor.CSS3DObject.position, battlescape.data.settings.animation.attack.in_time)
+                    .chain(
+                        new TWEEN.Tween(actor.CSS3DObject.position)
+                        .to(original_position, battlescape.data.settings.animation.attack.out_time)
+                    )
+                    .onComplete(
+                        actor.set_pose_to_current_state
+                    );
+        tween.easing(TWEEN.Easing.Linear.None).start()
     }
     
     // Set Variables

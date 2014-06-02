@@ -28,6 +28,12 @@ var data = {
         vote: {
             pool: 'battlescape',
         },
+        animation: {
+            attack: {
+                in_time: 600,
+                out_time: 200,
+            }
+        },
     },
     characters: {
         'player1': {

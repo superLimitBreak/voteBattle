@@ -35,6 +35,12 @@ var data = {
             }
         },
     },
+    enviroment: {
+        floor: {
+            texture: 'rock_stones_0079_01_preview.jpg',
+            size: 2000,
+        },
+    },
     characters: {
         'player1': {
             name: 'Axe Specalist',

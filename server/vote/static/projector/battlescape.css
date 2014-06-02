@@ -136,3 +136,17 @@ td.numeric {
 .websocket_disconnected #icon_disconnected {display: block;}
 #icon_attention                            {display: none;}
 .browser_unsupported    #icon_attention    {display: block;}
+
+/*---------------------------------------------------------------------------*/
+/* Animations */
+/*---------------------------------------------------------------------------*/
+
+@-webkit-keyframes hurt {
+   0%   { -webkit-filter: sepia(100%) hue-rotate(310deg) saturate(0); }
+   50%  { -webkit-filter: sepia(100%) hue-rotate(310deg) saturate(3); }
+   100% { -webkit-filter: sepia(100%) hue-rotate(310deg) saturate(0); }
+}
+
+#threeD .hurt {
+	-webkit-animation: hurt 3s ease 0s 100 alternate;
+}

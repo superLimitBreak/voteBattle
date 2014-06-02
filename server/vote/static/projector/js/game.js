@@ -157,7 +157,8 @@ function create_actor(id, team_name, actor_data) {
     }
     
     actor.set_filter = function() {
-        dom.style['-webkit-filter'] = 'sepia(100%) hue-rotate(310deg) saturate(3)';
+        dom.className = 'hurt';
+        //dom.style['-webkit-filter'] = 'sepia(100%) hue-rotate(310deg) saturate(3)';
     }
     
     // Set Variables

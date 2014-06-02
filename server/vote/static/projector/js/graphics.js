@@ -21,6 +21,7 @@ function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.domElement.style.position = 'absolute';
     renderer.domElement.style.top = 0;
+    renderer.domElement.id = 'threeD';
     // DOM Addition
     document.body.appendChild( renderer.domElement );
     // Events

@@ -15,17 +15,17 @@ function create_actor(id, team_name, actor_data) {
     var defending = false;
     
     // Create 3D dom object for this player
-    actor.dom = document.createElement('img');
+    var dom = document.createElement('img');
     //player.dom.style.width = '200px';
     //player.dom.style.height = '300px';
-    actor.CSS3DObject = new THREE.CSS3DObject( actor.dom );
+    actor.CSS3DObject = new THREE.CSS3DObject( dom );
     
     // Methods
     actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}
     actor.is_hurt = function() {return (health/data.health) <= battlescape.data.settings.ui.health_low_threshold;}
     actor.is_dead = function() {return health <= 0;}    
     actor.set_pose = function(pose) {
-        actor.dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
+        dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
     };
     actor.set_direction = function(direction) {
         if (direction != 0) {direction = Math.PI;}
@@ -156,8 +156,12 @@ function create_actor(id, team_name, actor_data) {
         ).start()
     }
     
+    actor.set_filter = function() {
+        dom.style['-webkit-filter'] = 'sepia(100%) hue-rotate(310deg) saturate(3)';
+    }
+    
     // Set Variables
-    actor.set_pose('stand');
+    actor.set_pose_to_current_state()
 
     return actor;
 };

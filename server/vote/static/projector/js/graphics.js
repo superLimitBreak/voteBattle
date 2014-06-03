@@ -1,5 +1,6 @@
 graphics = window.graphics || {};
-(function(external){
+animation_update_functions = window.animation_update_functions || [];
+(function(external, animation_update_functions){
 
 // Constats --------------------------------------------------------------------
 var DRAW_DISTANCE = 5000;
@@ -41,7 +42,10 @@ function animate() {
     requestAnimationFrame(animate);
     TWEEN.update();
     render();
-    controls.update();
+    //controls.update();
+    _.each(animation_update_functions, function(animation_update_function, index, list){
+        animation_update_function();
+    });
 }
 
 function onWindowResize() {
@@ -60,4 +64,4 @@ external.scene = scene;
 external.camera = camera;
 external.animate = animate;
 
-}(graphics));
+}(graphics, animation_update_functions));

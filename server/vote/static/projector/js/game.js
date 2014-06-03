@@ -138,18 +138,21 @@ function create_actor(id, team_name, actor_data) {
         set_pose('stand');
         dom.className = null;
         // Set apply state pose's and effects
-        if (defending) {
-            set_pose('defend');
-        }
         if (charge > 0) {
             set_pose('charge');
         }
-        if (actor.is_dead()) {
-            set_pose('dead');
+        if (defending) {
+            set_pose('defend');
         }
         if (actor.is_hurt()) {
+            set_pose('hurt');
             dom.className = 'hurt';
         }
+        if (actor.is_dead()) {
+            set_pose('dead');
+            dom.className = 'dead';
+        }
+
     }
 
     function set_pose(pose) {

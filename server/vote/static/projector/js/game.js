@@ -24,13 +24,7 @@ function create_actor(id, team_name, actor_data) {
     actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}
     actor.is_hurt = function() {return (health/data.health) <= battlescape.data.settings.ui.health_low_threshold;}
     actor.is_dead = function() {return health <= 0;}    
-    actor.set_pose = function(pose) {
-        dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
-    };
-    actor.set_direction = function(direction) {
-        if (direction != 0) {direction = Math.PI;}
-        actor.CSS3DObject.rotation.y = direction;
-    }
+
     actor.get_actions = function() {
         if (actor.is_dead()) {return [];}
         var actions = _.clone(data.base_actions);
@@ -54,6 +48,7 @@ function create_actor(id, team_name, actor_data) {
             var enemy = battlescape.ai.get_random_enemy(actor);
             var damage = get_attack_damage();
             damage = enemy.take_damage(damage);
+            actor.animate_attack(enemy);
             battlescape.ui.set_message(""+data.name+" does "+damage+" damage to "+enemy.get_data().name);
             return;
         }
@@ -61,17 +56,18 @@ function create_actor(id, team_name, actor_data) {
             var hurt_friend = battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor));
             var value = hurt_friend.heal(data.heal);
             battlescape.ui.set_message(""+data.name+" healed "+hurt_friend.get_data().name+" "+value);
+            set_pose_to_current_state();
             return;
         }
         if (action == "defend") {
             defending = true;
-            actor.set_pose('defend');
+            set_pose_to_current_state();
             return;
         }
         if (action == "charge") {
             charge++;
             battlescape.ui.set_message(""+data.name+" is charging");
-            actor.set_pose('charge');
+            set_pose_to_current_state();
             return;
         }
         if (action == "all") {
@@ -81,6 +77,7 @@ function create_actor(id, team_name, actor_data) {
                 total += enemy.take_damage(get_attack_damage());
             });
             battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
+            set_pose_to_current_state();
             return;
         }
         if (action == "super") {
@@ -89,6 +86,7 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "confused") {
             battlescape.ui.set_message("" + data.name + " is confused");
+            set_pose_to_current_state();
             return;
         }
         
@@ -98,7 +96,6 @@ function create_actor(id, team_name, actor_data) {
     
     function cancel_existing_action() {
         defending = false;
-        actor.set_pose_to_current_state();
     }
     
     function get_attack_damage() {
@@ -113,8 +110,12 @@ function create_actor(id, team_name, actor_data) {
         health = health - damage;  // Update health
         if (health < 0) {health = 0;}  // Limit health
         if (health > data.health) {health = data.health;}
-        if (actor.is_dead()) {  // Update pose
-            actor.set_pose('dead');
+        if (damage > 0) {
+            set_pose('hit');
+            setTimeout(set_pose_to_current_state, battlescape.data.settings.animation.hit.delay);
+        }
+        else {
+            set_pose_to_current_state(); // Update pose and health feedback
         }
         battlescape.ui.update();  // Update ui
     }
@@ -132,14 +133,37 @@ function create_actor(id, team_name, actor_data) {
         return health - health_before;
     }
     
-    actor.set_pose_to_current_state = function() {
-        // TODO, inspect state and set
-        actor.set_pose('stand');
+    function set_pose_to_current_state() {
+        console.log('reset_pose');
+        // Set default state
+        set_pose('stand');
+        dom.className = null;
+        // Set apply state pose's and effects
+        if (defending) {
+            set_pose('defend');
+        }
+        if (charge > 0) {
+            set_pose('charge');
+        }
+        if (actor.is_dead()) {
+            set_pose('dead');
+        }
+        if (actor.is_hurt()) {
+            dom.className = 'hurt';
+        }
+    }
+
+    function set_pose(pose) {
+        dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
+    };
+    actor.set_direction = function(direction) {
+        if (direction != 0) {direction = Math.PI;}
+        actor.CSS3DObject.rotation.y = direction;
     }
     
     actor.animate_attack = function(target_actor) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
-        actor.set_pose('attack');
+        set_pose('attack');
         var original_position = _.clone(actor.CSS3DObject.position);
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)
                     .to(target_actor.CSS3DObject.position, battlescape.data.settings.animation.attack.in_time)
@@ -148,7 +172,7 @@ function create_actor(id, team_name, actor_data) {
                         .to(original_position, battlescape.data.settings.animation.attack.out_time)
                     )
                     .onComplete(
-                        actor.set_pose_to_current_state
+                        set_pose_to_current_state
                     );
         tween.easing(
             TWEEN.Easing.Elastic.InOut
@@ -156,13 +180,8 @@ function create_actor(id, team_name, actor_data) {
         ).start()
     }
     
-    actor.set_filter = function() {
-        dom.className = 'hurt';
-        //dom.style['-webkit-filter'] = 'sepia(100%) hue-rotate(310deg) saturate(3)';
-    }
-    
     // Set Variables
-    actor.set_pose_to_current_state()
+    set_pose_to_current_state()
 
     return actor;
 };

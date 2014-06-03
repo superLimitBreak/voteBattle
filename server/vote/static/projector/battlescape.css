@@ -148,5 +148,9 @@ td.numeric {
 }
 
 #threeD .hurt {
-	-webkit-animation: hurt 3s ease 0s 100 alternate;
+	-webkit-animation-name: hurt;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: ease-in-out;
+	-webkit-animation-direction: alternate;
+	-webkit-animation-duration: 3s;
 }

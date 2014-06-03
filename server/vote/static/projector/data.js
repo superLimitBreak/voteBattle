@@ -32,6 +32,9 @@ var data = {
             attack: {
                 in_time: 600,
                 out_time: 200,
+            },
+            hit: {
+                delay: 1000,
             }
         },
     },

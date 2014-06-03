@@ -48,7 +48,7 @@ function create_actor(id, team_name, actor_data) {
             var enemy = battlescape.ai.get_random_enemy(actor);
             var damage = get_attack_damage();
             damage = enemy.take_damage(damage);
-            actor.animate_attack(enemy);
+            animate_attack(enemy);
             battlescape.ui.set_message(""+data.name+" does "+damage+" damage to "+enemy.get_data().name);
             return;
         }
@@ -134,7 +134,6 @@ function create_actor(id, team_name, actor_data) {
     }
     
     function set_pose_to_current_state() {
-        console.log('reset_pose');
         // Set default state
         set_pose('stand');
         dom.className = null;
@@ -154,14 +153,22 @@ function create_actor(id, team_name, actor_data) {
     }
 
     function set_pose(pose) {
-        dom.src = battlescape.data.settings.path.images.characters + data.images[pose];
+        var pose_image = data.images['stand'];
+        if (data.images[pose]) {
+            pose_image = data.images[pose];
+        }
+        if (pose == 'dead' && !data.images['dead']) {
+            dom.src = '';
+            return
+        }
+        dom.src = battlescape.data.settings.path.images.characters + pose_image;
     };
     actor.set_direction = function(direction) {
         if (direction != 0) {direction = Math.PI;}
         actor.CSS3DObject.rotation.y = direction;
     }
     
-    actor.animate_attack = function(target_actor) {
+    function animate_attack(target_actor) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
         set_pose('attack');
         var original_position = _.clone(actor.CSS3DObject.position);

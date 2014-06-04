@@ -1,4 +1,4 @@
-cameras = {};
+battlescape.cameras = {};
 
 (function(external, graphics){
 // -----------------------------------------------------------------------------
@@ -62,6 +62,6 @@ external.update = update;
 external.stop = stop;
 external.new_camera = new_camera;
 
-}(cameras, graphics));
+}(battlescape.cameras, graphics));
 
-animation_update_functions.push(cameras.update);
+animation_update_functions.push(battlescape.cameras.update);

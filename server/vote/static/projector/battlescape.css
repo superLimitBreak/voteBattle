@@ -4,11 +4,6 @@
 }
 
 body {
-	font-family: pixelfont, courier, sans-serif;
-	letter-spacing:0.1em;
-	/*font-size: 13px;
-	line-height: 13px;*/
-	text-shadow: 2px 2px #555;
 }
 
 html {
@@ -35,6 +30,12 @@ td.numeric {
 }
 
 .box {
+	font-family: pixelfont, courier, sans-serif;
+	letter-spacing:0.1em;
+	/*font-size: 13px;
+	line-height: 13px;*/
+	text-shadow: 2px 2px #555;
+	
 	color: white;
 	background-color: blue;
 	background: linear-gradient(#0000b0 0%, #000050 100%);
@@ -129,22 +130,33 @@ td.numeric {
 	background-color: black;
 }
 
+/* Screen Title --------------------------------------------------------------*/
+
 #screen_title {
-	background-color: black;
-	font-family: sans;
+	font-family: sans-serif;
+	background: white url('images/ff7-logo-h1n-net.png') no-repeat center center;
 }
 
 #screen_title .title {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 300px;
-	margin-left: -150px;
-	height: 200px;
-	margin-top: -100px;
-	background-color: red;
 	text-align: center;
 	vertical-align: middle;
+   color: black;
+   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 4px;
+   -webkit-text-stroke-color: white;
+   font-size: 7em;
+   font-weight: bold;
+   letter-spacing:-0.08em;
+   padding-top: 2.8em;
+}
+
+#screen_title .action {
+	position: absolute;
+	top:0;
+	left:0;
+	right: 0;
+	font-size: 2em;
+	text-align: center;
 }
 
 /*---------------------------------------------------------------------------*/

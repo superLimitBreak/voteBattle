@@ -99,9 +99,14 @@ function update_countdown(time_remaining) {
 
 function set_message(msg) {
     var $messages = $('#messages');
-    $messages.removeClass('message');
-    $messages.html(msg);
-    $messages.addClass('message');
+    if (msg) {
+        $messages.removeClass('message').removeClass('hidden');
+        $messages.html(msg);
+        $messages.addClass('message');
+    }
+    else {
+        $messages.addClass('hidden');
+    }
 }
 
 function update() {
@@ -110,10 +115,17 @@ function update() {
     update_actions();
 }
 
+function screen(screen_name) {
+    $screen = $('#screen_'+screen_name);
+    $('.screen').addClass('hidden');
+    $screen.removeClass('hidden');
+}
+
 // Init ------------------------------------------------------------------------
 
 update();
-set_message("VoteBattle");
+set_message();
+//set_message("VoteBattle");
 
 
 // External --------------------------------------------------------------------
@@ -122,5 +134,6 @@ external.update = update
 external.set_message = set_message;
 external.update_countdown = update_countdown;
 external.update_actions = update_actions;
+external.screen = screen;
 
 }(battlescape.ui, battlescape));

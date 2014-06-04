@@ -13,7 +13,6 @@ body {
 
 html {
 	overflow: hidden;
-	background-color: black;
 }
 
 ul, li {
@@ -114,6 +113,39 @@ td.numeric {
 }
 
 
+/*---------------------------------------------------------------------------*/
+/* Screens */
+/*---------------------------------------------------------------------------*/
+
+.screen {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+#screen_battle {
+	background-color: black;
+}
+
+#screen_title {
+	background-color: black;
+	font-family: sans;
+}
+
+#screen_title .title {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+	height: 200px;
+	margin-top: -100px;
+	background-color: red;
+	text-align: center;
+	vertical-align: middle;
+}
 
 /*---------------------------------------------------------------------------*/
 /* Notification Area */

@@ -24,7 +24,8 @@ function init() {
     renderer.domElement.style.top = 0;
     renderer.domElement.id = 'threeD';
     // DOM Addition
-    document.body.appendChild( renderer.domElement );
+    //document.body.appendChild( renderer.domElement );
+    document.getElementById('screen_battle').appendChild( renderer.domElement );
     // Events
     window.addEventListener('resize', onWindowResize, false);
 

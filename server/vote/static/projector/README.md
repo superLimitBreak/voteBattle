@@ -1,4 +1,8 @@
-
+Possible fonts
+ Six Caps
+ Bowlby One
+ Anton
+ Oswald
 
 ToDo
 ----
@@ -13,8 +17,6 @@ In the run up to the first trial run, the functionality below is a prioritised l
 
 ### Should have ###
 
-* Attack animation movement
-* Floor
 * Message area transitions
 * Title screen holding area
 

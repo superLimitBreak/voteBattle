@@ -115,8 +115,8 @@ var data = {
                          'super', 'all', 'all', 'all', 'all', 'all'],
             base_actions: ['attack', 'charge'],
             images: {
-                'stand': 'nyan_cat.gif',
-                'charge': 'nyan_cat.charge.gif',
+                'stand': 'nyan_cat2.gif',
+                'charge': 'nyan_cat.charge2.gif',
             },
         }
     },

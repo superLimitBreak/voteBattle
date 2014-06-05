@@ -199,7 +199,7 @@ function create_actor(id, team_name, actor_data) {
 function create_game(players, enemys, turn_order) {
     var game = {};
     
-    var current_turn_index = 0;
+    var current_turn_index = -1;
     var actors = {};
 
     function init_team(id_list, team_name) {

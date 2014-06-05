@@ -123,7 +123,7 @@ function screen(screen_name) {
 
 // Init ------------------------------------------------------------------------
 
-update();
+//update();
 set_message();
 //set_message("VoteBattle");
 

@@ -12,7 +12,7 @@ function init() {
     // Camera
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, DRAW_DISTANCE);
     camera.position.z = 2000;
-    camera.position.y = 0;
+    camera.position.y = 400;
 
     // Scene
     scene = new THREE.Scene();
@@ -43,7 +43,7 @@ function animate() {
     requestAnimationFrame(animate);
     TWEEN.update();
     render();
-    //controls.update();
+    controls.update();
     _.each(animation_update_functions, function(animation_update_function, index, list){
         animation_update_function();
     });

@@ -16,9 +16,14 @@ function create_actor(id, team_name, actor_data) {
     
     // Create 3D dom object for this player
     var dom = document.createElement('img');
+    dom.style['z-index'] = 1;
+    if (data.height) {
+        dom.style.height = ''+data.height+'px';
+    }
+    actor.CSS3DObject = new THREE.CSS3DObject( dom );
     //player.dom.style.width = '200px';
     //player.dom.style.height = '300px';
-    actor.CSS3DObject = new THREE.CSS3DObject( dom );
+    
     
     // Methods
     actor.is_player = function() {return battlescape.data.players.indexOf(id) >= 0;}

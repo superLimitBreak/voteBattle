@@ -4,6 +4,10 @@ Possible fonts
  Anton
  Oswald
 
+
+https://chrome.google.com/webstore/detail/chromoji-emoji-for-google/cahedbegdkagmcjfolhdlechbkeaieki/
+
+
 ToDo
 ----
 

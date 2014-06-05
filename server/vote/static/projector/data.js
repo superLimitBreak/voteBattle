@@ -30,8 +30,8 @@ var data = {
         },
         animation: {
             attack: {
-                in_time: 600,
-                out_time: 200,
+                in_time: 800,
+                out_time: 300,
             },
             hit: {
                 delay: 1000,
@@ -54,6 +54,7 @@ var data = {
             defence_effectiveness: 6,
             specials: [],
             base_actions: base_actions,
+            height: 300,
             images: {
                 'stand': 'char1.png',
                 'attack': '',
@@ -74,6 +75,7 @@ var data = {
             heal: 20,
             defence_effectiveness: 4,
             base_actions: base_actions,
+            height: 300,
             images: {
                 'stand': 'char3.png',
             },
@@ -87,6 +89,7 @@ var data = {
             defence_effectiveness: 5,
             specials: [],
             base_actions: base_actions,
+            height: 300,
             images: {
                 'stand': 'char2.png',
             },
@@ -100,13 +103,14 @@ var data = {
             defence_effectiveness: 8,
             specials: [],
             base_actions: base_actions,
+            height: 300,
             images: {
                 'stand': 'char4.png',
             },
         },
         'boss': {
             name: 'Nyan Cat',
-            health: 320,
+            health: 340,
             max_damage: 50,
             min_damage: 30,
             specials: ['all'],
@@ -114,6 +118,7 @@ var data = {
                          'attack','attack','attack','charge','charge','all',
                          'super', 'all', 'all', 'all', 'all', 'all'],
             base_actions: ['attack', 'charge'],
+            height: 500,
             images: {
                 'stand': 'nyan_cat2.gif',
                 'charge': 'nyan_cat.charge2.gif',

@@ -35,7 +35,7 @@ function setup_websocket(on_connect, on_message) {
 		$('body').addClass('websocket_disconnected');
 		console.log("Websocket: Disconnected");
 		if (!socket_retry_interval) {
-			socket_retry_interval = setInterval(function(){setup_websocket(on_message)},settings["websocket.disconnected_retry_interval"]*1000);
+			socket_retry_interval = setInterval(function(){setup_websocket(on_message)}, battlescape.data.settings.websocket.disconnected_retry_interval * 1000);
 		}
 	};
 	socket.onmessage = function(msg) {

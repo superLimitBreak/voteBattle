@@ -3,6 +3,17 @@
 	src: url('fonts/6x13-ISO8859-1.pcf.woff');
 }
 
+@font-face {
+  font-family: 'Six Caps';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Six Caps'), local('SixCaps'), url('fonts/SixCaps.woff'); /* url(http://themes.googleusercontent.com/static/fonts/sixcaps/v5/tMrhQDUBAHnnGuM33-yobHYhjbSpvc47ee6xR_80Hnw.woff) format('woff') */
+}
+
+.emoji {
+	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol';
+}
+
 body {
 }
 
@@ -133,30 +144,42 @@ td.numeric {
 /* Screen Title --------------------------------------------------------------*/
 
 #screen_title {
-	font-family: sans-serif;
+	
 	background: white url('images/ff7-logo-h1n-net.png') no-repeat center center;
 }
 
 #screen_title .title {
+	font-family: 'Six Caps', sans-serif;
 	text-align: center;
 	vertical-align: middle;
    color: black;
-   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   /*
+   -webkit-text-fill-color: black;
    -webkit-text-stroke-width: 4px;
    -webkit-text-stroke-color: white;
-   font-size: 7em;
+   */
+
+  text-shadow:
+   -5px -5px 0 #FFF,
+    5px -5px 0 #FFF,
+    -5px 5px 0 #FFF,
+     5px 5px 0 #FFF;
+
+   font-size: 12em;
    font-weight: bold;
-   letter-spacing:-0.08em;
-   padding-top: 2.8em;
+   /* letter-spacing:-0.08em; */
+   padding-top: 1.2em;
 }
 
 #screen_title .action {
+	font-family: sans-serif;
 	position: absolute;
 	top:0;
 	left:0;
 	right: 0;
 	font-size: 2em;
 	text-align: center;
+	padding-top: 0.5em;
 }
 
 /*---------------------------------------------------------------------------*/

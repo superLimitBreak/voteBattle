@@ -34,6 +34,7 @@ function init() {
     controls.rotateSpeed = 0.3;
     controls.minDistance = 500;
     controls.maxDistance = 6000;
+    controls.target = new THREE.Vector3( 0, 300, 0 );
     controls.addEventListener( 'change', function(){} );
 }
 

@@ -11,7 +11,7 @@
 }
 
 .emoji {
-	font-family: 'Segoe UI Emoji', 'Segoe UI Symbol';
+	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
 }
 
 body {
@@ -108,11 +108,13 @@ td.numeric {
 /* http://codepoints.net/U+1F480 */
 .box .dead .selected_td:before {
 	text-shadow: none;
-	content: "\1F480";
+	/* content: "\1F480"; */
+	content: url(images/icons/1f480.png);
 }
 
 .box .selected .selected_td:before {
-	content: "\1F449";
+	content: url(images/icons/FF7-cursor.png);
+	/* content: "\1F449";*/
 	text-shadow: none;
 }
 .box .confused .selected_td:before {
@@ -169,6 +171,8 @@ td.numeric {
    font-weight: bold;
    /* letter-spacing:-0.08em; */
    padding-top: 1.2em;
+   
+   /* text-decoration: underline; */
 }
 
 #screen_title .action {

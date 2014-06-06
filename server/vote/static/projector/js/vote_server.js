@@ -14,12 +14,13 @@ var interval_countdown;
 
 
 // Websocket -------------------------------
+var socket_retry_interval = null;
 function setup_websocket(on_connect, on_message) {
 	console.log("setup_websocket");
     $('body').addClass('websocket_disconnected');
     
 	var socket = new WebSocket("ws://"+location.hostname+":"+battlescape.data.settings.websocket.port+"/");
-    var socket_retry_interval = null;
+    
 	socket.onopen = function(){ // Authenicate client with session key on socket connect
 		socket.send(document.cookie.match(/_session=(.+?)(\;|\b)/)[1]);  // TODO - replace with use of settings['session_key'] or server could just use the actual http-header
 		$('body').removeClass('websocket_disconnected');
@@ -35,7 +36,7 @@ function setup_websocket(on_connect, on_message) {
 		$('body').addClass('websocket_disconnected');
 		console.log("Websocket: Disconnected");
 		if (!socket_retry_interval) {
-			socket_retry_interval = setInterval(function(){setup_websocket(on_message)}, battlescape.data.settings.websocket.disconnected_retry_interval * 1000);
+			socket_retry_interval = setInterval(function(){setup_websocket(on_connect, on_message)}, battlescape.data.settings.websocket.disconnected_retry_interval * 1000);
 		}
 	};
 	socket.onmessage = function(msg) {
@@ -141,14 +142,35 @@ function create_vote_pool(vote_pool) {
 }
 create_vote_pool(vote_pool);
 
+var websocket_message_handlers = {};
+function register_websocket_message_handler(key, handler_function) {
+	websocket_message_handlers[key] = handler_function;
+}
+
+register_websocket_message_handler('votes', function(data){
+	_.extend(current_frame, data);
+	update_current_frame_ui();
+});
+
+var joined_count = 0;
+register_websocket_message_handler('join', function(data){
+	battlescape.ui.set_joined(joined_count++);
+});
+
 
 setup_websocket(
     // connect
     function(){},
     // message
     function(data){
-        _.extend(current_frame, data);
-        update_current_frame_ui();
+		_.each(data, function(value, key, list){
+			if (_.has(websocket_message_handlers, key)) {
+				websocket_message_handlers[key](value);
+			}
+			else {
+				console.warn("unknown message key: "+key);
+			}
+		});
     }
 );
 
@@ -156,6 +178,7 @@ setup_websocket(
 external.new_frame = new_frame;
 external.get_current_frame = get_current_frame;
 external.get_highest_voted_actions = get_highest_voted_actions;
+external.register_websocket_message_handler = register_websocket_message_handler;
 
 }(battlescape.vote, battlescape));
 

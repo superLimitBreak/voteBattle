@@ -61,7 +61,9 @@ def vote(request):
     except VoteException as e:
         raise action_error(message=str(e), code=400)
     # Send update over websocket
-    request.registry['socket_manager'].recv(json_string(vote_pool.current_frame.to_dict(total=True)['votes']).encode('utf-8'))
+    request.registry['socket_manager'].recv(json_string(
+        {'votes': vote_pool.current_frame.to_dict(total=True)['votes']}
+    ).encode('utf-8'))
     log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(vote_pool.id, request.session.get('id'), request.params.get('item')))
     return action_ok()
 

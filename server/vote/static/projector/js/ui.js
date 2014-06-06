@@ -97,6 +97,11 @@ function update_countdown(time_remaining) {
     filled_circle(time_remaining * Math.PI * 2, 1);
 }
 
+function set_joined(count) {
+    $('joined_count').html(count);
+}
+
+
 function set_message(msg) {
     var $messages = $('#messages');
     if (msg) {
@@ -135,5 +140,6 @@ external.set_message = set_message;
 external.update_countdown = update_countdown;
 external.update_actions = update_actions;
 external.screen = screen;
+external.set_joined = set_joined;
 
 }(battlescape.ui, battlescape));

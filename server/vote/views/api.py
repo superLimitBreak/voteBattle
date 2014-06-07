@@ -39,8 +39,8 @@ def get_pool_id(request):
         except KeyError:
             raise action_error(message='no pool_id provided', code=400)
 
-def get_pool(request, is_owner=False):
-    pool_id = get_pool_id(request)
+def get_pool(request, is_owner=False, pool_id=None):
+    pool_id = pool_id or get_pool_id(request)
     vote_pool = VotePool.get_pool(pool_id)
     if not vote_pool:
         raise action_error(message='unknown vote_pool: {0}'.format(pool_id), code=400)
@@ -78,7 +78,7 @@ def generate_cache_key_current_frame(request):
 @view_config(route_name='frame', request_method='GET')
 @etag_decorator(generate_cache_key_current_frame)
 @web
-def current_frame(request):
+def current_frame(request, pool_id=None):
     """
     The current frame is client cached under the etag of it's frame counter
     This means if a client wants an 'up to the second' response they have to cache bust the query string
@@ -86,8 +86,10 @@ def current_frame(request):
     It's worth noting that if a client joins a vote half way through, the etaged frame they receive will have votes in it
     
     TODO: Is it worth making this return cutdown item details for mobile clients, but the full thing for the frame owner?
+    
+    the pool_id is used for internal calls only (I had trouble with subrequest running all the decorators again)
     """
-    vote_pool = get_pool(request)
+    vote_pool = get_pool(request, pool_id=pool_id)
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': vote_pool.current_frame.to_dict() if vote_pool.current_frame else {}

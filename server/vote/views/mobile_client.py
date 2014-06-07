@@ -8,6 +8,7 @@ from vote.lib.vote import VotePool
 
 from . import web, action_ok, etag_decorator, set_cookie
 
+
 def generate_cache_key_mobile_client_select(request):
     return '-'.join(VotePool.get_pool_ids())  # This could be md5'ed because the pool list could become long
 
@@ -31,5 +32,11 @@ def mobile_client_select(request):
 @web
 def mobile_client(request):
     set_cookie(request, name='server_timesync', data={'server_timesync': now()}, path=request.path)
-    current_frame = request.invoke_subrequest(Request.blank('/api/{}.json'.format(request.matchdict['pool_id']))).json['data']
+    #_sub_request = Request.blank('/api/{}.json'.format(request.matchdict['pool_id']))
+    #_sub_request.matchdict['internal_request'] = True
+    #current_frame = request.invoke_subrequest(_sub_request).json['data']
+    from externals.lib.pyramid.events import SessionCreated
+    request.registry.notify(SessionCreated(request))
+    from .api import current_frame as get_current_frame
+    current_frame = get_current_frame(request, pool_id=request.matchdict['pool_id'])['data']
     return action_ok(data=current_frame)

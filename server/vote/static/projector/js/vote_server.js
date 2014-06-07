@@ -140,7 +140,6 @@ function create_vote_pool(vote_pool) {
 		}
 	});
 }
-create_vote_pool(vote_pool);
 
 var websocket_message_handlers = {};
 function register_websocket_message_handler(key, handler_function) {
@@ -159,9 +158,11 @@ register_websocket_message_handler('join', function(data){
 
 
 setup_websocket(
-    // connect
-    function(){},
-    // message
+    // onconnect
+    function(){
+		create_vote_pool(vote_pool);
+	},
+    // onmessage
     function(data){
 		_.each(data, function(value, key, list){
 			if (_.has(websocket_message_handlers, key)) {

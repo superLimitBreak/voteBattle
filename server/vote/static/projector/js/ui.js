@@ -98,7 +98,7 @@ function update_countdown(time_remaining) {
 }
 
 function set_joined(count) {
-    $('joined_count').html(count);
+    $('#join_count').html(count);
 }
 
 

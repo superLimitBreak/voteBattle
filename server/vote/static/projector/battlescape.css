@@ -10,11 +10,8 @@
   src: local('Six Caps'), local('SixCaps'), url('fonts/SixCaps.woff'); /* url(http://themes.googleusercontent.com/static/fonts/sixcaps/v5/tMrhQDUBAHnnGuM33-yobHYhjbSpvc47ee6xR_80Hnw.woff) format('woff') */
 }
 
-.emoji {
-	font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-}
-
 body {
+	font-family: sans-serif;
 }
 
 html {
@@ -184,6 +181,13 @@ td.numeric {
 	font-size: 2em;
 	text-align: center;
 	padding-top: 0.5em;
+}
+
+#screen_preroll {
+	background-color: black;
+	color: white;
+	font-size: 10em;
+	text-align: center;
 }
 
 /*---------------------------------------------------------------------------*/

@@ -120,11 +120,37 @@ function update() {
     update_actions();
 }
 
+var screen_init_functions = {
+    'battle': function() {
+        battlescape.game.next_turn();
+    },
+    'preroll': function() {
+        var countdown = 10;
+        function countdown_timer() {
+            if (countdown > 0) {
+                console.log("preroll", countdown);
+                $('#screen_preroll .countdown').html(countdown);
+                countdown--;
+                setTimeout(countdown_timer, 1000);
+            }
+            else {
+                screen('battle');
+            }
+        }
+        countdown_timer();
+    },
+    'title': function() {
+        
+    }
+};
+
 function screen(screen_name) {
     $screen = $('#screen_'+screen_name);
-    $('.screen').addClass('hidden');
+    $('.screen').addClass('hidden'); // Hide all screens
     $screen.removeClass('hidden');
+    screen_init_functions[screen_name]();
 }
+
 
 // Init ------------------------------------------------------------------------
 

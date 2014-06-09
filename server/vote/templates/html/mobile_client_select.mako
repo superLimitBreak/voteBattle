@@ -1,9 +1,6 @@
 <%inherit file="_base.mako"/>
 
-<%def name="title()">Mobile Client</%def>
-
 <%def name="body()">
-	<h1>${title()}</h1>
 	
 	% if data['pools']:
 		<ul>
@@ -12,7 +9,7 @@
 		% endfor
 		</ul>
 	% else:
-		<p>Waiting for vote to become avalable ...</p>
+		<p>Scanning for vote to become avalable <span id="active_feedback"></span></p>
 	% endif
 	
 	<script type="text/javascript">
@@ -25,6 +22,14 @@
 				},
 				settings["mobile.client.select.refresh"] * 1000
 			);
+			
+			active_feedback_timeout = setInterval(
+				function() {
+					var active_feedback = document.getElementById('active_feedback');
+					active_feedback.innerText = active_feedback.innerText + "."
+				},
+				1000
+			)
 		});
 	</script>
 </%def>

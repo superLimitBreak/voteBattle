@@ -19,7 +19,7 @@ def generate_cache_key_mobile_client_select(request):
 def mobile_client_select(request):
     """
     Mobile client landing page
-    
+
     If only one vote pool exists then redirect to the single pool
     else display list of vote pools
     """
@@ -27,6 +27,7 @@ def mobile_client_select(request):
     if request.registry.settings.get('mobile.client.auto_redirect_if_single_pool') and len(pools) == 1:
         raise HTTPFound(location='mobile_client/{0}'.format(tuple(pools)[0]))
     return action_ok(data={'pools': pools})
+
 
 @view_config(route_name='mobile_client')
 @web

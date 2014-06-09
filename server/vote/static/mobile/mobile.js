@@ -4,7 +4,7 @@
 $.cookie.json = true;
 
 var settings = {
-    "mobile.client.select.refresh": 20,  // Seconds
+    "mobile.client.select.refresh": 10,  // Seconds
     "mobile.client.retry.timeout.error": 10,
     "mobile.client.retry.timeout.missed": 1,
     "mobile.client.retry.timeout.default_frame_duration": 10,
@@ -115,12 +115,12 @@ function get_frame(pool_id) {
 
 function setup_vote_input(pool_id, votes) {
     console.debug("setup_vote_input", votes)
-    var $vote_input = $('#vote_input');
-    $vote_input.empty();
+    var $vote_list = $('#vote_input').append('ol');
+    $vote_list.empty();
     $.each(votes, function(key, value){
-        $vote_input.append('<li><button data-item="'+key+'">'+key+'</button></li>');
+        $vote_list.append('<li><button data-item="'+key+'">'+key+'</button></li>');
     });
-    $vote_input.find('li button').on('click', function(){
+    $vote_list.find('#vote_input button').on('click', function(){
         var item = $(this).data('item');
         do_vote(pool_id, item);
     });

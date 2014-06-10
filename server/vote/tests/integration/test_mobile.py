@@ -11,7 +11,7 @@ def get_cookie(app, key):
 
 def test_mobile_client_landing_flow(app):
     response = app.get('/')
-    assert 'waiting' in response.text.lower(), "The landing screen should start waiting"
+    assert 'scanning' in response.text.lower(), "The landing screen should start waiting/scanning"
 
     app.post('/api/.json', dict(pool_id='test_vote')).json
     app.post('/api/test_vote.json', dict(items='option1,option2,option3')).json['data']
@@ -23,7 +23,7 @@ def test_mobile_client_landing_flow(app):
     assert get_cookie(app, 'server_timesync'), 'timesync cookie is provided'
 
     app.post('/api/.json', dict(pool_id='test_vote2')).json
-    
+
     soup = BeautifulSoup(app.get('/').text)
     assert 'mobile_client/test_vote' in soup.find_all('li')[0].a['href'], "The landing screen link to a mobile_client url for the created vote"
 

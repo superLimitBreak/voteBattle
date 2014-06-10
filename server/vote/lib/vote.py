@@ -110,4 +110,5 @@ class VoteFrame(object):
                 'end': self.timestamp_end,
             },
             'properties': self.properties,
+            'item_order': [i for i in self.items],
         }

@@ -91,11 +91,11 @@ function get_frame(pool_id) {
         }
         // Setup new frame
         sequence_id = data['sequence_id'];
-        var votes = data['frame']['votes'];
+        var items = data['frame']['item_order'];
         var timeout;
-        if (votes) {
+        if (items) {
             timeout = data['frame']['timeframe']['end'];  // Setup refresh timestamp for the next frame - this could be null
-            setup_vote_input(pool_id, votes);  // If we have something to vote for, setup input
+            setup_vote_input(pool_id, items);  // If we have something to vote for, setup input
         }
         if (!timeout) {
             timeout = settings["mobile.client.retry.timeout.missed"] * 1000;  // Nothing to vote for, keep asking for votes frequently
@@ -117,8 +117,8 @@ function setup_vote_input(pool_id, votes) {
     console.debug("setup_vote_input", votes)
     var $vote_list = $('#vote_input').append('ol');
     $vote_list.empty();
-    $.each(votes, function(key, value){
-        $vote_list.append('<button data-item="'+key+'">'+key+'</button>');
+    $.each(votes, function(index, value){
+        $vote_list.append('<button data-item="'+value+'">'+value+'</button>');
     });
 	$vote_list.trigger("create");
     $vote_list.find('button').on('click', function(){

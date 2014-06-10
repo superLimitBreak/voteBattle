@@ -47,9 +47,9 @@ function build_scene() {
 //setup_actors();
 build_scene();
 
-$.on('keydown', function(event) {
-    console.log("keydown", event);
-});
+//$.on('keydown', function(event) {
+//    console.log("keydown", event);
+//});
 
 // Export ----------------------------------------------------------------------
 

@@ -2,8 +2,8 @@
 
 <%def name="body()">
 
-	##${data}
 	<div id="vote_input">
+		<p>Connected, awaiting game to start</p>
 	</div>
 
 	<script type="text/javascript">

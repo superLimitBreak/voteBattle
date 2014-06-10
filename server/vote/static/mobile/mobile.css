@@ -1,3 +1,7 @@
 #vote_input button {
     text-transform: capitalize;
 }
+
+#vote_input .selected {
+    background-color: #88FF88;
+}

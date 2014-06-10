@@ -68,7 +68,7 @@ var sequence_id = 0;
 
 function set_vote_input_state(state, item_confirmed) {
     console.log("set_vote_input_state", state, item_confirmed);
-    $('#vote_input li button').each(function(i, element){
+    $('#vote_input button').each(function(i, element){
         var $element = $(element);
         $element.attr('disabled', !state);
     });
@@ -118,11 +118,13 @@ function setup_vote_input(pool_id, votes) {
     var $vote_list = $('#vote_input').append('ol');
     $vote_list.empty();
     $.each(votes, function(key, value){
-        $vote_list.append('<li><button data-item="'+key+'">'+key+'</button></li>');
+        $vote_list.append('<button data-item="'+key+'">'+key+'</button>');
     });
-    $vote_list.find('#vote_input button').on('click', function(){
-        var item = $(this).data('item');
-        do_vote(pool_id, item);
+	$vote_list.trigger("create");
+    $vote_list.find('button').on('click', function(){
+		var $button = $(this);
+        $button.addClass('selected');
+        do_vote(pool_id, $button.data('item'));
     });
 }
 

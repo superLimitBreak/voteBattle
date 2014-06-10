@@ -26,7 +26,7 @@
 			active_feedback_timeout = setInterval(
 				function() {
 					var active_feedback = document.getElementById('active_feedback');
-					active_feedback.innerText = active_feedback.innerText + "."
+					active_feedback.innerHTML = active_feedback.innerHTML + "."
 				},
 				1000
 			)

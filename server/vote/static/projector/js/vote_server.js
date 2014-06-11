@@ -22,13 +22,19 @@ function setup_websocket(on_connect, on_message) {
 	var socket = new WebSocket("ws://"+location.hostname+":"+battlescape.data.settings.websocket.port+"/");
     
 	socket.onopen = function(){ // Authenicate client with session key on socket connect
-		socket.send(document.cookie.match(/_session=(.+?)(\;|\b)/)[1]);  // TODO - replace with use of settings['session_key'] or server could just use the actual http-header
+		var cookie = document.cookie.match(/_session=(.+?)(\;|\b)/);  // TODO - replace with use of settings['session_key'] or server could just use the actual http-header
+		if (cookie) {
+			socket.send(cookie[1]);
+		}
+		else {
+			console.warn("No session cookie to authenticate websocket write access");
+		}
 		$('body').removeClass('websocket_disconnected');
-		console.log("Websocket: Connected");
 		if (socket_retry_interval) {
 			clearInterval(socket_retry_interval);
 			socket_retry_interval = null;
 		}
+		console.log("Websocket: Connected");
 		on_connect();
 	};
 	socket.onclose  = function() {
@@ -54,8 +60,8 @@ function update_current_frame_ui() {
 // Key Events ------------------------------
 
 var keys = {49:'0', 50:'1', 51:'2', 52:'3', 32:'SPACE'};
-window.addEventListener('keydown', eventKeyDown, true);
-function eventKeyDown(event) {
+//window.addEventListener('keydown', keyboard_vote, true);
+function keyboard_vote(event) {
     if (event.keyCode in keys) {
         var key = keys[event.keyCode];
         current_frame[current_frame_item_order[key]]++;
@@ -180,6 +186,7 @@ external.new_frame = new_frame;
 external.get_current_frame = get_current_frame;
 external.get_highest_voted_actions = get_highest_voted_actions;
 external.register_websocket_message_handler = register_websocket_message_handler;
+external.keyboard_vote = keyboard_vote;
 
 }(battlescape.vote, battlescape));
 

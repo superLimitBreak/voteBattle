@@ -120,8 +120,23 @@ function update() {
     update_actions();
 }
 
+var keys = {76:'L'};
+function keyboard_title(event) {
+    console.log(event.keyCode);
+    if (event.keyCode in keys) {
+        var key = keys[event.keyCode];
+        if (key == 'L') {
+            battlescape.ui.screen('preroll');
+        }
+        event.preventDefault();
+    }
+}
+
+// TODO - Screen should be a class with a show() and hide() method that act like
+//   constructor/destructor
 var screen_init_functions = {
     'battle': function() {
+        $(window).on('keydown', battlescape.vote.keyboard_vote);  // TODO - this should be unbound on screen hide
         battlescape.game.next_turn();
     },
     'preroll': function() {
@@ -140,7 +155,7 @@ var screen_init_functions = {
         countdown_timer();
     },
     'title': function() {
-        
+        $(window).on('keydown', keyboard_title);  // TODO - this should be unbound on screen hide
     }
 };
 

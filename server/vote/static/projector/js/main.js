@@ -1,4 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    graphics.animate();
+    graphics.start();
     battlescape.ui.screen('title');
 });

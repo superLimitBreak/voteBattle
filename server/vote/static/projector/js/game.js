@@ -207,6 +207,8 @@ function create_game(players, enemys, turn_order) {
     var current_turn_index = -1;
     var actors = {};
 
+    var running = false;
+    
     function init_team(id_list, team_name) {
         $.each(id_list ,function(i, id){
             actors[id] = create_actor(id, team_name, battlescape.data.characters[id]);
@@ -226,6 +228,7 @@ function create_game(players, enemys, turn_order) {
     }
 
     game.next_turn = function() {
+        if (!running) {return;}
         current_turn_index = (current_turn_index + 1) % turn_order.length;
         battlescape.ui.update();
         
@@ -242,20 +245,28 @@ function create_game(players, enemys, turn_order) {
         battlescape.vote.new_frame(actor.get_actions(), battlescape.data.settings.game.turn.player_duration);
     }
 
+    game.stop = function() {
+        running = false;
+    }
+    game.start = function() {
+        running = true;
+        game.next_turn();
+    }
+
     return game;
 }
 
-// Init ------------------------------------------------------------------------
-// External --------------------------------------------------------------------
 
-external.game = create_game(
+// Init ------------------------------------------------------------------------
+
+var game = create_game(
     battlescape.data.players,
     battlescape.data.enemys,
     battlescape.data.turn_order
 );
 
+// External --------------------------------------------------------------------
 
-
-
+external.game = game
 
 }(battlescape, battlescape));

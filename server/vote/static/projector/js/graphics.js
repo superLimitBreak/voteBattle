@@ -8,6 +8,8 @@ var DRAW_DISTANCE = 5000;
 // Variables -------------------------------------------------------------------
 var camera, scene, renderer, controls;
 
+var running = false;
+
 function init() {
     // Camera
     camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, DRAW_DISTANCE);
@@ -29,22 +31,23 @@ function init() {
     // Events
     window.addEventListener('resize', onWindowResize, false);
 
-    //controls = new THREE.OrbitControls( camera );
     controls = new THREE.TrackballControls( camera );
     controls.rotateSpeed = 0.3;
     controls.minDistance = 500;
     controls.maxDistance = 6000;
     controls.target = new THREE.Vector3( 0, 300, 0 );
     controls.addEventListener( 'change', function(){} );
+
 }
 
 function render() {renderer.render( scene, camera );}
 
 function animate() {
+    if (!running) {return;}
     requestAnimationFrame(animate);
     TWEEN.update();
     render();
-    controls.update();
+    //controls.update();
     _.each(animation_update_functions, function(animation_update_function, index, list){
         animation_update_function();
     });
@@ -58,12 +61,22 @@ function onWindowResize() {
     render()
 }
 
+function stop() {
+    running = false;
+}
+function start() {
+    running = true;
+    animate();
+}
+
 // Init ------------------------------------------------------------------------
 init();
 
 // Export ----------------------------------------------------------------------
 external.scene = scene;
 external.camera = camera;
-external.animate = animate;
+external.controls = controls;
+external.stop = stop;
+external.start = start;
 
 }(graphics, animation_update_functions));

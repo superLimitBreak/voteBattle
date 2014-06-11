@@ -113,6 +113,7 @@ td.numeric {
 	content: url(images/icons/FF7-cursor.png);
 	/* content: "\1F449";*/
 	text-shadow: none;
+	margin-left: -0.8em;
 }
 .box .confused .selected_td:before {
 	content: "?";

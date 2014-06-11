@@ -120,13 +120,15 @@ function update() {
     update_actions();
 }
 
-var keys = {76:'L'};
+var keys = {65:'A', 76:'L'};
 function keyboard_title(event) {
-    console.log(event.keyCode);
     if (event.keyCode in keys) {
         var key = keys[event.keyCode];
         if (key == 'L') {
             battlescape.ui.screen('preroll');
+        }
+        if (key == 'A') {
+            battlescape.ui.screen('battle');
         }
         event.preventDefault();
     }
@@ -134,11 +136,12 @@ function keyboard_title(event) {
 
 // TODO - Screen should be a class with a show() and hide() method that act like
 //   constructor/destructor
+// This REALLY shouldnt be in ui .. really!
 var screen_init_functions = {
     'battle': function() {
         $(window).on('keydown', battlescape.vote.keyboard_vote);  // TODO - this should be unbound on screen hide
-        battlescape.game.next_turn();
         battlescape.cameras.new_camera('_into_pan_players');
+        setTimeout(battlescape.game.start, 6000);  // Allow 4 seconds for the intro pan before starting the combat
     },
     'preroll': function() {
         var countdown = 10;

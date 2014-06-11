@@ -138,6 +138,7 @@ var screen_init_functions = {
     'battle': function() {
         $(window).on('keydown', battlescape.vote.keyboard_vote);  // TODO - this should be unbound on screen hide
         battlescape.game.next_turn();
+        battlescape.cameras.new_camera('_into_pan_players');
     },
     'preroll': function() {
         var countdown = 10;

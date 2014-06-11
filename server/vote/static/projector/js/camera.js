@@ -22,7 +22,7 @@ var cameras = {
         }
     },
     
-    pan_players: {
+    _into_pan_players: {
         init: function() {
             camera.position.x =  -600;
             camera.position.y =   100;
@@ -41,10 +41,25 @@ var cameras = {
     }
 }
 
+function get_public_cameras_list() {
+    var public_cameras = []
+    _.each(cameras, function(value, key, list){
+        if (key.charAt(0) != '_') {
+            public_cameras.push(value);
+        }
+    });
+    return public_cameras;
+}
+
 var camera_control;
 
-function new_camera() {
-    camera_control = _.sample(_.values(cameras));
+function new_camera(camera_name) {
+    if (_.has(cameras, camera_name)) {
+        camera_control = cameras[camera_name];
+    }
+    else {
+        camera_control = _.sample(get_public_cameras_list());
+    }
     camera_control.init();
 }
 

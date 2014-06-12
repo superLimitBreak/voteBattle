@@ -89,7 +89,6 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "charge") {
             charge++;
-            //battlescape.ui.set_message(""+data.name+" is charging");
             ui_message('charge', actor);
             set_pose_to_current_state();
             return;

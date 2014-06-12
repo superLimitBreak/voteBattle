@@ -36,7 +36,7 @@ var cameras = {
             camera.position.y += 0.1;
             camera.position.z += 0.2;
             camera.lookAt(this.target);
-            if (camera.position.x > -1700) {
+            if (camera.position.x > -1600) {
                 new_camera();
             }
         }
@@ -90,13 +90,15 @@ function get_public_cameras_list() {
 }
 
 var camera_control;
+var camera_control_previous;
 
 function new_camera(camera_name) {
+    camera_control_previous = camera_control;
     if (_.has(cameras, camera_name)) {
         camera_control = cameras[camera_name];
     }
     else {
-        camera_control = _.sample(get_public_cameras_list());
+        camera_control = _.sample(_.reject(get_public_cameras_list(), function(cc){return cc==camera_control_previous}));
     }
     camera_control.init();
 }

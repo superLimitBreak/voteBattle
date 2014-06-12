@@ -47,7 +47,7 @@ function animate() {
     requestAnimationFrame(animate);
     TWEEN.update();
     render();
-    //controls.update();
+    controls.update();
     _.each(animation_update_functions, function(animation_update_function, index, list){
         animation_update_function();
     });

@@ -113,7 +113,7 @@ var data = {
         },
         'boss': {
             name: 'Nyan Cat',
-            health: 340,
+            health: 360,
             max_damage: 50,
             min_damage: 30,
             specials: ['all'],
@@ -125,7 +125,6 @@ var data = {
             images: {
                 'stand' : 'nyan_cat2.gif',
                 'charge': 'nyan_cat.charge2.gif',
-                'hit'   : 'nyan_cat.charge2.gif',
             },
             messages: {
                 'charge': 'MY_NAME looks angry',

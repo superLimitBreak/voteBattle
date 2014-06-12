@@ -97,7 +97,7 @@ function create_actor(id, team_name, actor_data) {
             charge = 0;
             var total = 0;
             _.each(battlescape.ai.get_enemys(actor), function(enemy, index, enemys) {
-                total += enemy.take_damage(get_attack_damage());
+                total += enemy.take_damage(actor.get_data().max_damage);
             });
             battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
             set_pose_to_current_state();
@@ -133,7 +133,7 @@ function create_actor(id, team_name, actor_data) {
         health = health - damage;  // Update health
         if (health < 0) {health = 0;}  // Limit health
         if (health > data.health) {health = data.health;}
-        if (damage > 0 && health > 0) {
+        if (damage > 0 && health > 0 && !charge) {
             set_pose('hit');
             setTimeout(set_pose_to_current_state, battlescape.data.settings.animation.hit.delay);
         }

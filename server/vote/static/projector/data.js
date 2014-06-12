@@ -44,6 +44,9 @@ var data = {
             size: 2000,
         },
     },
+    default_messages: {
+        charge: 'MY_NAME is charging',
+    },
     characters: {
         'player1': {
             name: 'Axe Specalist',
@@ -120,9 +123,13 @@ var data = {
             base_actions: ['attack', 'charge'],
             height: 500,
             images: {
-                'stand': 'nyan_cat2.gif',
+                'stand' : 'nyan_cat2.gif',
                 'charge': 'nyan_cat.charge2.gif',
+                'hurt'  : 'nyan_cat.charge2.gif',
             },
+            messages: {
+                'charge': 'MY_NAME looks angry',
+            }
         }
     },
     players: ['player1', 'player2', 'player3', 'player4'],

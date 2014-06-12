@@ -3,6 +3,24 @@ battlescape = window.battlescape || {};
 (function(external, battlescape){
 // -----------------------------------------------------------------------------
 
+function message_generator(message_type, actor) {
+    var message = '';
+    if (actor && _.has(actor.get_data(), 'messages')) {
+        message = actor.get_data().messages[message_type];
+    }
+    if (!message) {
+        message = battlescape.data.default_messages[message_type];
+    }
+    if (!message) {
+        console.warn('unable to generate base message for '+message_type)
+    }
+    message = message
+        .replace('MY_NAME', actor.get_data().name);
+    return message;
+}
+function ui_message(message_type, actor) {
+    battlescape.ui.set_message(message_generator(message_type, actor));
+}
 
 function create_actor(id, team_name, actor_data) {
     var actor = {
@@ -71,7 +89,8 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "charge") {
             charge++;
-            battlescape.ui.set_message(""+data.name+" is charging");
+            //battlescape.ui.set_message(""+data.name+" is charging");
+            ui_message('charge', actor);
             set_pose_to_current_state();
             return;
         }

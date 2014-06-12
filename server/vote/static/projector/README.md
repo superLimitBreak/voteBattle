@@ -6,6 +6,7 @@ Possible fonts
 
 
 https://chrome.google.com/webstore/detail/chromoji-emoji-for-google/cahedbegdkagmcjfolhdlechbkeaieki/
+wont work with css elements as this plugin is only a html parse/replace
 
 
 ToDo
@@ -15,27 +16,22 @@ In the run up to the first trial run, the functionality below is a prioritised l
 
 ### Must have ###
 
+* Intro pan
+
+### Should have ###
+
+* Enemy All animation
 * Damage feedback
 * UI
   * Defend feedback
 
-### Should have ###
-
-* Message area transitions
-* Title screen holding area
-
 ### Could have ###
 
-* Pointer to current highest vote (with sound)
-* Intro pan
-* Enemy All animation
-* General camera pan
-* Low health red filter pulse
+* Intro pan (with pose change)
+* Message area transitions
 
 ### Nice to have ###
 
-* Intro pan (with pose change)
 * Heal animation
-* Defend feedback pose
-* Pain pose
-* Low health pose
+* Sound
+  * Pointer to current highest

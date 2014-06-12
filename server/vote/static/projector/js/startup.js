@@ -36,18 +36,37 @@ function build_scene() {
     dom.style.backgroundImage = "url('images/textures/"+battlescape.data.enviroment.floor.texture+"')";
     floor_CSS3DObject = new THREE.CSS3DObject(dom);
     floor_CSS3DObject.position.x = 0;
-    floor_CSS3DObject.position.y = 0; //-150;
+    floor_CSS3DObject.position.y = 0;
     floor_CSS3DObject.position.z = 0;
     floor_CSS3DObject.rotation.x = Math.PI/2;
     scene.add(floor_CSS3DObject);
     battlescape.doom = dom;
     
 }
+
+function preload_images() {
+    var images = _.filter(
+                    _.flatten(
+                        _.chain(battlescape.data.characters)
+                         .pluck('images')
+                         .map(function(images){
+                            return _.values(images)
+                        }).value()
+                    ),
+                    function(image) {return image}
+                );
+    _.each(images, function(image, index, list){
+        console.log('Preload '+image);
+        new Image(image);
+    });
+}
+
+
 // Init ------------------------------------------------------------------------
 //setup_actors();
 build_scene();
 
-
+preload_images();
 // Export ----------------------------------------------------------------------
 
 

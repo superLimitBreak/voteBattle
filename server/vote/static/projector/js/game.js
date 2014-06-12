@@ -71,7 +71,7 @@ function create_actor(id, team_name, actor_data) {
             var enemy = battlescape.ai.get_random_enemy(actor);
             var damage = get_attack_damage();
             damage = enemy.take_damage(damage);
-            animate_attack(enemy);
+            animate_move(enemy, 'attack');
             battlescape.ui.set_message(""+data.name+" does "+damage+" damage to "+enemy.get_data().name);
             return;
         }
@@ -79,7 +79,7 @@ function create_actor(id, team_name, actor_data) {
             var hurt_friend = battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor));
             var value = hurt_friend.heal(data.heal);
             battlescape.ui.set_message(""+data.name+" healed "+hurt_friend.get_data().name+" "+value);
-            set_pose_to_current_state();
+            animate_move(hurt_friend, 'stand');
             return;
         }
         if (action == "defend") {
@@ -133,7 +133,7 @@ function create_actor(id, team_name, actor_data) {
         health = health - damage;  // Update health
         if (health < 0) {health = 0;}  // Limit health
         if (health > data.health) {health = data.health;}
-        if (damage > 0) {
+        if (damage > 0 && health > 0) {
             set_pose('hit');
             setTimeout(set_pose_to_current_state, battlescape.data.settings.animation.hit.delay);
         }
@@ -194,9 +194,9 @@ function create_actor(id, team_name, actor_data) {
         actor.CSS3DObject.rotation.y = direction;
     }
     
-    function animate_attack(target_actor) {
+    function animate_move(target_actor, pose) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
-        set_pose('attack');
+        set_pose(pose);
         var original_position = _.clone(actor.CSS3DObject.position);
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)
                     .to(target_actor.CSS3DObject.position, battlescape.data.settings.animation.attack.in_time)

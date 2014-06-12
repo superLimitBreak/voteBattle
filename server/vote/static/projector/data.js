@@ -125,7 +125,7 @@ var data = {
             images: {
                 'stand' : 'nyan_cat2.gif',
                 'charge': 'nyan_cat.charge2.gif',
-                'hurt'  : 'nyan_cat.charge2.gif',
+                'hit'   : 'nyan_cat.charge2.gif',
             },
             messages: {
                 'charge': 'MY_NAME looks angry',

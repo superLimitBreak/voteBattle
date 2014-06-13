@@ -6,6 +6,21 @@ battlescape.effects = {};
 
 var scene = graphics.scene;
 
+
+function rainbow_beam_tween(dom, dom_3d) {
+    var target = _.clone(dom_3d.position);
+    target.x += 3000;
+    var tween = new TWEEN.Tween(dom_3d.position)
+        .to(target, _.random(5,10) * 300)
+        .onComplete(function() {
+            scene.remove(dom_3d);
+        })
+    ;
+    tween.easing(
+        TWEEN.Easing.Linear.None
+    ).start();    
+}
+
 function rainbow_beam() {
     console.log("RAINBOW BEAM!!!");
     var beam_objects = []
@@ -23,20 +38,7 @@ function rainbow_beam() {
         beam_objects.push(dom_3d);
         scene.add(dom_3d);
         
-        function tween_beam(dom, dom_3d) {
-            var target = _.clone(dom_3d.position);
-            target.x += 3000;
-            var tween = new TWEEN.Tween(dom_3d.position)
-                .to(target, _.random(5,10) * 300)
-                .onComplete(function() {
-                    scene.remove(dom_3d);
-                })
-            ;
-            tween.easing(
-                TWEEN.Easing.Linear.None
-            ).start();    
-        }
-        tween_beam(dom, dom_3d);
+        rainbow_beam_tween(dom, dom_3d);
         
     }
 }

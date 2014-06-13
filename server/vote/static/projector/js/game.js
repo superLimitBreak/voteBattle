@@ -99,7 +99,8 @@ function create_actor(id, team_name, actor_data) {
             _.each(battlescape.ai.get_enemys(actor), function(enemy, index, enemys) {
                 total += enemy.take_damage(actor.get_data().max_damage);
             });
-            battlescape.ui.set_message("BLAM! "+data.name+" collectivly did "+total+" damage");
+            battlescape.effects.raninbow_beam();
+            battlescape.ui.set_message("" + data.name+" used RAINBOW BEAM! collectivly doing "+total+" damage");
             set_pose_to_current_state();
             return;
         }

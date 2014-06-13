@@ -85,6 +85,7 @@ function create_actor(id, team_name, actor_data) {
         if (action == "defend") {
             defending = true;
             set_pose_to_current_state();
+            ui_message('defend', actor);
             return;
         }
         if (action == "charge") {
@@ -276,7 +277,7 @@ function create_game(players, enemys, turn_order) {
 }
 
 var game;
-function new_game(autostart) {
+function new_game() {
     if (game) {
         game.stop();
     }
@@ -286,9 +287,8 @@ function new_game(autostart) {
         battlescape.data.turn_order
     );
     battlescape.build_scene();
-    if (autostart) {
-        game.start();
-    }
+    battlescape.cameras.new_camera('_into_pan_players');
+    setTimeout(game.start, 6000);  // Allow 6 seconds for the intro pan before starting the combat
 }
 
 // Init ------------------------------------------------------------------------

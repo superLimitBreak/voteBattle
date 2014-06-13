@@ -141,8 +141,6 @@ var screen_init_functions = {
     'battle': function() {
         battlescape.new_game();
         $(window).on('keydown', battlescape.vote.keyboard_vote);  // TODO - this should be unbound on screen hide
-        battlescape.cameras.new_camera('_into_pan_players');
-        setTimeout(battlescape.get_game().start, 6000);  // Allow 4 seconds for the intro pan before starting the combat
     },
     'preroll': function() {
         var countdown = 10;

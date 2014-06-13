@@ -46,6 +46,7 @@ var data = {
     },
     default_messages: {
         charge: 'MY_NAME is charging',
+        defend: 'MY_NAME is defending himself',
     },
     characters: {
         'player1': {

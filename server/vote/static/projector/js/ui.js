@@ -7,14 +7,14 @@ function update_stats() {
     //console.log("update_stats");
     
     function build_player_row(player_id) {
-        var actor = battlescape.game.get_actors()[player_id];
+        var actor = battlescape.get_game().get_actors()[player_id];
         $row = $(
             "<tr><td class='selected_td emoji'></td><th>PLAYER_NAME</th><td class='numeric'>CURRENT_HEALTH/MAX_HEALTH</td></tr>"
             .replace("PLAYER_NAME", actor.get_data().name)
             .replace("CURRENT_HEALTH", actor.get_health())
             .replace("MAX_HEALTH", actor.get_data().health)
         );
-        if (actor == battlescape.game.get_current_turn_actor()) {
+        if (actor == battlescape.get_game().get_current_turn_actor()) {
             $row.addClass('selected');
         }
         if (actor.is_hurt()) {
@@ -55,7 +55,7 @@ function update_actions() {
     }
     
     $actions = $('#actions');
-    var actor = battlescape.game.get_current_turn_actor();
+    var actor = battlescape.get_game().get_current_turn_actor();
     if (actor.is_player()) {
         $actions.removeClass('hidden');
         $action_table = $("<table></table>");
@@ -139,9 +139,10 @@ function keyboard_title(event) {
 // This REALLY shouldnt be in ui .. really!
 var screen_init_functions = {
     'battle': function() {
+        battlescape.new_game();
         $(window).on('keydown', battlescape.vote.keyboard_vote);  // TODO - this should be unbound on screen hide
         battlescape.cameras.new_camera('_into_pan_players');
-        setTimeout(battlescape.game.start, 6000);  // Allow 4 seconds for the intro pan before starting the combat
+        setTimeout(battlescape.get_game().start, 6000);  // Allow 4 seconds for the intro pan before starting the combat
     },
     'preroll': function() {
         var countdown = 10;

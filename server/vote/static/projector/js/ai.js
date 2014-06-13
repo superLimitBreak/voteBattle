@@ -22,8 +22,8 @@ function create_ai() {
         }
     }
     
-    ai.get_enemys = function(actor) {return battlescape.game.get_team(actor.team_name, INVERSE);}
-    ai.get_friends = function(actor) {return battlescape.game.get_team(actor.team_name);}
+    ai.get_enemys = function(actor) {return battlescape.get_game().get_team(actor.team_name, INVERSE);}
+    ai.get_friends = function(actor) {return battlescape.get_game().get_team(actor.team_name);}
     
     ai.get_random_enemy = function(actor) {
         var live_enemys = $.grep(ai.get_enemys(actor), function(a){return !a.is_dead()});

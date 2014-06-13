@@ -100,15 +100,15 @@ function new_frame(items, duration) {
 
 function end_frame() {
     clearInterval(interval_countdown);
-    
-    var actor = battlescape.game.get_current_turn_actor();
+    var game = battlescape.get_game();
+    var actor = game.get_current_turn_actor();
     
     var actions = get_highest_voted_actions();
     // If more than one highest action - confused
     if (actions.length != 1) {actions.push("confused");}
     
     actor.action(_.last(actions));
-    battlescape.game.next_turn();
+    game.next_turn();
 }
 
 function get_highest_voted_actions() {

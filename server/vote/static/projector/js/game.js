@@ -275,17 +275,29 @@ function create_game(players, enemys, turn_order) {
     return game;
 }
 
+var game;
+function new_game(autostart) {
+    if (game) {
+        game.stop();
+    }
+    game = create_game(
+        battlescape.data.players,
+        battlescape.data.enemys,
+        battlescape.data.turn_order
+    );
+    battlescape.build_scene();
+    if (autostart) {
+        game.start();
+    }
+}
 
 // Init ------------------------------------------------------------------------
 
-var game = create_game(
-    battlescape.data.players,
-    battlescape.data.enemys,
-    battlescape.data.turn_order
-);
+//new_game();
 
 // External --------------------------------------------------------------------
 
-external.game = game
+external.get_game = function(){return game || {}};
+external.new_game = new_game;
 
 }(battlescape, battlescape));

@@ -6,16 +6,13 @@ var scene = graphics.scene;
 
 
 
-// Setup Players ---------------------------------------------------------------
-
-
-
 // Build 3D Scene --------------------------------------------------------------
 
 function build_scene() {
+    // TODO - Clear the scene HERE!!!
     
     $.each(battlescape.data.players ,function(i, player_id){
-        var actor = battlescape.game.get_actors()[player_id];
+        var actor = battlescape.get_game().get_actors()[player_id];
         actor.CSS3DObject.position.x = 0 + (200*i);
         actor.CSS3DObject.position.y = (actor.get_data().height/2);
         actor.CSS3DObject.position.z = -300 + (200*i);
@@ -23,7 +20,7 @@ function build_scene() {
     });
     
     $.each(battlescape.data.enemys ,function(i, enemy_id){
-        var actor = battlescape.game.get_actors()[enemy_id];
+        var actor = battlescape.get_game().get_actors()[enemy_id];
         actor.CSS3DObject.position.x = -1000 - (200*i);
         actor.CSS3DObject.position.y = (actor.get_data().height/2);
         actor.CSS3DObject.position.z = 0 + (200*i);
@@ -44,30 +41,12 @@ function build_scene() {
     
 }
 
-function preload_images() {
-    var images = _.filter(
-                    _.flatten(
-                        _.chain(battlescape.data.characters)
-                         .pluck('images')
-                         .map(function(images){
-                            return _.values(images)
-                        }).value()
-                    ),
-                    function(image) {return image}
-                );
-    _.each(images, function(image, index, list){
-        console.log('Preload '+image);
-        new Image(image);
-    });
-}
-
 
 // Init ------------------------------------------------------------------------
-//setup_actors();
-build_scene();
 
-preload_images();
+
 // Export ----------------------------------------------------------------------
 
+external.build_scene = build_scene
 
-}(null, graphics, battlescape));
+}(battlescape, graphics, battlescape));

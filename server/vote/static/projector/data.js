@@ -114,13 +114,13 @@ var data = {
         },
         'boss': {
             name: 'Nyan Cat',
-            health: 360,
+            health: 350,
             max_damage: 50,
             min_damage: 30,
             specials: ['all'],
             ai_actions: ['attack','attack','attack','charge','charge','all',
                          'attack','attack','attack','charge','charge','all',
-                         'super', 'all', 'all', 'all', 'all', 'all'],
+                         'attack','super', 'all', 'all', 'all', 'all', 'all'],
             base_actions: ['attack', 'charge'],
             height: 500,
             images: {

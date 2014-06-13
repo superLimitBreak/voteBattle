@@ -132,6 +132,7 @@ function create_actor(id, team_name, actor_data) {
     }
     
     function modify_health(damage) {
+        var initial_heath = health;
         health = health - damage;  // Update health
         if (health < 0) {health = 0;}  // Limit health
         if (health > data.health) {health = data.health;}
@@ -143,14 +144,14 @@ function create_actor(id, team_name, actor_data) {
             set_pose_to_current_state(); // Update pose and health feedback
         }
         battlescape.ui.update();  // Update ui
+        return initial_heath - health;
     }
     
     actor.take_damage = function(value) {
         if (defending && value > 0) {
             value = Math.round(value / data.defence_effectiveness);
         }
-        modify_health(value);
-        return value;
+        return modify_health(value);
     }
     actor.heal = function(value) {
         var health_before = health
@@ -249,6 +250,19 @@ function create_game(players, enemys, turn_order) {
 
     game.next_turn = function() {
         if (!running) {return;}
+        
+        // Check end states
+        if (game.players_all_dead()) {
+            game.stop();
+            battlescape.ui.set_message('Game Over: Nyan Cat had '+battlescape.get_game().get_actors().boss.get_health()+' health left');
+            return;
+        }
+        if (game.enemy_all_dead()) {
+            game.stop();
+            battlescape.ui.set_message('Win');
+            return;
+        }
+        
         current_turn_index = (current_turn_index + 1) % turn_order.length;
         battlescape.ui.update();
         
@@ -272,7 +286,14 @@ function create_game(players, enemys, turn_order) {
         running = true;
         game.next_turn();
     }
-
+    
+    game.players_all_dead = function() {
+        return _.filter(game.get_team('player'), function(actor){return !actor.is_dead()}).length <= 0;
+    }
+    game.enemy_all_dead = function() {
+        return _.filter(game.get_team('enemy'), function(actor){return !actor.is_dead()}).length <= 0;
+    }
+    
     return game;
 }
 

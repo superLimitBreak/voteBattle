@@ -30,11 +30,11 @@ var data = {
         },
         animation: {
             attack: {
-                in_time: 800,
-                out_time: 300,
+                in_time: 900,
+                out_time: 400,
             },
             hit: {
-                delay: 1000,
+                delay: 1500,
             }
         },
     },
@@ -81,7 +81,15 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
-                'stand': 'char3.png',
+                'stand': 'allan_stand.png',
+                'attack': 'allan_attack.png',
+                'defend': 'allan_defend.png',
+                'charge': '',
+                'hit': 'allan_hit.png',
+                'hurt': 'allan_hurt.png',
+                'dead': 'allan_dead.png',
+                'win': 'allan_win.png',
+                'at_ease': 'allan_at_ease.png',
             },
         },
         'player3': {

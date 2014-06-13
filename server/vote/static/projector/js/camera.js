@@ -24,19 +24,20 @@ var cameras = {
     },
     hover_boss: {
         init: function() {
-            camera.position.x = -1820;
-            camera.position.y =   200;
-            camera.position.z =   760;
+            camera.position.x = -1600;
+            camera.position.y =   50;
+            camera.position.z =  1200;
             this.target = new THREE.Vector3();
-            this.target.y = 300;
-            this.target.x = 400;
+            this.target.y =  300;
+            this.target.x = -400;
+            this.target.z =    0;
         },
         update: function() {
             camera.position.x += 0.5;
             camera.position.y += 0.1;
-            camera.position.z += 0.2;
+            camera.position.z += 0.3;
             camera.lookAt(this.target);
-            if (camera.position.x > -1600) {
+            if (camera.position.x > -1300) {
                 new_camera();
             }
         }
@@ -62,7 +63,7 @@ var cameras = {
     
     _into_pan_players: {
         init: function() {
-            camera.position.x =  -600;
+            camera.position.x =  -400;
             camera.position.y =   100;
             camera.position.z =  -200;
             camera.rotation.x = Math.PI * 4;
@@ -72,7 +73,7 @@ var cameras = {
         update: function() {
             camera.position.x += 3;
             camera.position.z += 4;
-            if (camera.position.x > 500) {
+            if (camera.position.x > 700) {
                 new_camera();
             }
         }

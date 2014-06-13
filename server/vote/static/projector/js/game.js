@@ -79,7 +79,7 @@ function create_actor(id, team_name, actor_data) {
             var hurt_friend = battlescape.ai.get_most_hurt(battlescape.ai.get_friends(actor));
             var value = hurt_friend.heal(data.heal);
             battlescape.ui.set_message(""+data.name+" healed "+hurt_friend.get_data().name+" "+value);
-            animate_move(hurt_friend, 'stand');
+            animate_move(hurt_friend, 'win');
             return;
         }
         if (action == "defend") {
@@ -196,6 +196,7 @@ function create_actor(id, team_name, actor_data) {
         if (direction != 0) {direction = Math.PI;}
         actor.CSS3DObject.rotation.y = direction;
     }
+    actor.set_pose = set_pose;
     
     function animate_move(target_actor, pose) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
@@ -259,7 +260,12 @@ function create_game(players, enemys, turn_order) {
         }
         if (game.enemy_all_dead()) {
             game.stop();
-            battlescape.ui.set_message('Win');
+            battlescape.ui.set_message('Win: took '+current_turn_index+' turns');
+            _.each(game.get_team('player'), function(actor, index, list) {
+                if (!actor.is_dead()) {
+                    actor.set_pose('win');
+                }
+            });
             return;
         }
         
@@ -309,6 +315,12 @@ function new_game() {
     );
     battlescape.build_scene();
     battlescape.cameras.new_camera('_into_pan_players');
+    var player_ready_time = 2000;
+    _.each(game.get_team('player'), function(actor, index, list) {
+        actor.set_pose('at_ease');
+        setTimeout(function(){actor.set_pose('win')}, player_ready_time);
+        player_ready_time += 1000;
+    });
     setTimeout(game.start, 6000);  // Allow 6 seconds for the intro pan before starting the combat
 }
 

@@ -162,11 +162,11 @@ function create_actor(id, team_name, actor_data) {
     function set_pose_to_current_state() {
         // Set default state
         set_pose('stand');
-        dom.className = null;
+        dom.className = '';
         // Set apply state pose's and effects
         if (actor.is_hurt()) {
             set_pose('hurt');
-            dom.className = 'hurt';
+            set_class('hurt');
         }
         if (defending) {
             set_pose('defend');
@@ -176,11 +176,16 @@ function create_actor(id, team_name, actor_data) {
         }
         if (actor.is_dead()) {
             set_pose('dead');
-            dom.className = 'dead';
+            set_class('dead');
         }
 
     }
 
+    function set_class(class_name) {
+        //setTimeout(function() {dom.className = class_name;}, 3000);
+        dom.className = class_name;
+    }
+    
     function set_pose(pose) {
         var pose_image = data.images['stand'];
         if (data.images[pose]) {
@@ -202,8 +207,23 @@ function create_actor(id, team_name, actor_data) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/
         set_pose(pose);
         var original_position = _.clone(actor.CSS3DObject.position);
+        
+        // HACK!
+        // Manually tamper with nyan cats target location
+        // This needs to be replaced with a more generic method for targeting animations
+        // Setting the y is a good idea and setting the
+        var target_position = _.clone(target_actor.CSS3DObject.position);
+        console.log('TARGET', target_actor.get_data().HACK_hit_offset);
+        if (target_actor.get_data().HACK_hit_offset) {
+            console.log('YAY');
+            target_position.x += target_actor.get_data().HACK_hit_offset;
+        }
+        target_position.y = original_position.y; // Ensure attacker keeps feet on floor while attacking
+        target_position.z += 10;  // Ensure the attacker is placed infront of target
+
+
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)
-                    .to(target_actor.CSS3DObject.position, battlescape.data.settings.animation.attack.in_time)
+                    .to(target_position, battlescape.data.settings.animation.attack.in_time)
                     .chain(
                         new TWEEN.Tween(actor.CSS3DObject.position)
                         .to(original_position, battlescape.data.settings.animation.attack.out_time)

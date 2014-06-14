@@ -137,7 +137,8 @@ var data = {
             },
             messages: {
                 'charge': 'MY_NAME looks angry',
-            }
+            },
+            HACK_hit_offset: 600
         }
     },
     players: ['player1', 'player2', 'player3', 'player4'],

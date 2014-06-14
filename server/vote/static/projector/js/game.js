@@ -3,6 +3,8 @@ battlescape = window.battlescape || {};
 (function(external, battlescape){
 // -----------------------------------------------------------------------------
 
+DEFAULT_POSE = 'stand';
+
 function message_generator(message_type, actor) {
     var message = '';
     if (actor && _.has(actor.get_data(), 'messages')) {
@@ -31,6 +33,7 @@ function create_actor(id, team_name, actor_data) {
     var health = data.health;
     var charge = 0;
     var defending = false;
+    var current_pose = '';
     
     // Create 3D dom object for this player
     var css_class = '';
@@ -162,54 +165,65 @@ function create_actor(id, team_name, actor_data) {
     
     function set_pose_to_current_state() {
         // Set default state
-        set_pose('stand');
-        dom.className = '';
+        var target_pose = DEFAULT_POSE;
+        var target_class = ''
+        
         // Set apply state pose's and effects
         if (actor.is_hurt()) {
-            set_pose('hurt');
-            set_class('hurt');
+            target_pose = 'hurt';
+            target_class = 'hurt';
         }
         if (defending) {
-            set_pose('defend');
+            target_pose = 'defend';
         }
         if (charge > 0) {
-            set_pose('charge');
+            target_pose = 'charge';
         }
         if (actor.is_dead()) {
-            set_pose('dead');
-            set_class('dead');
+            target_pose = 'dead';
+            target_class = 'dead';
         }
-
+        set_pose(target_pose);
+        if (target_class) {set_class(target_class);}
+        else              {dom.className = '';} // if there is no target class it can be applyed immediately
     }
 
     function set_class(new_css_class) {
         if (new_css_class) {
             css_class = new_css_class;
         }
-        setTimeout(function() {dom.className = css_class;}, 100);
-        //dom.className = class_name;
+        setTimeout(function() {dom.className = css_class;}, 15);
     }
     actor.set_class = set_class;
     
-    function set_pose(pose) {
-        //var class_name = dom.className
-        dom.className = '';  // Always clear the css class on pose change as it takes time for the filters to stop
-        var pose_image = data.images['stand'];
+    function _set_pose(pose) {
+        current_pose = DEFAULT_POSE;
+        var pose_image = data.images[DEFAULT_POSE];
         if (data.images[pose]) {
             pose_image = data.images[pose];
+            current_pose = pose;
         }
         if (pose == 'dead' && !data.images['dead']) {
+            current_pose = 'dead'
             dom.src = '';
             return
         }
         dom.src = battlescape.data.settings.path.images.characters + pose_image;
+    }
+    function set_pose(pose) {
+        if (pose == current_pose) {return;}
+        _set_pose(pose);
+        //var class_name = dom.className
+        dom.className = '';  // Always clear the css class on pose change as it takes time for the filters to stop
         set_class(); // Set the class back to the current value set for this actor
     };
+    actor.set_pose = set_pose;
+    
     actor.set_direction = function(direction) {
         if (direction != 0) {direction = Math.PI;}
         actor.CSS3DObject.rotation.y = direction;
     }
-    actor.set_pose = set_pose;
+    
     
     function animate_move(target_actor, pose) {
         // http://learningthreejs.com/blog/2011/08/17/tweenjs-for-smooth-animation/

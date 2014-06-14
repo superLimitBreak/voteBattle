@@ -166,7 +166,7 @@ function create_actor(id, team_name, actor_data) {
     function set_pose_to_current_state() {
         // Set default state
         var target_pose = DEFAULT_POSE;
-        var target_class = ''
+        var target_class = '';
         
         // Set apply state pose's and effects
         if (actor.is_hurt()) {
@@ -235,14 +235,11 @@ function create_actor(id, team_name, actor_data) {
         // This needs to be replaced with a more generic method for targeting animations
         // Setting the y is a good idea and setting the
         var target_position = _.clone(target_actor.CSS3DObject.position);
-        console.log('TARGET', target_actor.get_data().HACK_hit_offset);
         if (target_actor.get_data().HACK_hit_offset) {
-            console.log('YAY');
             target_position.x += target_actor.get_data().HACK_hit_offset;
         }
         target_position.y = original_position.y; // Ensure attacker keeps feet on floor while attacking
-        target_position.z += 10;  // Ensure the attacker is placed infront of target
-
+        target_position.z += 20;  // Ensure the attacker is placed infront of target
 
         var tween = new TWEEN.Tween(actor.CSS3DObject.position)
                     .to(target_position, battlescape.data.settings.animation.attack.in_time)

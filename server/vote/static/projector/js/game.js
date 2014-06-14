@@ -93,14 +93,14 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "defend") {
             defending = true;
-            set_pose_to_current_state();
+            reset_pose();
             ui_message('defend', actor);
             return;
         }
         if (action == "charge") {
             charge++;
             ui_message('charge', actor);
-            set_pose_to_current_state();
+            reset_pose();
             return;
         }
         if (action == "all") {
@@ -111,7 +111,7 @@ function create_actor(id, team_name, actor_data) {
             });
             battlescape.effects.raninbow_beam();
             battlescape.ui.set_message("" + data.name+" used RAINBOW BEAM! collectivly doing "+total+" damage");
-            set_pose_to_current_state();
+            reset_pose();
             return;
         }
         if (action == "super") {
@@ -120,7 +120,8 @@ function create_actor(id, team_name, actor_data) {
         }
         if (action == "confused") {
             battlescape.ui.set_message("" + data.name + " is confused");
-            set_pose_to_current_state();
+            set_pose('confused');
+            setTimeout(reset_pose, battlescape.data.settings.animation.hit.delay)
             return;
         }
         
@@ -147,10 +148,10 @@ function create_actor(id, team_name, actor_data) {
         if (health > data.health) {health = data.health;}
         if (damage > 0 && health > 0 && !charge) {
             set_pose('hit');
-            setTimeout(set_pose_to_current_state, battlescape.data.settings.animation.hit.delay);
+            setTimeout(reset_pose, battlescape.data.settings.animation.hit.delay);
         }
         else {
-            set_pose_to_current_state(); // Update pose and health feedback
+            reset_pose(); // Update pose and health feedback
         }
         battlescape.ui.update();  // Update ui
         return initial_heath - health;
@@ -158,7 +159,7 @@ function create_actor(id, team_name, actor_data) {
     
     actor.take_damage = function(value) {
         if (defending && value > 0) {
-            value = Math.round(value / data.defence_effectiveness);
+            value = 1; //Math.round(value / data.defence_effectiveness);
         }
         return modify_health(value);
     }
@@ -168,7 +169,7 @@ function create_actor(id, team_name, actor_data) {
         return health - health_before;
     }
     
-    function set_pose_to_current_state() {
+    function reset_pose() {
         // Set default state
         var target_pose = DEFAULT_POSE;
         var target_class = '';
@@ -193,7 +194,7 @@ function create_actor(id, team_name, actor_data) {
         if (css_class != target_class) {css_class = target_class;}
         set_pose(target_pose);
     }
-    actor.reset_pose = set_pose_to_current_state;
+    actor.reset_pose = reset_pose;
 
     function set_class(new_css_class) {
         if (new_css_class) {
@@ -201,7 +202,7 @@ function create_actor(id, team_name, actor_data) {
         }
         setTimeout(function() {dom.className = css_class;}, 15);
     }
-    actor.set_class = set_class;
+    actor.set_class = set_class;  // TODO? this was public for debugging? can this be made private
     
     function _set_pose(pose) {
         current_pose = DEFAULT_POSE;
@@ -264,7 +265,7 @@ function create_actor(id, team_name, actor_data) {
                         .to(original_position, battlescape.data.settings.animation.attack.out_time)
                     )
                     .onComplete(
-                        set_pose_to_current_state
+                        reset_pose
                     );
         tween.easing(
             TWEEN.Easing.Elastic.InOut
@@ -273,7 +274,7 @@ function create_actor(id, team_name, actor_data) {
     }
     
     // Set Variables
-    set_pose_to_current_state()
+    reset_pose()
 
     return actor;
 };
@@ -281,7 +282,7 @@ function create_actor(id, team_name, actor_data) {
 function create_game(players, enemys, turn_order) {
     var game = {};
     
-    var current_turn_index = -1;
+    var turn_number = -1;
     var actors = {};
 
     var running = false;
@@ -294,6 +295,10 @@ function create_game(players, enemys, turn_order) {
     init_team(players, 'player');
     init_team(enemys, 'enemy');
 
+    function turn_index() {
+        return turn_number % turn_order.length;
+    }
+    
     game.get_actors = function() {return actors;};
     game.get_team = function(team_name, inverse) {
         console.log("get_team", team_name, inverse);
@@ -301,7 +306,7 @@ function create_game(players, enemys, turn_order) {
         return $.grep(battlescape.utils.values(actors), function(actor){return actor.team_name == team_name;}, inverse);
     }
     game.get_current_turn_actor =  function() {
-        return actors[turn_order[current_turn_index]];
+        return actors[turn_order[turn_index()]];
     }
 
     game.next_turn = function() {
@@ -315,16 +320,16 @@ function create_game(players, enemys, turn_order) {
         }
         if (game.enemy_all_dead()) {
             game.stop();
-            battlescape.ui.set_message('Win: took '+current_turn_index+' turns');
+            battlescape.ui.set_message('Win: took '+turn_number+' turns');
             _.each(game.get_team('player'), function(actor, index, list) {
                 if (!actor.is_dead()) {
-                    actor.set_pose('win');
+                    actor.set_pose('at_ease');
                 }
             });
             return;
         }
         
-        current_turn_index = (current_turn_index + 1) % turn_order.length;
+        turn_number++;
         battlescape.ui.update();
         
         var actor = game.get_current_turn_actor();

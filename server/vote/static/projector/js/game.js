@@ -33,6 +33,7 @@ function create_actor(id, team_name, actor_data) {
     var defending = false;
     
     // Create 3D dom object for this player
+    var css_class = '';
     var dom = document.createElement('img');
     dom.style['z-index'] = 1;
     if (data.height) {
@@ -181,12 +182,18 @@ function create_actor(id, team_name, actor_data) {
 
     }
 
-    function set_class(class_name) {
-        //setTimeout(function() {dom.className = class_name;}, 3000);
-        dom.className = class_name;
+    function set_class(new_css_class) {
+        if (new_css_class) {
+            css_class = new_css_class;
+        }
+        setTimeout(function() {dom.className = css_class;}, 100);
+        //dom.className = class_name;
     }
+    actor.set_class = set_class;
     
     function set_pose(pose) {
+        //var class_name = dom.className
+        dom.className = '';  // Always clear the css class on pose change as it takes time for the filters to stop
         var pose_image = data.images['stand'];
         if (data.images[pose]) {
             pose_image = data.images[pose];
@@ -196,6 +203,7 @@ function create_actor(id, team_name, actor_data) {
             return
         }
         dom.src = battlescape.data.settings.path.images.characters + pose_image;
+        set_class(); // Set the class back to the current value set for this actor
     };
     actor.set_direction = function(direction) {
         if (direction != 0) {direction = Math.PI;}

@@ -84,6 +84,11 @@ function create_actor(id, team_name, actor_data) {
             var value = hurt_friend.heal(data.heal);
             battlescape.ui.set_message(""+data.name+" healed "+hurt_friend.get_data().name+" "+value);
             animate_move(hurt_friend, 'win');
+            // Hurt friend happy pose
+            setTimeout(function(){
+                hurt_friend.set_pose('win');
+                setTimeout(hurt_friend.reset_pose, battlescape.data.settings.animation.hit.delay)
+            }, 1000);
             return;
         }
         if (action == "defend") {

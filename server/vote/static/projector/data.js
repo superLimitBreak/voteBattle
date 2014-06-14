@@ -34,7 +34,7 @@ var data = {
                 out_time: 400,
             },
             hit: {
-                delay: 1500,
+                delay: 1800,
             }
         },
     },

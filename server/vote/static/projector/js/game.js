@@ -183,10 +183,12 @@ function create_actor(id, team_name, actor_data) {
             target_pose = 'dead';
             target_class = 'dead';
         }
+
+        // Update the css_class state, this will be applyed on set_pose as the class is always re-instated
+        if (css_class != target_class) {css_class = target_class;}
         set_pose(target_pose);
-        if (target_class) {set_class(target_class);}
-        else              {dom.className = '';} // if there is no target class it can be applyed immediately
     }
+    actor.reset_pose = set_pose_to_current_state;
 
     function set_class(new_css_class) {
         if (new_css_class) {
@@ -210,12 +212,21 @@ function create_actor(id, team_name, actor_data) {
         }
         dom.src = battlescape.data.settings.path.images.characters + pose_image;
     }
-    function set_pose(pose) {
-        if (pose == current_pose) {return;}
-        _set_pose(pose);
+    function _update_class() {
         //var class_name = dom.className
         dom.className = '';  // Always clear the css class on pose change as it takes time for the filters to stop
         set_class(); // Set the class back to the current value set for this actor
+    }
+    function set_pose(pose) {
+        // If pose handt chnaged
+        if (pose == current_pose) {
+            // Check if class needs updating specificly
+            if (dom.className != css_class) {_update_class();}
+            return;
+        }
+        // Update pose + always update class after a pose change
+        _set_pose(pose);
+        _update_class();
     };
     actor.set_pose = set_pose;
     

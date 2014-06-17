@@ -31,12 +31,14 @@ function init() {
     // Events
     window.addEventListener('resize', onWindowResize, false);
 
+    /*
     controls = new THREE.TrackballControls( camera );
     controls.rotateSpeed = 0.3;
     controls.minDistance = 500;
     controls.maxDistance = 6000;
     controls.target = new THREE.Vector3( 0, 300, 0 );
     controls.addEventListener( 'change', function(){} );
+    */
 
 }
 
@@ -57,7 +59,7 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    controls.handleResize();
+    //controls.handleResize();
     render()
 }
 
@@ -75,7 +77,7 @@ init();
 // Export ----------------------------------------------------------------------
 external.scene = scene;
 external.camera = camera;
-external.controls = controls;
+//external.controls = controls;
 external.stop = stop;
 external.start = start;
 

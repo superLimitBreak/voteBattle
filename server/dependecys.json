@@ -44,14 +44,16 @@
         "target": "static/three.min.js"
     },
     
-    "threejs_libs": {
-        "source": "https://raw.githubusercontent.com/mrdoob/three.js/VERSION/build/",
+    "threejs_tween": {
+        "source": "https://raw.githubusercontent.com/mrdoob/three.js/VERSION/examples/js/libs/tween.min.js",
         "version": "r67",
-        "target": [
-            "libs/tween.min.js",
-            "controls/TrackballControls.js",
-            "renderers/CSS3DRenderer.js",
-        ]
+        "target": "static/tween.min.js"
+    },
+    
+    "threejs_CSSRenderer": {
+        "source": "https://raw.githubusercontent.com/mrdoob/three.js/VERSION/examples/js/renderers/CSS3DRenderer.js",
+        "version": "r67",
+        "target": "static/CSS3DRenderer.js"
     },
     
     "yui-reset": {

@@ -72,6 +72,7 @@
             "lib/make_ini.py",
             "lib/pyramid/__init__.py",
             "lib/pyramid/auto_format.py",
+            "lib/pyramid/events.py",
             "lib/pyramid/etag.py",
             "lib/pyramid/session_identity.py",
             "lib/socket/__init__.py",

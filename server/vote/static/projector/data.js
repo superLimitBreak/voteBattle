@@ -14,7 +14,7 @@ var data = {
             }
         },
         websocket: {
-            port: 9873,
+            port: 9883,
             disconnected_retry_interval: 5,
         },
         path: {

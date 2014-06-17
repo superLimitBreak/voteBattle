@@ -24,7 +24,7 @@ env:
 		else \
 			echo installing virtualenv; \
 			sudo apt-get install python-virtualenv; \
-		fi
+		fi ;\
 		if dpkg -s python3-setuptools ; then \
 			echo python 3 already installed; \
 		else \

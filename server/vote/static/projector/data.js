@@ -61,14 +61,16 @@ var data = {
             height: 300,
             images: {
                 'stand': 'char1.png',
-                'attack': '',
-                'defend': '',
-                'charge': '',
-                'hit': '',
-                'hurt': '',
-                'dead': '',
-                'win': '',
-                'at_ease': '',
+                /*
+                'stand': 'lyle_stand.png',
+                'attack': 'lyle_attack.png',
+                'defend': 'lyle_defend.png',
+                'hit': 'lyle_hit.png',
+                'hurt': 'lyle_hurt.png',
+                'dead': 'lyle_dead.png',
+                'win': 'lyle_win.png',
+                'at_ease': 'lyle_at_ease.png',
+                */
             },
         },
         'player2': {
@@ -104,6 +106,17 @@ var data = {
             height: 300,
             images: {
                 'stand': 'char2.png',
+                /*
+                'stand': 'matt_stand.png',
+                'attack': 'matt_attack.png',
+                'defend': 'matt_defend.png',
+                'hit': 'matt_hit.png',
+                'hurt': 'matt_hurt.png',
+                'dead': 'matt_dead.png',
+                'win': 'matt_win.png',
+                'at_ease': 'matt_at_ease.png',
+                */
+
             },
         },
         'player4': {
@@ -118,6 +131,16 @@ var data = {
             height: 300,
             images: {
                 'stand': 'char4.png',
+                /*
+                'stand': 'joe_stand.png',
+                'attack': 'joe_attack.png',
+                'defend': 'joe_defend.png',
+                'hit': 'joe_hit.png',
+                'hurt': 'joe_hurt.png',
+                'dead': 'joe_dead.png',
+                'win': 'joe_win.png',
+                'at_ease': 'joe_at_ease.png',
+                */
             },
         },
         'boss': {

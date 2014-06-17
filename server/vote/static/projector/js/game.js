@@ -200,7 +200,7 @@ function create_actor(id, team_name, actor_data) {
         if (new_css_class) {
             css_class = new_css_class;
         }
-        setTimeout(function() {dom.className = css_class;}, 15);
+        setTimeout(function() {dom.className = css_class;}, 50);
     }
     actor.set_class = set_class;  // TODO? this was public for debugging? can this be made private
     

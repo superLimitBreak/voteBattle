@@ -32,16 +32,26 @@
         "target": "static/jquery.mobile-VERSION.min.map"
     },
     
-    "underscore":{
+    "underscore": {
         "source": "https://raw.github.com/jashkenas/underscore/VERSION/underscore-min.js",
         "version": "1.6.0",
         "target": "static/underscore-min.js"
     },
 
-    "threejs":{
+    "threejs": {
         "source": "https://raw.githubusercontent.com/mrdoob/three.js/VERSION/build/three.min.js",
         "version": "r67",
         "target": "static/three.min.js"
+    },
+    
+    "threejs_libs": {
+        "source": "https://raw.githubusercontent.com/mrdoob/three.js/VERSION/build/",
+        "version": "r67",
+        "target": [
+            "libs/tween.min.js",
+            "controls/TrackballControls.js",
+            "renderers/CSS3DRenderer.js",
+        ]
     },
     
     "yui-reset": {

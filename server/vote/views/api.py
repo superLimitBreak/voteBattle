@@ -48,6 +48,11 @@ def get_pool(request, is_owner=False, pool_id=None):
         raise action_error(message='not owner of vote_pool: {0}'.format(pool_id), code=403)
     return vote_pool
 
+def send_websocket(request, data):
+    request.registry['socket_manager'].recv(json_string(
+        data
+    ).encode('utf-8'))
+
 # Vote -------------------------------------------------------------------------
 
 @view_config(route_name='vote')
@@ -61,9 +66,9 @@ def vote(request):
     except VoteException as e:
         raise action_error(message=str(e), code=400)
     # Send update over websocket
-    request.registry['socket_manager'].recv(json_string(
+    send_websocket(request,
         {'votes': vote_pool.current_frame.to_dict(total=True)['votes']}
-    ).encode('utf-8'))
+    )
     log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(vote_pool.id, request.session.get('id'), request.params.get('item')))
     return action_ok()
 
@@ -127,6 +132,7 @@ def new_frame(request):
     new_frame = vote_pool.new_frame(**properties)
     invalidate_cache(vote_pool.id)
     log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(vote_pool.id, properties))
+    #send_websocket(request, data)  # Todo
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': new_frame.to_dict(),

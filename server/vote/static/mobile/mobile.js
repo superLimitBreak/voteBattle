@@ -7,6 +7,7 @@ var settings = {
 	"mobile.client.select.refresh": 10 * 1000,
 	"mobile.client.retry.timeout.error": 10 * 1000,
 	"mobile.client.retry.timeout.missed": 1 * 1000,
+	//"server.websocket.port": 9883,
 };
 
 
@@ -20,18 +21,27 @@ function set_vote_input_state(state, item_confirmed) {
 	});
 }
 
-function setup_vote_input(pool_id, votes) {
-	console.debug("setup_vote_input", votes)
+function setup_vote_input(pool_id, vote_items) {
+	console.debug("setup_vote_input", vote_items)
 	var $vote_list = $('#vote_input').append('ol');
 	$vote_list.empty();
-	$.each(votes, function(index, value){
-		$vote_list.append('<button data-item="'+value+'">'+value+'</button>');
+	$.each(vote_items, function(index, value){
+		$vote_list.append('<button data-item="'+value+'">'+value+' <span></span></button>');
 	});
 	$vote_list.trigger("create");
 	$vote_list.find('button').on('click', function(){
 		var $button = $(this);
 		$button.addClass('selected');
 		do_vote(pool_id, $button.data('item'));
+	});
+}
+
+function update_vote_counts(votes) {
+	$.each(votes, function(key, value){
+		console.debug("vote_count", key, value);
+		if (value.length) {
+			$("button:contains('"+key+"') span").html(""+value.length);
+		}
 	});
 }
 
@@ -48,11 +58,14 @@ function get_frame(pool_id, sequence_id) {
 			if (data['sequence_id'] != sequence_id) {
 				// Setup new frame
 				sequence_id = data['sequence_id'];  // Update sequence_id
-				var items = data['frame']['item_order'];
-				if (items) {
-					setup_vote_input(pool_id, items);  // If we have something to vote for, setup input
+				var vote_items = data['frame']['item_order'];
+				if (vote_items) {
+					setup_vote_input(pool_id, vote_items);  // If we have something to vote for, setup input
 				}
 			}
+			
+			update_vote_counts(data.frame.votes);
+			
 			setTimeout(function(){
 				get_frame(pool_id, sequence_id);
 			}, settings["mobile.client.retry.timeout.missed"]);
@@ -87,4 +100,3 @@ function do_vote(pool_id, item) {
 			set_vote_input_state(true);
 		});
 }
-

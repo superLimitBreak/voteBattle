@@ -76,7 +76,7 @@ def generate_cache_key_current_frame(request):
         str(CACHE_COUNTER[request.matchdict['pool_id']])
     ])
 @view_config(route_name='frame', request_method='GET')
-@etag_decorator(generate_cache_key_current_frame)
+#@etag_decorator(generate_cache_key_current_frame)
 @web
 def current_frame(request, pool_id=None):
     """

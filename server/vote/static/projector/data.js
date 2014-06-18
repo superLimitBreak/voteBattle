@@ -83,6 +83,8 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
+                'stand': 'char3.png',
+                /*
                 'stand': 'allan_stand.png',
                 'attack': 'allan_attack.png',
                 'defend': 'allan_defend.png',
@@ -92,6 +94,7 @@ var data = {
                 'dead': 'allan_dead.png',
                 'win': 'allan_win.png',
                 'at_ease': 'allan_at_ease.png',
+                */
             },
         },
         'player3': {

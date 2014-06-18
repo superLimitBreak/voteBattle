@@ -20,7 +20,7 @@
 				function(){
 					window.location = window.location;
 				},
-				settings["mobile.client.select.refresh"] * 1000
+				settings["mobile.client.select.refresh"]
 			);
 			
 			active_feedback_timeout = setInterval(

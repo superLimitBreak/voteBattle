@@ -8,7 +8,7 @@
 
 	<script type="text/javascript">
 		document.addEventListener("DOMContentLoaded", function() {
-			startup_client("${request.matchdict['pool_id']}");
+				get_frame("${request.matchdict['pool_id']}");
 		});
 	</script>
 

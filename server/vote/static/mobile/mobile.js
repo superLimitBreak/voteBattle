@@ -4,153 +4,87 @@
 $.cookie.json = true;
 
 var settings = {
-    "mobile.client.select.refresh": 10,  // Seconds
-    "mobile.client.retry.timeout.error": 10,
-    "mobile.client.retry.timeout.missed": 1,
-    "mobile.client.retry.timeout.default_frame_duration": 10,
-    "mobile.client.fetch.offset": 0.1,  // deliberatly check 1 second after datetime timeout provided, give the server a chance to sort itself
+	"mobile.client.select.refresh": 10 * 1000,
+	"mobile.client.retry.timeout.error": 10 * 1000,
+	"mobile.client.retry.timeout.missed": 1 * 1000,
 };
 
-// Timesync --------------------------------------------------------------------
 
-
-function timediff(datetime) {
-    var server_datetime_offset = $.cookie('server_datetime_offset');
-    if (!server_datetime_offset) {
-        try {
-            server_datetime_offset = new Date() - new Date($.cookie('server_timesync').server_timesync);
-            $.cookie('server_datetime_offset', server_datetime_offset, {path: '/'})
-            console.log("Calculated server_datetime_offset: " + server_datetime_offset);
-        } catch(e) {
-            server_datetime_offset = 0;
-            console.warn("Unable to determin server_datetime_offset");
-        }
-    }
-    if (!datetime) {datetime = new Date();}
-    return datetime - server_datetime_offset;
-};
-timediff();  // Set cookies and init server offset as soon as possible
-var now = timediff;  // function alias for timediff for readabilty
-var timed_functions = {}
-function clear_timed_function(func) {
-    if (func && func in timed_functions) {
-        console.debug("clear_timed_function");
-        clearTimeout(timed_functions[func]);
-        timed_functions[func] = null;
-    }
-}
-function set_timed_function(func, timeout) {
-    /* at timestamp (with server offset), tigger the function */
-    clear_timed_function(func);
-    if (!timeout) {
-        console.error("null timeout");
-        return;
-    }
-    if (typeof(timeout)=="string") {
-        timeout = new Date(timeout);
-    }
-    if (typeof(timeout)=="object" && 'getDate' in timeout) {
-        timeout = (timeout - now()) + settings["mobile.client.fetch.offset"] * 1000;
-    }
-    if (typeof(timeout)!="number") {
-        console.error("Invalid timeout", timeout);
-        return;
-    }
-    console.debug("waiting "+timeout/1000);
-    timed_functions[func] = setTimeout(func, timeout);
-}
-
-
-var sequence_id = 0;
-
-
-// utils ------
+// Button manager ------
 
 function set_vote_input_state(state, item_confirmed) {
-    console.log("set_vote_input_state", state, item_confirmed);
-    $('#vote_input button').each(function(i, element){
-        var $element = $(element);
-        $element.attr('disabled', !state);
-    });
-}
-
-// Flow ------------------------------------------------------------------------
-
-function get_frame(pool_id) {
-    console.debug("get_frame", pool_id);
-	$.getJSON('/api/'+pool_id+'.json')
-	.success(function(response_json){
-        var data = response_json['data'];
-        // If frame aquire is our current frame - retry get_frame
-        if (sequence_id == data['sequence_id']) {
-            console.log("already on this frame");
-            set_timed_function(function(){
-                get_frame(pool_id);
-            }, settings["mobile.client.retry.timeout.missed"] * 1000);
-            return;
-        }
-        // Setup new frame
-        sequence_id = data['sequence_id'];
-        var items = data['frame']['item_order'];
-        var timeout;
-        if (items) {
-            timeout = data['frame']['timeframe']['end'];  // Setup refresh timestamp for the next frame - this could be null
-            setup_vote_input(pool_id, items);  // If we have something to vote for, setup input
-        }
-        if (!timeout) {
-            timeout = settings["mobile.client.retry.timeout.missed"] * 1000;  // Nothing to vote for, keep asking for votes frequently
-        }
-        set_timed_function(function(){
-            get_frame(pool_id);
-        }, timeout);
-	})
-	.error(function(xhr){
-        console.error("get_frame failed, the server has issues, recovering timeout");
-        setTimeout(function(){
-            get_frame(pool_id);
-        }, settings["mobile.client.retry.timeout.error"] * 1000);
-        return;
+	//console.log("set_vote_input_state", state, item_confirmed);
+	$('#vote_input button').each(function(i, element){
+		var $element = $(element);
+		$element.attr('disabled', !state);
 	});
 }
 
 function setup_vote_input(pool_id, votes) {
-    console.debug("setup_vote_input", votes)
-    var $vote_list = $('#vote_input').append('ol');
-    $vote_list.empty();
-    $.each(votes, function(index, value){
-        $vote_list.append('<button data-item="'+value+'">'+value+'</button>');
-    });
+	console.debug("setup_vote_input", votes)
+	var $vote_list = $('#vote_input').append('ol');
+	$vote_list.empty();
+	$.each(votes, function(index, value){
+		$vote_list.append('<button data-item="'+value+'">'+value+'</button>');
+	});
 	$vote_list.trigger("create");
-    $vote_list.find('button').on('click', function(){
+	$vote_list.find('button').on('click', function(){
 		var $button = $(this);
-        $button.addClass('selected');
-        do_vote(pool_id, $button.data('item'));
-    });
+		$button.addClass('selected');
+		do_vote(pool_id, $button.data('item'));
+	});
 }
+
+
+// Poll vote frame -------------------------------------------------------------
+
+function get_frame(pool_id, sequence_id) {
+	if (!sequence_id) {sequence_id = 0;}
+	console.debug("get_frame", pool_id, sequence_id);
+	$.getJSON('/api/'+pool_id+'.json')
+		.success(function(response_json){
+			var data = response_json['data'];
+			// If frame aquire is our current frame - retry get_frame
+			if (data['sequence_id'] != sequence_id) {
+				// Setup new frame
+				sequence_id = data['sequence_id'];  // Update sequence_id
+				var items = data['frame']['item_order'];
+				if (items) {
+					setup_vote_input(pool_id, items);  // If we have something to vote for, setup input
+				}
+			}
+			setTimeout(function(){
+				get_frame(pool_id, sequence_id);
+			}, settings["mobile.client.retry.timeout.missed"]);
+		})
+		.error(function(xhr){
+			console.error("get_frame failed, the server has issues, recovering timeout");
+			setTimeout(function(){
+				get_frame(pool_id, sequence_id);
+			}, settings["mobile.client.retry.timeout.error"]);
+			return;
+		});
+}
+
+// Perform the vote ------------------------------------------------------------
 
 function do_vote(pool_id, item) {
-    console.debug("do_vote", pool_id, item);
-    set_vote_input_state(false);
-    $.getJSON('/api/'+pool_id+'/vote.json?item='+item)
-    .success(function(data){
-        console.debug("vote successful");
-        set_vote_input_state(false, item);
-    })
-    .error(function(xhr){
-        var error_message = xhr.responseJSON['messages'][0];  // TODO: join all the messages
-        if (error_message.search("multivote")) {
-            alert("already voted");
-            return;
-        }
-        console.error(error_message);
-        consoleNode.log("no idea what went wrong, re-enable the buttons");
-        set_vote_input_state(true);
-    });
+	console.debug("do_vote", pool_id, item);
+	set_vote_input_state(false);
+	$.getJSON('/api/'+pool_id+'/vote.json?item='+item)
+		.success(function(data){
+			console.debug("vote successful");
+			set_vote_input_state(false, item);
+		})
+		.error(function(xhr){
+			var error_message = xhr.responseJSON['messages'][0];  // TODO: join all the messages
+			if (error_message.search("multivote")) {
+				alert("already voted this frame (something has gone wrong)");
+				return;
+			}
+			console.error(error_message);
+			console.log("no idea what went wrong, re-enable the buttons");
+			set_vote_input_state(true);
+		});
 }
 
-
-// Startup ---------------------------------------------------------------------
-
-function startup_client(pool_id) {
-    get_frame(pool_id);
-};

@@ -106,7 +106,7 @@ td.numeric {
 .box .dead .selected_td:before {
 	text-shadow: none;
 	/* content: "\1F480"; */
-	content: url(images/icons/1f480.png);
+	content: url(images/icons/1f480_32x.png);
 }
 
 .box .selected .selected_td:before {

@@ -107,7 +107,7 @@ function create_actor(id, team_name, actor_data) {
             charge = 0;
             var total = 0;
             _.each(battlescape.ai.get_enemys(actor), function(enemy, index, enemys) {
-                total += enemy.take_damage(actor.get_data().max_damage);
+                total += enemy.take_damage(actor.get_data().all_damage);
             });
             battlescape.effects.raninbow_beam();
             battlescape.ui.set_message("" + data.name+" used RAINBOW BEAM! collectivly doing "+total+" damage");

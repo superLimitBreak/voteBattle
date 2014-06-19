@@ -60,17 +60,15 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
-                'stand': 'char1.png',
-                /*
+                //'stand': 'char1.png',
                 'stand': 'lyle_stand.png',
                 'attack': 'lyle_attack.png',
                 'defend': 'lyle_defend.png',
                 'hit': 'lyle_hit.png',
-                'hurt': 'lyle_hurt.png',
+                //'hurt': 'lyle_hurt.png',
                 'dead': 'lyle_dead.png',
-                'win': 'lyle_win.png',
+                //'win': 'lyle_win.png',
                 'at_ease': 'lyle_at_ease.png',
-                */
             },
         },
         'player2': {
@@ -83,8 +81,7 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
-                'stand': 'char3.png',
-                /*
+                //'stand': 'char3.png',
                 'stand': 'allan_stand.png',
                 'attack': 'allan_attack.png',
                 'defend': 'allan_defend.png',
@@ -94,7 +91,6 @@ var data = {
                 'dead': 'allan_dead.png',
                 'win': 'allan_win.png',
                 'at_ease': 'allan_at_ease.png',
-                */
             },
         },
         'player3': {

@@ -44,8 +44,8 @@ var cameras = {
     },
     foot_pass: {
         init: function() {
-            camera.position.x = 704;
-            camera.position.y = 36;
+            camera.position.x = 650;
+            camera.position.y = 20;
             camera.position.z = 771;
             this.target = new THREE.Vector3();
             this.target.y = 300;
@@ -64,7 +64,7 @@ var cameras = {
     _into_pan_players: {
         init: function() {
             camera.position.x =  -400;
-            camera.position.y =   100;
+            camera.position.y =   200;
             camera.position.z =  -200;
             camera.rotation.x = Math.PI * 4;
             camera.rotation.y = 0;

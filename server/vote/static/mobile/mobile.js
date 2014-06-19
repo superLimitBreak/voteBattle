@@ -64,7 +64,9 @@ function get_frame(pool_id, sequence_id) {
 				}
 			}
 			
-			update_vote_counts(data.frame.votes);
+			if (data && data.frame && data.frame.votes) {
+				update_vote_counts(data.frame.votes);
+			}
 			
 			setTimeout(function(){
 				get_frame(pool_id, sequence_id);

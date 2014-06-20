@@ -129,17 +129,15 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
-                'stand': 'char4.png',
-                /*
+                //'stand': 'char4.png',
                 'stand': 'joe_stand.png',
                 'attack': 'joe_attack.png',
                 'defend': 'joe_defend.png',
-                'hit': 'joe_hit.png',
-                'hurt': 'joe_hurt.png',
+                //'hit': 'joe_hit.png',
+                //'hurt': 'joe_hurt.png',
                 'dead': 'joe_dead.png',
-                'win': 'joe_win.png',
-                'at_ease': 'joe_at_ease.png',
-                */
+                //'win': 'joe_win.png',
+                //'at_ease': 'joe_at_ease.png',
             },
         },
         'boss': {

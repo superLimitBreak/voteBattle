@@ -29,14 +29,14 @@ var cameras = {
             camera.position.z =  1200;
             this.target = new THREE.Vector3();
             this.target.y =  300;
-            this.target.x = -400;
+            this.target.x = -200;
             this.target.z =    0;
+            camera.lookAt(this.target);
         },
         update: function() {
             camera.position.x += 0.5;
             camera.position.y += 0.1;
-            camera.position.z += 0.3;
-            camera.lookAt(this.target);
+            camera.position.z += -0.3;
             if (camera.position.x > -1300) {
                 new_camera();
             }
@@ -44,18 +44,19 @@ var cameras = {
     },
     foot_pass: {
         init: function() {
-            camera.position.x = 650;
+            camera.position.x = 800;
             camera.position.y = 20;
-            camera.position.z = 771;
+            camera.position.z = 1000;
             this.target = new THREE.Vector3();
-            this.target.y = 300;
-            this.target.x = 0;
+            this.target.y = 400;
+            this.target.x = -200;
+            camera.lookAt(this.target);
         },
         update: function() {
             camera.position.x += 0.1;
             camera.position.z += 0.01;
-            camera.lookAt(this.target);
-            if (camera.position.x > 750) {
+            
+            if (camera.position.x > 900) {
                 new_camera();
             }
         }

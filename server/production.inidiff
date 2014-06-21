@@ -2,3 +2,6 @@
 pyramid.reload_templates = false
 
 server.etag.enabled = True -> bool
+
+[logger_vote]
+level = INFO

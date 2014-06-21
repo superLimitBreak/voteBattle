@@ -104,8 +104,7 @@ var data = {
             base_actions: base_actions,
             height: 300,
             images: {
-                'stand': 'char2.png',
-                /*
+                //'stand': 'char2.png',
                 'stand': 'matt_stand.png',
                 'attack': 'matt_attack.png',
                 'defend': 'matt_defend.png',
@@ -114,8 +113,6 @@ var data = {
                 'dead': 'matt_dead.png',
                 'win': 'matt_win.png',
                 'at_ease': 'matt_at_ease.png',
-                */
-
             },
         },
         'player4': {
@@ -133,11 +130,12 @@ var data = {
                 'stand': 'joe_stand.png',
                 'attack': 'joe_attack.png',
                 'defend': 'joe_defend.png',
-                //'hit': 'joe_hit.png',
-                //'hurt': 'joe_hurt.png',
+                'hit': 'joe_hit.png',
+                'hurt': 'joe_hurt.png',
                 'dead': 'joe_dead.png',
                 //'win': 'joe_win.png',
-                //'at_ease': 'joe_at_ease.png',
+                'win': 'joe_at_ease.png',
+                'at_ease': 'joe_at_ease.png',
             },
         },
         'boss': {

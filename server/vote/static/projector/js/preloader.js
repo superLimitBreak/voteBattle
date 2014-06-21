@@ -1,5 +1,7 @@
 (function(external, battlescape){
 
+var image_path_characters = 'images/characters/';
+
 function preload_images() {
     var images = _.filter(
                     _.flatten(
@@ -13,7 +15,8 @@ function preload_images() {
                 );
     _.each(images, function(image, index, list){
         console.log('Preload '+image);
-        new Image(image);
+        var image_element = new Image();
+        image_element.src = image_path_characters+image;
     });
 }
 

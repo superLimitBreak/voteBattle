@@ -1,7 +1,7 @@
 [app:main]
 pyramid.reload_templates = false
 
-server.etag.enabled = True -> bool
+server.etag.enabled = False -> bool
 
 [logger_vote]
 level = INFO

@@ -36,8 +36,10 @@ def mobile_client(request):
     #_sub_request = Request.blank('/api/{}.json'.format(request.matchdict['pool_id']))
     #_sub_request.matchdict['internal_request'] = True
     #current_frame = request.invoke_subrequest(_sub_request).json['data']
-    from externals.lib.pyramid.events import SessionCreated
-    request.registry.notify(SessionCreated(request))
+
+    #from externals.lib.pyramid.events import SessionCreated
+    #request.registry.notify(SessionCreated(request))
+
     from .api import current_frame as get_current_frame
     current_frame = get_current_frame(request, pool_id=request.matchdict['pool_id'])['data']
     return action_ok(data=current_frame)

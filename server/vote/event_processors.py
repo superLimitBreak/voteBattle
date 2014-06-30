@@ -1,6 +1,6 @@
 from pyramid.events import subscriber
 from externals.lib.misc import json_string
-from externals.lib.pyramid.events import SessionCreated
+from externals.lib.pyramid_helpers.events import SessionCreated
 
 
 @subscriber(SessionCreated)

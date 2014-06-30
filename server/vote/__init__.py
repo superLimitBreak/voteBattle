@@ -5,7 +5,7 @@ import pyramid.events
 import pyramid_beaker
 
 from externals.lib.misc import convert_str_with_type
-from externals.lib.pyramid.auto_format import append_format_pattern
+from externals.lib.pyramid_helpers.auto_format import append_format_pattern
 
 from vote.templates import helpers as template_helpers
 
@@ -34,7 +34,7 @@ def main(global_config, **settings):
 
     # WebSocket ----------------------------------------------------------------
     
-    from externals.lib.socket.auth_echo_server import AuthEchoServerManager
+    from externals.lib.multisocket.auth_echo_server import AuthEchoServerManager
     def authenicator(key):
         """
         Only authenticated keys can connect to the websocket with write access

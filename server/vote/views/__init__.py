@@ -19,7 +19,7 @@ __all__ = [
 
 from externals.lib.pyramid_helpers import mark_external_request, gzip
 from externals.lib.pyramid_helpers.auto_format import auto_format_output
-from externals.lib.pyramid_helpers.session_identity import overlay_sessio
+from externals.lib.pyramid_helpers.session_identity import overlay_session_identity
 
 web = decorator_combine(
     gzip,

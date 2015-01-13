@@ -9,9 +9,3 @@ window.addEventListener('message', function(event) {
 	
 	//event.source.postMessage('reply', event.origin);  // post back to origin
 },false);
-
-console.log("postmessage handlers set")
-
-function test_me() {
-	alert("test");
-}

@@ -17,10 +17,10 @@ var interval_countdown;
 var socket_retry_interval = null;
 function setup_websocket(on_connect, on_message) {
 	console.log("setup_websocket");
-    $('body').addClass('websocket_disconnected');
-    
+	$('body').addClass('websocket_disconnected');
+
 	var socket = new WebSocket("ws://"+location.hostname+":"+battlescape.data.settings.websocket.port+"/");
-    
+
 	socket.onopen = function(){ // Authenicate client with session key on socket connect
 		var cookie = document.cookie.match(/_session=(.+?)(\;|\b)/);  // TODO - replace with use of settings['session_key'] or server could just use the actual http-header
 		if (cookie) {
@@ -49,11 +49,12 @@ function setup_websocket(on_connect, on_message) {
 		var data = JSON.parse(msg.data);
 		on_message(data);
 	};
+	
 }
 
 
 function update_current_frame_ui() {
-    _.throttle(battlescape.ui.update_actions, 500)();
+	_.throttle(battlescape.ui.update_actions, 500)();
 }
 
 
@@ -62,12 +63,12 @@ function update_current_frame_ui() {
 var keys = {49:'0', 50:'1', 51:'2', 52:'3', 32:'SPACE'};
 //window.addEventListener('keydown', keyboard_vote, true);
 function keyboard_vote(event) {
-    if (event.keyCode in keys) {
-        var key = keys[event.keyCode];
-        current_frame[current_frame_item_order[key]]++;
-        event.preventDefault();
-        update_current_frame_ui();
-    }
+	if (event.keyCode in keys) {
+		var key = keys[event.keyCode];
+		current_frame[current_frame_item_order[key]]++;
+		event.preventDefault();
+		update_current_frame_ui();
+	}
 }
 
 
@@ -77,53 +78,53 @@ function keyboard_vote(event) {
 
 function new_frame(items, duration) {
 	$.post('/api/'+vote_pool+'.json', {items: items.join(","), duration: duration})
-        .success(function(data){})
-        .error(function(xhr){
-            console.error("new_frame failed", xhr.responseJSON);
-        });
-    
-    current_frame_item_order = _.clone(items);
-    current_frame = {};
-    _.each(items, function(item, index, items){
-        current_frame[item] = 0;
-    });
-    battlescape.ui.update_actions();
-    _.delay(end_frame, duration * 1000);
+		.success(function(data){})
+		.error(function(xhr){
+			console.error("new_frame failed", xhr.responseJSON);
+		});
+	
+	current_frame_item_order = _.clone(items);
+	current_frame = {};
+	_.each(items, function(item, index, items){
+		current_frame[item] = 0;
+	});
+	battlescape.ui.update_actions();
+	_.delay(end_frame, duration * 1000);
 	
 	battlescape.ui.update_countdown(0);
 	var ui_progress_update_interval = 0.05;
-    var progress = 0;
+	var progress = 0;
 	function update_countdown(){progress += ui_progress_update_interval/duration; battlescape.ui.update_countdown(progress);};
-    interval_countdown = setInterval(update_countdown, ui_progress_update_interval * 1000);
+	interval_countdown = setInterval(update_countdown, ui_progress_update_interval * 1000);
 	update_countdown();
 }
 
 function end_frame() {
-    clearInterval(interval_countdown);
-    var game = battlescape.get_game();
-    var actor = game.get_current_turn_actor();
-    
-    var actions = get_highest_voted_actions();
-    // If more than one highest action - confused
-    if (actions.length != 1) {actions.push("confused");}
-    
-    actor.action(_.last(actions));
-    game.next_turn();
+	clearInterval(interval_countdown);
+	var game = battlescape.get_game();
+	var actor = game.get_current_turn_actor();
+	
+	var actions = get_highest_voted_actions();
+	// If more than one highest action - confused
+	if (actions.length != 1) {actions.push("confused");}
+	
+	actor.action(_.last(actions));
+	game.next_turn();
 }
 
 function get_highest_voted_actions() {
-    var max = _.max(_.values(current_frame));
-    var actions = []
-    _.each(current_frame, function(value, key, list){
-        if (value == max) {
-            actions.push(key);
-        }
-    });
-    return actions;
+	var max = _.max(_.values(current_frame));
+	var actions = []
+	_.each(current_frame, function(value, key, list){
+		if (value == max) {
+			actions.push(key);
+		}
+	});
+	return actions;
 }
 
 function get_current_frame() {
-    return current_frame;    
+	return current_frame;
 }
 
 
@@ -135,8 +136,8 @@ function create_vote_pool(vote_pool) {
 	$.post("/api/.json" , {"pool_id":vote_pool})
 	.success(function(data){
 		console.log("vote_pool created", vote_pool);
-    })
-    .error(function(xhr){
+	})
+	.error(function(xhr){
 		var error_message = xhr.responseJSON.messages[0];
 		if (error_message.search("pool already exists")) {
 			console.debug("vote_pool already exisits", vote_pool);
@@ -164,12 +165,12 @@ register_websocket_message_handler('join', function(data){
 
 
 setup_websocket(
-    // onconnect
-    function(){
+	// onconnect
+	function(){
 		create_vote_pool(vote_pool);
 	},
-    // onmessage
-    function(data){
+	// onmessage
+	function(data){
 		_.each(data, function(value, key, list){
 			if (_.has(websocket_message_handlers, key)) {
 				websocket_message_handlers[key](value);
@@ -178,7 +179,7 @@ setup_websocket(
 				console.warn("unknown message key: "+key);
 			}
 		});
-    }
+	}
 );
 
 // External --------------------------------------------------------------------

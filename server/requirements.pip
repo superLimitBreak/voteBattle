@@ -1,0 +1,9 @@
+pyramid
+pyramid_debugtoolbar
+waitress
+pyramid_mako
+decorator
+python-dateutil
+dogpile.cache
+pyramid_beaker
+# beaker Session/Cache framework # REMOVE - has been depricated - need alternative

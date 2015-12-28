@@ -1,10 +1,10 @@
 *.db
 *.db-journal
 /env/
+/libs/
 /externals/
 /data/
 /test.ini
 /production.ini
-dependency_downloader.py
 dependencys_installed.json
 

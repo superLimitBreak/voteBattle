@@ -60,6 +60,6 @@
         "source": "http://yui.yahooapis.com/VERSION/build/cssreset/cssreset-min.css",
         "version": "3.13.0",
         "target": "static/cssreset-min.css"
-    },
+    }
 
 }

@@ -39,58 +39,56 @@ help:
 #		brew install python3 ;\
 #	fi
 
-.PHONY: has-python
-has-python:
-	which python
-	which python3
-	which virtualenv
+#.PHONY: has-python
+#has-python:
+#	which python
+#	which python3
+#	which virtualenv
 
-env: has-python
+env:
 	virtualenv --no-site-packages -p python3 env
-	cd env; bin/easy_install pyramid
+	env/bin/easy_install pyramid
 
 VoteBattle.egg-info: env
 	env/bin/python setup.py develop
 
-dependencys_installed.json: libs externals
+dependencys_installed.json: libs
 	env/bin/python libs/dependency_downloader.py --destination externals
 
 libs:
 	mkdir libs
 	touch libs/__init__.py
 	cd libs && \
-	if [ -d ../../libs/ ] ; then \
+	if [ -d ../../../libs/ ] ; then \
 		ln -s ../../../libs/python3/lib/dependency_downloader.py           dependency_downloader.py ;\
 		ln -s ../../../libs/python3/lib/misc.py                            misc.py                  ;\
 		ln -s ../../../libs/python3/lib/make_ini.py                        make_ini.py              ;\
 		ln -s ../../../libs/python3/lib/xml.py                             xml.py                   ;\
-		
 		mkdir multisocket ;\
 		cd multisocket && \
 		touch __init__.py ;\
+		ln -s ../../../../libs/python3/lib/multisocket/multisocket_server.py  multisocket_server.py    ;\
 		ln -s ../../../../libs/python3/lib/multisocket/subscription_server.py subscription_server.py   ;\
 		ln -s ../../../../libs/python3/lib/multisocket/auth_echo_server.py    auth_echo_server.py      ;\
-		
+		cd .. ;\
 		mkdir pyramid_helpers ;\
 		cd pyramid_helpers && \
-		touch __init__.py ;\
+		ln -s ../../../../libs/python3/lib/pyramid_helpers/__init__.py         __init__.py         ;\
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/auto_format.py      auto_format.py      ;\
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/events.py           events.py           ;\
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/etag.py             etag.py             ;\
-		ln -s ../../../../libs/python3/lib/pyramid_helpers/events.py           events.py           ;\
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/session_identity.py session_identity.py ;\
-
 	else \
 		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/dependency_downloader.py           --compressed -O ;\
 		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/misc.py                            --compressed -O ;\
 		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/make_ini.py                        --compressed -O ;\
 		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/multisocket/subscription_server.py --compressed -O ;\
-		
-		# UNFINISHED!!!
-		# TODO: Pull in the other depedndencys via curl
 	fi
+	# UNFINISHED!!!
+	# TODO: Pull in the other depedndencys via curl
 
-install: env VoteBattle.egg-info libs dependencys_installed.json test
+PHONY: install
+install: VoteBattle.egg-info dependencys_installed.json
 
 
 # Run --------------------------------------------------------------------------
@@ -104,7 +102,7 @@ run_production: ini_production
 shell:
 	env/bin/pshell $(INI_DEV)
 
-ini_production: libs
+ini_production:
 	env/bin/python3 libs/make_ini.py production
 
 start_webapp_daemon: ini_production
@@ -115,7 +113,7 @@ stop_webapp_daemon:
 
 # Test -------------------------------------------------------------------------
 
-ini_test: libs
+ini_test:
 	env/bin/python3 libs/make_ini.py test
 
 test: ini_test

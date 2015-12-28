@@ -2,7 +2,7 @@ from pyramid.view import view_config
 from pyramid.httpexceptions import HTTPFound
 from pyramid.request import Request
 
-from externals.lib.misc import now
+from libs.misc import now
 
 from vote.lib.vote import VotePool
 
@@ -37,7 +37,7 @@ def mobile_client(request):
     #_sub_request.matchdict['internal_request'] = True
     #current_frame = request.invoke_subrequest(_sub_request).json['data']
 
-    #from externals.lib.pyramid.events import SessionCreated
+    #from libs.pyramid.events import SessionCreated
     #request.registry.notify(SessionCreated(request))
 
     from .api import current_frame as get_current_frame

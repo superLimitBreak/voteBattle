@@ -1,7 +1,7 @@
 from functools import reduce
 import datetime
 
-from externals.lib.misc import OrderedDefaultdict, now
+from libs.misc import OrderedDefaultdict, now
 
 import logging
 log = logging.getLogger(__name__)

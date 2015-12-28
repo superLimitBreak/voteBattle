@@ -11,7 +11,7 @@ import random
 from collections import defaultdict
 from pyramid.view import view_config
 
-from externals.lib.misc import json_string, json_load, now
+from libs.misc import json_string, json_load, now
 
 from . import web, action_ok, action_error, etag_decorator, cache
 

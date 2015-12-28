@@ -1,8 +1,8 @@
-from externals.lib.misc import decorator_combine
+from libs.misc import decorator_combine
 
-from externals.lib.pyramid_helpers import set_cookie
-from externals.lib.pyramid_helpers.auto_format import action_ok, action_error
-from externals.lib.pyramid_helpers.etag import etag_decorator
+from libs.pyramid_helpers import set_cookie
+from libs.pyramid_helpers.auto_format import action_ok, action_error
+from libs.pyramid_helpers.etag import etag_decorator
 
 __all__ = [
     'web',
@@ -17,9 +17,9 @@ __all__ = [
 # Web - (a default combination of a range of common decorators)
 #-------------------------------------------------------------------------------
 
-from externals.lib.pyramid_helpers import mark_external_request, gzip
-from externals.lib.pyramid_helpers.auto_format import auto_format_output
-from externals.lib.pyramid_helpers.session_identity import overlay_session_identity
+from libs.pyramid_helpers import mark_external_request, gzip
+from libs.pyramid_helpers.auto_format import auto_format_output
+from libs.pyramid_helpers.session_identity import overlay_session_identity
 
 web = decorator_combine(
     gzip,

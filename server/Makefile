@@ -1,5 +1,9 @@
 PROJECT=vote
 
+ENV = _env
+PYTHON = $(ENV)/bin/python3
+PIP = $(ENV)/bin/pip3
+PSERVE = $(ENV)/bin/pserve
 
 INI_DEV  = development.ini
 INI_TEST = test.ini
@@ -45,15 +49,15 @@ help:
 #	which python3
 #	which virtualenv
 
-env:
-	virtualenv --no-site-packages -p python3 env
-	env/bin/easy_install pyramid
+$(ENV):
+	virtualenv --no-site-packages -p python3 $(ENV)
+	$(ENV)/bin/easy_install pyramid
 
-VoteBattle.egg-info: env
-	env/bin/python setup.py develop
+VoteBattle.egg-info: $(ENV)
+	$(PYTHON) setup.py develop
 
 dependencys_installed.json: libs
-	env/bin/python libs/dependency_downloader.py --destination externals
+	$(PYTHON) libs/dependency_downloader.py --destination externals
 
 libs:
 	mkdir libs
@@ -87,23 +91,27 @@ libs:
 	# UNFINISHED!!!
 	# TODO: Pull in the other depedndencys via curl
 
-PHONY: install
+
+.PHONY: install
 install: VoteBattle.egg-info dependencys_installed.json
 
 
 # Run --------------------------------------------------------------------------
 
+.PHONY: run
 run: install
-	env/bin/pserve --reload $(INI_DEV)
+	$(PSERVE) --reload $(INI_DEV)
 
+.PHONY: run_production
 run_production: ini_production
-	env/bin/pserve $(INI_PROD)
+	$(PSERVE) $(INI_PROD)
 
+.PHONY: shell
 shell:
-	env/bin/pshell $(INI_DEV)
+	$(ENV)/bin/pshell $(INI_DEV)
 
 ini_production:
-	env/bin/python3 libs/make_ini.py production
+	$(PYTHON) libs/make_ini.py production
 
 start_webapp_daemon: ini_production
 	start-stop-daemon --start --pidfile webapp.pid --name $(PROJECT) --make-pidfile --background --exec /bin/bash -- -c "$(CURDIR)/env/bin/pserve $(CURDIR)/$(INI_PROD)"
@@ -118,13 +126,13 @@ ini_test:
 
 test: ini_test
 	# Think this is broken?!
-	env/bin/py.test $(PROJECT) -q --pdb
+	$(ENV)/bin/py.test $(PROJECT) -q --pdb
 
 
 # Clean ------------------------------------------------------------------------
 
 clean:
-	rm -rf env externals libs dependencys_installed.json
+	rm -rf $(ENV) externals libs dependencys_installed.json
 	rm -rf *.egg-info
 	rm -rf $(INI_TEST)
 	rm -rf $(INI_PROD)

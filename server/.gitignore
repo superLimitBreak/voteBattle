@@ -1,6 +1,6 @@
 *.db
 *.db-journal
-/env/
+*_env/
 /libs/
 /externals/
 /data/

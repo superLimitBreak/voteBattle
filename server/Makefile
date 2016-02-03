@@ -83,13 +83,25 @@ libs:
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/etag.py             etag.py             ;\
 		ln -s ../../../../libs/python3/lib/pyramid_helpers/session_identity.py session_identity.py ;\
 	else \
-		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/dependency_downloader.py           --compressed -O ;\
-		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/misc.py                            --compressed -O ;\
-		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/make_ini.py                        --compressed -O ;\
-		curl https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/multisocket/subscription_server.py --compressed -O ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/dependency_downloader.py ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/misc.py                  ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/make_ini.py              ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/xml.py                   ;\
+		mkdir multisocket ;\
+		cd multisocket && \
+		touch __init__.py ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/multisocket/multisocket_server.py  ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/multisocket/subscription_server.py ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/multisocket/auth_echo_server.py    ;\
+		cd .. ;\
+		mkdir pyramid_helpers ;\
+		cd pyramid_helpers && \
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/pyramid_helpers/__init__.py         ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/pyramid_helpers/auto_format.py      ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/pyramid_helpers/events.py           ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/pyramid_helpers/etag.py             ;\
+		wget -cq https://raw.githubusercontent.com/calaldees/libs/master/python3/lib/pyramid_helpers/session_identity.py ;\
 	fi
-	# UNFINISHED!!!
-	# TODO: Pull in the other depedndencys via curl
 
 
 .PHONY: install
@@ -122,7 +134,7 @@ stop_webapp_daemon:
 # Test -------------------------------------------------------------------------
 
 ini_test:
-	env/bin/python3 libs/make_ini.py test
+	$(PYTHON) libs/make_ini.py test
 
 test: ini_test
 	# Think this is broken?!

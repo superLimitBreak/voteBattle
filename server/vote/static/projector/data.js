@@ -40,7 +40,7 @@ var data = {
     },
     enviroment: {
         floor: {
-            texture: 'rock_stones_0079_01_preview.jpg',
+            texture: 'floor.png',
             size: 2000,
         },
     },

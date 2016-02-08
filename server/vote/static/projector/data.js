@@ -9,8 +9,8 @@ var data = {
         game: {
             turn: {
                 player_duration: 6,
-                enemy_duration: 6,
-                enemy_think_duration: 3,
+                enemy_duration: 4,
+                enemy_think_duration: 2,
             }
         },
         websocket: {

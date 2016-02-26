@@ -14,7 +14,7 @@ INI_PROD = production.ini
 
 help:
 	# Usage: make <target>, where target is
-	# setup         -- setup python egg & install dependencys/env if needed
+	# install         -- setup python egg & install dependencys/env if needed
 	# test          -- run all nosetests
 	# run           -- run the site in development mode
 	# run_production -- run in production mode

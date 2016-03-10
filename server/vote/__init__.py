@@ -1,10 +1,9 @@
 from pyramid.config import Configurator
 import pyramid.request
 import pyramid.events
+from pyramid.session import SignedCookieSessionFactory  # TODO: should needs to be replaced with an encrypted cookie or a hacker at an event may be able to intercept other users id's
 
-import pyramid_beaker
-
-from libs.misc import convert_str_with_type
+from libs.misc import convert_str_with_type, extract_subkeys, json_serializer
 from libs.pyramid_helpers.auto_format import append_format_pattern
 
 from vote.templates import helpers as template_helpers
@@ -28,8 +27,8 @@ def main(global_config, **settings):
 
     # Session Manager ----------------------------------------------------------
 
-    # TODO: Beaker is depreicated and should be replaced with another session facotry
-    session_factory = pyramid_beaker.session_factory_from_settings(settings)
+    session_settings = extract_subkeys(config.registry.settings, 'session.')
+    session_factory = SignedCookieSessionFactory(serializer=json_serializer, **session_settings)
     config.set_session_factory(session_factory)
 
     # WebSocket ----------------------------------------------------------------
@@ -41,7 +40,7 @@ def main(global_config, **settings):
         The first message sent MUST be a valid session key or the client is disconnected
         Clients can still connect and read messages
         """
-        session_data = session_factory(pyramid.request.Request({'HTTP_COOKIE':'{0}={1}'.format(config.registry.settings['session.key'],key)}))
+        session_data = session_factory(pyramid.request.Request({'HTTP_COOKIE':'{0}={1}'.format(config.registry.settings['session.cookie_name'],key)}))
         #return session_data and session_data.get('admin')
         return True
     socket_manager = AuthEchoServerManager(
@@ -65,6 +64,7 @@ def main(global_config, **settings):
     config.add_route('frame'               , append_format_pattern('/api/{pool_id}'))
     config.add_route('vote'                , append_format_pattern('/api/{pool_id}/vote'))
     config.add_route('previous_frames'     , append_format_pattern('/api/{pool_id}/previous_frames'))
+    config.add_route('join'                , append_format_pattern('/api/{pool_id}/join'))
 
 
     # Events -------------------------------------------------------------------

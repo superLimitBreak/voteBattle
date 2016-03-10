@@ -33,6 +33,7 @@ class VotePool(object):
     def __init__(self, id, owner=None):
         self.id = id
         self.frames = []
+        self.members = set()
         self._add_pool(self)
         self.owner = owner
 

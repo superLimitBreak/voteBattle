@@ -158,9 +158,8 @@ register_websocket_message_handler('votes', function(data){
 	update_current_frame_ui();
 });
 
-var joined_count = 0;
-register_websocket_message_handler('join', function(data){
-	battlescape.ui.set_joined(joined_count++);
+register_websocket_message_handler('joined', function(data){
+	battlescape.ui.set_joined(data);
 });
 
 

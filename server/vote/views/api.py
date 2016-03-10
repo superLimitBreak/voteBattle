@@ -1,7 +1,7 @@
 """
 Terminology:
     Short periods of voting time are called 'frames'
-    
+
     A frame could be setup with the actions 'attack', 'defend', 'heal'
     A frame is initalsed with a duration time, this is so that client devices
     that are not connected via websockets know when to refresh and can provide
@@ -27,7 +27,8 @@ CACHE_COUNTER = defaultdict(lambda: random.randint(0,65535))
 def invalidate_cache(id):
     CACHE_COUNTER[id] += 1
     cache.delete(id)
-    
+
+
 # Utils ------------------------------------------------------------------------
 
 def get_pool_id(request):
@@ -39,6 +40,7 @@ def get_pool_id(request):
         except KeyError:
             raise action_error(message='no pool_id provided', code=400)
 
+
 def get_pool(request, is_owner=False, pool_id=None):
     pool_id = pool_id or get_pool_id(request)
     vote_pool = VotePool.get_pool(pool_id)
@@ -48,10 +50,12 @@ def get_pool(request, is_owner=False, pool_id=None):
         raise action_error(message='not owner of vote_pool: {0}'.format(pool_id), code=403)
     return vote_pool
 
+
 def send_websocket(request, data):
     request.registry['socket_manager'].recv(json_string(
         data
     ).encode('utf-8'))
+
 
 # Vote -------------------------------------------------------------------------
 
@@ -66,8 +70,9 @@ def vote(request):
     except VoteException as e:
         raise action_error(message=str(e), code=400)
     # Send update over websocket
-    send_websocket(request,
-        {'votes': vote_pool.current_frame.to_dict(total=True)['votes']}
+    send_websocket(
+        request,
+        {'votes': vote_pool.current_frame.to_dict(total=True)['votes']},
     )
     log.debug('VOTE VotePool:{0} Session:{1} Item:{2}'.format(vote_pool.id, request.session.get('id'), request.params.get('item')))
     return action_ok()
@@ -89,9 +94,9 @@ def current_frame(request, pool_id=None):
     This means if a client wants an 'up to the second' response they have to cache bust the query string
     Projector interfaces will get updates via websockets.
     It's worth noting that if a client joins a vote half way through, the etaged frame they receive will have votes in it
-    
+
     TODO: Is it worth making this return cutdown item details for mobile clients, but the full thing for the frame owner?
-    
+
     the pool_id is used for internal calls only (I had trouble with subrequest running all the decorators again)
     """
     vote_pool = get_pool(request, pool_id=pool_id)
@@ -109,21 +114,21 @@ def new_frame(request):
     """
     Create a new frame:
     post params:
-    
+
     The final results from the previous frame are returned (this prevents the need )
-    
+
     TODO: Make this method optionaly take an entire frame state
     If the server crashs and the client has the state of the current frame, attempt to reinstate it
     We need to be resiliant to both the projector client and the server failing.
     """
     vote_pool = get_pool(request, is_owner=True)
     if request.params.get('frame_state'):
-        #frame_state = json_load(request.params['frame_state'])
+        # frame_state = json_load(request.params['frame_state'])
         # the host interface could need to restore a frame state from server failure
         raise action_error(message='unimplemented', code=502)
     properties = dict(request.params)
     try:
-        properties['items'] = map(lambda item: item.strip(),properties['items'].split(','))
+        properties['items'] = map(lambda item: item.strip(), properties['items'].split(','))
     except Exception:
         raise action_error(message='invalid items', code=400)
     previous_frame = vote_pool.current_frame
@@ -132,7 +137,7 @@ def new_frame(request):
     new_frame = vote_pool.new_frame(**properties)
     invalidate_cache(vote_pool.id)
     log.debug('NEW_FRAME VotePool:{0} Items:{1}'.format(vote_pool.id, properties))
-    #send_websocket(request, data)  # Todo
+    # send_websocket(request, data)  # Todo
     return action_ok(data={
         'sequence_id': vote_pool.size(),
         'frame': new_frame.to_dict(),
@@ -146,7 +151,7 @@ def generate_cache_key_previous_frames(request):
     return '-'.join([
         request.path_qs,
         str(VotePool.get_pool(request.matchdict['pool_id']).size()),
-        request.params.get('limit',''),
+        request.params.get('limit', ''),
     ])
 # TODO: what if there is an exception in generating the cache key? - should not etag and log 'unable to key'?
 @view_config(route_name='previous_frames', request_method='GET')
@@ -160,7 +165,7 @@ def previous_frames(request):
     def get_previous_frame_dict():
         return {
             'frames': [
-                frame.to_dict() for frame in get_pool(request).previous_frames(limit=int(request.params.get('limit',0)))
+                frame.to_dict() for frame in get_pool(request).previous_frames(limit=int(request.params.get('limit', 0)))
             ],
         }
     previous_frame_data = cache.get_or_create(cache_key, get_previous_frame_dict)
@@ -179,6 +184,7 @@ def new_vote_pool(request):
     log.info('NEW_POOL VotePool:{0} with owner {1}'.format(vote_pool.id, vote_pool.owner))
     return action_ok(code=201)
 
+
 @view_config(route_name='frame', request_method='DELETE')
 @web
 def remove_vote_pool(request):
@@ -186,4 +192,24 @@ def remove_vote_pool(request):
     vote_pool.remove()
     invalidate_cache(vote_pool.id)
     log.info('REMOVED_POOL VotePool:{0}'.format(vote_pool.id))
+    return action_ok()
+
+
+# Join Count -------------------------------------------------------------------
+
+@view_config(route_name='join', request_method='GET')
+@web
+def join(request):
+    vote_pool = get_pool(request)
+    vote_pool.members.add(request.session.get('id'))
+    # TODO:
+    # An attacker could spem this endpoint and flood the system with a new 'id' each time
+    # Could be safer to only allow pre-existing sessions rather than a session
+    # that has just been created for this endpoint.
+    # As this is stored in a python set, it is plausable an attack could run the process out of memory
+
+    send_websocket(
+        request,
+        {'joined': len(vote_pool.members)},
+    )
     return action_ok()

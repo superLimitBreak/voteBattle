@@ -16,7 +16,6 @@ requires = [
     'decorator',
     'python-dateutil',
     'dogpile.cache',
-    'pyramid_beaker', # Session/Cache framework # REMOVE - has been depricated - need alternative
 ]
 test_requires = [
     'pytest',
@@ -28,13 +27,13 @@ setup(
     name='VoteBattle',
     version='0.0',
     description='vote',
-    long_description=README, # + '\n\n' + CHANGES,
+    long_description=README,  # + '\n\n' + CHANGES,
     classifiers=[
-      "Programming Language :: Python",
-      "Framework :: Pyramid",
-      "Topic :: Internet :: WWW/HTTP",
-      "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
-      ],
+        "Programming Language :: Python",
+        "Framework :: Pyramid",
+        "Topic :: Internet :: WWW/HTTP",
+        "Topic :: Internet :: WWW/HTTP :: WSGI :: Application",
+    ],
     author='calaldees',
     author_email='calaldees@gmail.com',
     url='http://www.github.com/calaldees/VoteBattle',

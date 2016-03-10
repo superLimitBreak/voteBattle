@@ -45,6 +45,11 @@ function update_vote_counts(votes) {
 	});
 }
 
+// Join notification -----------------------------------------------------------
+
+function join(pool_id) {
+    $.getJSON('/api/'+pool_id+'/join.json');
+}
 
 // Poll vote frame -------------------------------------------------------------
 

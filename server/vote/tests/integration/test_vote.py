@@ -56,12 +56,12 @@ def test_frame_sequence(app):
     assert response_json['status']=='ok'
     response_json = app.get('/api/test_vote.json', expect_errors=True).json
     assert response_json['code'] == 400
-    
+
 
 def test_vote(app):
     # Vote on on non exisitnat vote_pool
     app.get('/api/test_vote/vote.json?item=ERROR', expect_errors=True).json
-    
+
     # Create new vote pool called 'test_vote'
     app.post('/api/.json', dict(pool_id='test_vote')).json
 
@@ -85,3 +85,5 @@ def test_vote(app):
     # Remove vote pool called 'test_vote'
     app.delete('/api/test_vote.json').json
 
+
+# TODO: Join tests

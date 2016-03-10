@@ -3,7 +3,6 @@
 *_env/
 /libs/
 /externals/
-/data/
 /test.ini
 /production.ini
 dependencys_installed.json

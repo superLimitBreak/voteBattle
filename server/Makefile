@@ -123,7 +123,7 @@ shell:
 	$(ENV)/bin/pshell $(INI_DEV)
 
 ini_production:
-	$(PYTHON) libs/make_ini.py production
+	$(PYTHON) libs/make_ini.py $(INI_DEV) production.inidiff $(INI_PROD)
 
 start_webapp_daemon: ini_production
 	start-stop-daemon --start --pidfile webapp.pid --name $(PROJECT) --make-pidfile --background --exec /bin/bash -- -c "$(CURDIR)/env/bin/pserve $(CURDIR)/$(INI_PROD)"
